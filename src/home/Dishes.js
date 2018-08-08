@@ -99,35 +99,24 @@ export default class Dishes extends Component {
 
 
                 }
-                //     if (this.state.order[i].name === POST.name){
-                //     this.state.order[i].num = this.state.order[i].num+1
-                //     console.log(this.state.order)
-                //     return;
-                // }
-                // else {
-                //     var newD={
-                //         "name": POST.name,
-                //         "price": POST.price,
-                //         "num": 1
-                //     }
-                //     this.state.order.push(newD)
-                //     console.log(this.state.order)
-                //     return;
-                // }
+
 
         }
         console.log(this.state.order)
-            // var num = this.state.Dish.get(POST);
-            // var Local  = this.state.Dish.set(POST, num+1);
-            // this.setState({
-            //     Dish: Local
-            // });
+
 
 
 
         //console.log(this.state.OrderedDish.get('A'));
     }
 
+    SumUp() {
+
+        var total = this.state.order.reduce((sum, price) =>{
+            return sum + price.num * price.price
+        }, 0)
+        return total;
+    }
 
 render() {
     return (
@@ -142,31 +131,6 @@ render() {
                                     return (<Button bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>)
                                 })}
 
-                            {/*/!* Indicates a successful or positive action *!/*/}
-                            {/*<Button bsStyle="success" id="A" onClick={()=>{this.setOrder(document.getElementById("A").innerHTML)}}>A*/}
-
-                            {/*</Button>*/}
-
-                            {/*/!* Indicates a successful or positive action *!/*/}
-                            {/*<Button bsStyle="success" id="B" onClick={()=>{this.setOrder(document.getElementById("B").innerHTML)}}>B</Button>*/}
-
-                            {/*/!* Indicates a successful or positive action *!/*/}
-                            {/*<Button bsStyle="success" id="C" onClick={()=>{this.setOrder(document.getElementById("C").innerHTML)}}>C</Button>*/}
-
-                            {/*/!* Indicates a successful or positive action *!/*/}
-                            {/*<Button bsStyle="success" id="D" onClick={()=>{this.setOrder(document.getElementById("D").innerHTML)}}>D</Button>*/}
-
-                            {/*/!* Indicates a successful or positive action *!/*/}
-                            {/*<Button bsStyle="success" id="E" onClick={()=>{this.setOrder(document.getElementById("E").innerHTML)}}>E</Button>*/}
-
-                            {/*/!* Indicates a successful or positive action *!/*/}
-                            {/*<Button bsStyle="success">Success</Button>*/}
-
-                            {/*/!* Indicates a successful or positive action *!/*/}
-                            {/*<Button bsStyle="success">Success</Button>*/}
-
-                            {/*/!* Indicates a successful or positive action *!/*/}
-                            {/*<Button bsStyle="success">Success</Button>*/}
 
                         </ButtonToolbar>
                     </Tab>
@@ -204,6 +168,10 @@ render() {
 
                     </div>}
                     {/*{this.state.Dish.get('A')}*/}
+                </div>
+                <div className="row">
+                    <div className="col-lg-3">总价: </div>
+                    <div className="col-lg-2">{this.SumUp()}</div>
                 </div>
             </div>
 
