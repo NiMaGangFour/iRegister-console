@@ -1,0 +1,219 @@
+body{
+    font-size: 18px;
+    color: dimgray;
+}
+#bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    /* Preserve aspet ratio */
+    min-width: 100%;
+    min-height: 100%;
+    width: 100%;
+    z-index: -1;
+
+}
+a{
+    text-decoration: none;
+    color: inherit;
+}
+a:hover{
+    text-decoration: none;
+    color: inherit;
+}
+.btn-nova{
+    background-color: darkcyan;
+    color: darkcyan;;
+}
+.service-header{
+    background-color: white;
+    border-radius: 3px;
+
+}
+.service-header:after{
+    content: "";
+    clear: both;
+    display: table;
+}
+.service{
+    float: left;
+    color: gray;
+    padding: 10px;
+    padding-right: 20px;
+    font-size: 24px;
+}
+.service:hover{
+    background-color: rgb(238, 238, 238);
+    border-radius: 5px;
+    cursor: pointer;
+}
+.post{
+    width: 20%;
+    background-color: white;
+    border-radius: 3px;
+}
+.meta-info{
+    border-bottom: rgb(238, 238, 238) 1px solid;
+}
+.meta-info:after{
+    content: "";
+    clear: both;
+    display: table;
+}
+.title{
+    color: black;
+}
+
+.nova-margin{
+    margin-top: 10px;
+
+}
+.nova-padding{
+    padding: 15px;
+}
+.filter{
+    background-color: white;
+    border-radius: 3px;
+
+}
+.filter:after{
+    content: "";
+    clear: both;
+    display: table;
+}
+.filter li{
+    list-style: none;
+    float: left;
+    padding: 5px 20px 5px 20px;
+
+}
+.filter li:hover{
+    cursor: pointer;
+}
+.choose{
+    background-color: rgb(238, 238, 238);
+    border-radius: 5px;
+}
+.message{
+    background-color: rgb(238, 238, 238);
+    border-radius: 5px;
+    margin-top: 10px;
+    padding: 5px;
+}
+
+.user_logo_nav img{
+    width: 35px;
+    height: 35px;
+    border-radius: 5px;
+    float: left;
+    margin-top: -10px;
+}
+.user_logo img{
+    width: 35px;
+    height: 35px;
+    border-radius: 5px;
+    float: left;
+}
+.user-name{
+    float: left;
+    font-size: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+    color: dimgray;
+}
+.tags{
+    float: left;
+    /* background-color: rgb(238, 238, 238); */
+    border-radius: 5px;
+    padding: 5px 10px 0px 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.tag{
+    background-color: lightsalmon;
+    border-radius: 5px;
+    font-size: 14px;
+    float: left;
+    padding: 0px 5px 0px 5px;
+    /* padding: 3px; */
+    margin-left: 10px;
+}
+.topic{
+    float: left;
+    padding: 5px;
+}
+.title{
+    clear: both;
+    padding: 5px;
+}
+.text-body{
+    clear: both;
+    padding: 5px;
+    color: dimgray;
+}
+
+.pics img{
+    padding: 5px;
+}
+.pics img:hover{
+    cursor: pointer;
+}
+.post-footer{
+    clear: both;
+    height: 30px;;
+    padding: 8px 5px 3px 5px;
+
+}
+.list{
+    float: left;
+    padding: 3px 20px 3px 20px;
+    border-radius: 5px;
+    color: dimgray;
+}
+.list:hover{
+    background-color: rgb(243, 243, 243);
+    cursor: pointer;
+
+}
+/* .praise{
+    float: left;
+    padding-right: 10px;
+}
+.praise-down{
+    float: left;
+    padding-right: 10px;
+}
+.comment{
+    float: left;
+    padding-right: 10px;
+}
+.favorit{
+    float: left;
+    padding-right: 10px;
+}
+*/
+.complain{
+    float: right;
+}
+
+.nova-card{
+    background-color: white;
+    border-radius: 3px;
+}
+.nova-card ul{
+    padding-left: 10px;
+}
+.nova-card li{
+    text-decoration: none;
+    list-style: none;
+    padding: 5px;
+}
+.nova-card li:hover{
+    background-color: rgb(238, 238, 238);
+    cursor: pointer;
+}
+.cust-border {
+    border-style: ridge;
+    border-radius: 1px;
+}
