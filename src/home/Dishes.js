@@ -185,10 +185,16 @@ render() {
                     </div>}
                     {/*{this.state.Dish.get('A')}*/}
                 </div>
-                <div className="row">
-                    <div className="col-lg-3">总价: </div>
-                    <div className="col-lg-2">{this.SumUp()}</div>
+                <div>
+                    <div className="row nova-margin">
+                        <div className="col-lg-3">总价: </div>
+                        <div className="col-lg-2">{this.SumUp()}</div>
+                    </div>
+                    <div className="row nova-margin">
+                        <Button className="" bsStyle="success" onClick={()=>{}}>提交订单</Button>
+                    </div>
                 </div>
+
             </div>
 
         </div>
