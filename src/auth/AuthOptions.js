@@ -1,20 +1,35 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { Button, Tabs, Tab, ButtonToolbar } from 'react-bootstrap';
+
+
 
 
 export default class AuthOptions extends Component {
+
+
+
     render() {
+
+        const newToAvia = {
+            pathname: '/home/Dishes/'+ "T1",
+            param1: "T1"
+        };
+        const newToOrdered = {
+            pathname: '/home/CheckDishes/'+ "T2",
+            param1: "T2"
+        };
         return (
             <div className="join-us  nova-margin nova-padding nova-card cust-border">
                 <div>大堂</div>
                 {/*<i className="fas fa-qrcode fa-8x"></i>*/}
                 <hr />
                 <div className="row">
-                    <div className="col-lg-4"><img src="/static/img/green.png" height="40"/>T1
+                    <div className="col-lg-4"><Link to={newToAvia} ><Button className="" bsStyle="success" > T1 </Button></Link>
 
                     </div>
-                    <div className="col-lg-4"><img src="/static/img/red.png" height="40"/>T2</div>
-                    <div className="col-lg-4"><img src="/static/img/yellowtable.jpg" height="40"/>T3</div>
+                    <div className="col-lg-4"><Link to={newToOrdered} ><Button className="" bsStyle="danger" > T2 </Button></Link></div>
+                    <div className="col-lg-4"><Button className="" bsStyle="warning" onClick={()=>{console.log("asdf")}}>T3</Button></div>
 
 
                     </div>

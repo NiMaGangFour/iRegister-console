@@ -35,28 +35,17 @@ export default class Dishes extends Component {
                 }
 
             ],
-            order: []
+            order: [],
+            tableNum: null
 
 
     }}
 
-    // //get 30 more posts
-    // setOrder(POST){
-    //     console.log(POST)
-    //     if (this.state.Dish.get(POST) !== undefined)
-    //     {
-    //         var num = this.state.Dish.get(POST);
-    //         var Local  = this.state.Dish.set(POST, num+1);
-    //         this.setState({
-    //             Dish: Local
-    //         });
-    //     }
-    //
-    //
-    //     //console.log(this.state.OrderedDish.get('A'));
-    // }
+   componentDidMount() {
 
-    //get 30 more posts
+       console.log(this.props)
+}
+
     setOrder(POST) {
         // console.log(POST)
 
@@ -133,10 +122,16 @@ export default class Dishes extends Component {
     }
 
 
+
+
 render() {
+    // var x = this.props.match.params.tablenum;
+    // this.setState({tableNum: x})
     return (
         <div>
-            桌号
+            桌号: {this.props.match.params.tablenum}
+
+
         <div className="row">
             <div className="col-lg-9 cust-border nova-card" >
                 <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">

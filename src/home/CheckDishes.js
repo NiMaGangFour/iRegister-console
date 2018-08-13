@@ -4,6 +4,7 @@ import { Button, Tabs, Tab, ButtonToolbar } from 'react-bootstrap';
 import { Map } from 'immutable'
 import { API } from '../config'
 
+
 export default class CheckDishesDishes extends Component {
     constructor(props) {
         super(props)
@@ -45,15 +46,24 @@ export default class CheckDishesDishes extends Component {
                     "price": 30,
                     "num": 1
                 }
-            ]
+            ],
+            tableNum: null
 
 
         }}
 
 
-    //get 30 more posts
+
+    componentDidMount() {
+        var x = this.props.match.params.table;
+        this.setState({tableNum: x})
+        console.log(this.props)
+
+
+    }
+
     setOrder(POST) {
-        // console.log(POST)
+
 
         if (this.state.order.length == 0) {
             var newD = {
@@ -170,9 +180,14 @@ export default class CheckDishesDishes extends Component {
 
 
     render() {
+        const newToMenu = {
+            pathname: '/home/Dishes/'+ this.state.tableNum,
+            param1: this.state.tableNum
+        };
         return (
+
             <div>
-                桌号
+                桌号: {this.state.tableNum}
             <div className="row">
                 <div className="col-lg-9 cust-border nova-card" >
                     {<div>
@@ -206,9 +221,14 @@ export default class CheckDishesDishes extends Component {
                             <div className="col-lg-3">总价: </div>
                             <div className="col-lg-2">{this.SumUp()}</div>
                         </div>
-                        <div className="row nova-margin">
-                            <Button className="" bsStyle="success" onClick={()=>{}}>提交订单</Button>
-                        </div>
+
+                    </div>
+
+                    <div className="row nova-margin">
+                        <Button className="" bsStyle="success" onClick={()=>{}}>返回控制台</Button>
+                        <Link to={newToMenu} ><Button className="" bsStyle="success" onClick={()=>{}}>加菜</Button></Link>
+                        <Button className="" bsStyle="success" onClick={()=>{}}>结账&打印</Button>
+                        <Button className="" bsStyle="danger" onClick={()=>{}}>厨房重新打印</Button>
                     </div>
                 </div>
 
