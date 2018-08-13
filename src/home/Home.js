@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import LeftInfo from './LeftInfo'
 import NewPost from './NewPost'
 import Dishes from './Dishes'
+import CheckDishes from './CheckDishes'
 import { API } from '../config'
 // import { Map } from 'immutable'
 
@@ -32,7 +33,7 @@ export default class Home extends Component {
     render() {
         return (
             <div>
-                <div>桌号</div>
+
                 <div>
 
                 </div>
@@ -68,7 +69,7 @@ export default class Home extends Component {
                 {/*</div>*/}
                 {/*<div className="posts nova-margin">*/}
                     {/*Post posts={this.state.posts} />*/}
-                    <Dishes />
+                    <CheckDishes />
                 {/*</div>*/}
             </div>
         )

@@ -4,22 +4,16 @@ import { Button, Tabs, Tab, ButtonToolbar } from 'react-bootstrap';
 import { Map } from 'immutable'
 import { API } from '../config'
 
-export default class Dishes extends Component {
+export default class CheckDishesDishes extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            Dish: new Map({
-                'A': 0,
-                'B': 0,
-                'C': 0,
-                'D': 0,
-                'E': 0,
-            }),
+
             Menu: [{
-             "id": 1,
-            "name": "A",
-            "price": 10,
-            "ava": true
+                "id": 1,
+                "name": "A",
+                "price": 10,
+                "ava": true
             },
                 {
                     "id": 2,
@@ -35,26 +29,27 @@ export default class Dishes extends Component {
                 }
 
             ],
-            order: []
+            order: [
+                {
+                    "name": "A",
+                    "price": 10,
+                    "num": 1
+                },
+                {
+                    "name": "B",
+                    "price": 20,
+                    "num": 2
+                },
+                {
+                    "name": "C",
+                    "price": 30,
+                    "num": 1
+                }
+            ]
 
 
-    }}
+        }}
 
-    // //get 30 more posts
-    // setOrder(POST){
-    //     console.log(POST)
-    //     if (this.state.Dish.get(POST) !== undefined)
-    //     {
-    //         var num = this.state.Dish.get(POST);
-    //         var Local  = this.state.Dish.set(POST, num+1);
-    //         this.setState({
-    //             Dish: Local
-    //         });
-    //     }
-    //
-    //
-    //     //console.log(this.state.OrderedDish.get('A'));
-    // }
 
     //get 30 more posts
     setOrder(POST) {
@@ -67,7 +62,7 @@ export default class Dishes extends Component {
                 "num": 1
             }
             let tempOrder = this.state.order
-                tempOrder.push(newD)
+            tempOrder.push(newD)
             console.log(tempOrder)
             this.setState({order: tempOrder})
             return;
@@ -90,7 +85,7 @@ export default class Dishes extends Component {
                         "num": 1
                     }
                     let tempOrder = this.state.order
-                        tempOrder.push(newD)
+                    tempOrder.push(newD)
                     console.log(tempOrder)
                     this.setState({order: tempOrder})
                     console.log(this.state.order)
@@ -98,7 +93,7 @@ export default class Dishes extends Component {
                 }
 
 
-                }
+            }
 
 
         }
@@ -132,39 +127,54 @@ export default class Dishes extends Component {
 
     }
 
+    addNum = (nameDish)=> {
+        var temp_post = [];
+        for(let index in this.state.order){
+            // console.log(this.state.myPosts[index].idPOST , idPost)
+            if(this.state.order[index].name === nameDish){
 
-render() {
-    return (
-        <div>
-            桌号
-        <div className="row">
-            <div className="col-lg-9 cust-border nova-card" >
-                <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
-                    <Tab eventKey={1} title="炒菜" className="nova-padding">
+                var temp_dish = this.state.order[index];
+                temp_dish.num = temp_dish.num +1;
+                temp_post.push(temp_dish)
+            }
+            else {
+                temp_post.push(this.state.order[index])
+            }
+        }this.setState({
+            order:temp_post
+        })
+    }
 
-                        <ButtonToolbar>
+    minusNum = (nameDish)=> {
+        var temp_post = [];
+        for(let index in this.state.order){
+            // console.log(this.state.myPosts[index].idPOST , idPost)
+            if(this.state.order[index].name === nameDish){
+                if (this.state.order[index].num === 1){
+                    this.deleteDish(nameDish);
+                }
+                else {
+                    var temp_dish = this.state.order[index];
+                    temp_dish.num = temp_dish.num -1;
+                    temp_post.push(temp_dish)
+                }
 
-                                {this.state.Menu.map((dish, i) =>{
-                                    return (<Button bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>)
-                                })}
+            }
+            else {
+                temp_post.push(this.state.order[index])
+            }
+        }this.setState({
+            order:temp_post
+        })
+    }
 
 
-                        </ButtonToolbar>
-                    </Tab>
-                    <Tab eventKey={2} title="凉菜" className="nova-padding">
-                        Tab 2 content
-                    </Tab>
-                    <Tab eventKey={3} title="汤" className="nova-padding">
-                        Tab 3 content
-                    </Tab>
-                    <Tab eventKey={4} title="主食" className="nova-padding">
-                        Tab 3 content
-                    </Tab>
-                </Tabs>
-            </div>
-            <div className="col-lg-3 pull-right cust-border nova-card">
-                购物车
-                <div>
+    render() {
+        return (
+            <div>
+                桌号
+            <div className="row">
+                <div className="col-lg-9 cust-border nova-card" >
                     {<div>
                         <div>
                             {this.state.order.map((value, key1) =>{
@@ -173,9 +183,14 @@ render() {
                                         <div>
                                             {value!==0?
                                                 <div className="row nova-margin">
-                                                    <div className="col-lg-6">{value.name}</div>
+                                                    <div className="col-lg-4">{value.name}</div>
                                                     <div className="col-lg-1">X</div>
-                                                    <div className="col-lg-1">{value.num}</div>
+                                                    <div className="col-lg-2 row">
+                                                        <Button className="" bsStyle="danger" onClick={()=>{this.minusNum(value.name)}}>-</Button>
+                                                        {value.num}
+                                                        <Button className="" bsStyle="danger" onClick={()=>{this.addNum(value.name)}}>+</Button>
+                                                    </div>
+
                                                     <div className="col-lg-2"><Button className="" bsStyle="danger" onClick={()=>{this.deleteDish(value.name)}}>删除</Button></div>
                                                 </div>: null}
                                         </div>
@@ -185,22 +200,21 @@ render() {
                         </div>
 
                     </div>}
-                    {/*{this.state.Dish.get('A')}*/}
-                </div>
-                <div>
-                    <div className="row nova-margin">
-                        <div className="col-lg-3">总价: </div>
-                        <div className="col-lg-2">{this.SumUp()}</div>
+
+                    <div>
+                        <div className="row nova-margin">
+                            <div className="col-lg-3">总价: </div>
+                            <div className="col-lg-2">{this.SumUp()}</div>
+                        </div>
+                        <div className="row nova-margin">
+                            <Button className="" bsStyle="success" onClick={()=>{}}>提交订单</Button>
+                        </div>
                     </div>
-                    <div className="row nova-margin">
-                        <Button className="" bsStyle="success" onClick={()=>{}}>提交订单</Button>
-                    </div>
                 </div>
+
 
             </div>
-
-        </div>
-        </div>
-    )
-}
+            </div>
+        )
+    }
 }
