@@ -15,7 +15,7 @@ export default class Dishes extends Component {
                 'D': 0,
                 'E': 0,
             }),
-            Ordered: [{
+            Menu: [{
              "id": 1,
             "name": "A",
             "price": 10,
@@ -110,13 +110,28 @@ export default class Dishes extends Component {
         //console.log(this.state.OrderedDish.get('A'));
     }
 
-    SumUp() {
+    SumUp= ()=> {
 
         var total = this.state.order.reduce((sum, price) =>{
             return sum + price.num * price.price
         }, 0)
         return total;
     }
+
+    deleteDish = (nameDish)=> {
+        console.log(nameDish)
+        var temp_post = [];
+        for(let index in this.state.order){
+            // console.log(this.state.myPosts[index].idPOST , idPost)
+            if(this.state.order[index].name !== nameDish){
+                temp_post.push(this.state.order[index])
+            }
+        }this.setState({
+            order:temp_post
+        })
+
+    }
+
 
 render() {
     return (
@@ -127,7 +142,7 @@ render() {
 
                         <ButtonToolbar>
 
-                                {this.state.Ordered.map((dish, i) =>{
+                                {this.state.Menu.map((dish, i) =>{
                                     return (<Button bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>)
                                 })}
 
@@ -155,10 +170,11 @@ render() {
                                     <div key={key1}>
                                         <div>
                                             {value!==0?
-                                                <div className="row">
+                                                <div className="row nova-margin">
                                                     <div className="col-lg-6">{value.name}</div>
                                                     <div className="col-lg-1">X</div>
-                                                    <div className="col-lg-2">{value.num}</div>
+                                                    <div className="col-lg-1">{value.num}</div>
+                                                    <div className="col-lg-2"><Button className="" bsStyle="danger" onClick={()=>{this.deleteDish(value.name)}}>删除</Button></div>
                                                 </div>: null}
                                         </div>
 

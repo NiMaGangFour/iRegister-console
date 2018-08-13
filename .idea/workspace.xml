@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ed19f086-8e46-4b87-8d8b-7b8e2e8936c4" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change beforePath="$PROJECT_DIR$/src/home/Dishes.js" afterPath="$PROJECT_DIR$/src/home/Dishes.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -20,8 +19,36 @@
       <file leaf-file-name="Dishes.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/home/Dishes.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="172" column="44" lean-forward="false" selection-start-line="172" selection-start-column="44" selection-end-line="172" selection-end-column="44" />
+            <state relative-caret-position="193">
+              <caret line="125" column="58" lean-forward="true" selection-start-line="125" selection-start-column="58" selection-end-line="125" selection-end-column="58" />
+              <folding>
+                <element signature="e#0#40#0" expanded="true" />
+                <marker date="1534121798384" expanded="true" signature="3636:6195" ph="..." />
+                <marker date="1534121798384" expanded="true" signature="3697:4675" ph="..." />
+                <marker date="1534121798384" expanded="true" signature="3772:4656" ph="..." />
+                <marker date="1534121798384" expanded="true" signature="3847:4213" ph="..." />
+                <marker date="1534121798384" expanded="true" signature="3888:4186" ph="..." />
+                <marker date="1534121798384" expanded="true" signature="4288:4353" ph="..." />
+                <marker date="1534121798384" expanded="true" signature="4427:4492" ph="..." />
+                <marker date="1534121798384" expanded="true" signature="4567:4632" ph="..." />
+                <marker date="1534121798384" expanded="true" signature="4747:6179" ph="..." />
+                <marker date="1534121798384" expanded="true" signature="4789:5975" ph="..." />
+                <marker date="1534121798384" expanded="true" signature="4816:5898" ph="..." />
+                <marker date="1534121798384" expanded="true" signature="4846:5870" ph="..." />
+                <marker date="1534121798384" expanded="true" signature="5008:5802" ph="..." />
+                <marker date="1534121798384" expanded="true" signature="5054:5758" ph="..." />
+                <marker date="1534121798384" expanded="true" signature="5192:5704" ph="..." />
+                <marker date="1534121798384" expanded="true" signature="6013:6160" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Home.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/home/Home.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-523">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
               </folding>
@@ -30,6 +57,11 @@
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>ordered</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -136,12 +168,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1533704179321</updated>
-      <workItem from="1533704181050" duration="3099000" />
+      <workItem from="1533704181050" duration="5799000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3099000" />
+    <option name="totallyTimeSpent" value="5799000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="36" y="23" width="1404" height="810" extended-state="0" />
@@ -178,12 +210,38 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/home/Dishes.js">
+    <entry file="file://$PROJECT_DIR$/src/home/Home.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="172" column="44" lean-forward="false" selection-start-line="172" selection-start-column="44" selection-end-line="172" selection-end-column="44" />
+        <state relative-caret-position="-523">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/home/Dishes.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="125" column="58" lean-forward="true" selection-start-line="125" selection-start-column="58" selection-end-line="125" selection-end-column="58" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+            <marker date="1534121798384" expanded="true" signature="3636:6195" ph="..." />
+            <marker date="1534121798384" expanded="true" signature="3697:4675" ph="..." />
+            <marker date="1534121798384" expanded="true" signature="3772:4656" ph="..." />
+            <marker date="1534121798384" expanded="true" signature="3847:4213" ph="..." />
+            <marker date="1534121798384" expanded="true" signature="3888:4186" ph="..." />
+            <marker date="1534121798384" expanded="true" signature="4288:4353" ph="..." />
+            <marker date="1534121798384" expanded="true" signature="4427:4492" ph="..." />
+            <marker date="1534121798384" expanded="true" signature="4567:4632" ph="..." />
+            <marker date="1534121798384" expanded="true" signature="4747:6179" ph="..." />
+            <marker date="1534121798384" expanded="true" signature="4789:5975" ph="..." />
+            <marker date="1534121798384" expanded="true" signature="4816:5898" ph="..." />
+            <marker date="1534121798384" expanded="true" signature="4846:5870" ph="..." />
+            <marker date="1534121798384" expanded="true" signature="5008:5802" ph="..." />
+            <marker date="1534121798384" expanded="true" signature="5054:5758" ph="..." />
+            <marker date="1534121798384" expanded="true" signature="5192:5704" ph="..." />
+            <marker date="1534121798384" expanded="true" signature="6013:6160" ph="..." />
           </folding>
         </state>
       </provider>
