@@ -1,21 +1,58 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Tabs, Tab, ButtonToolbar } from 'react-bootstrap';
-
+import {API} from "../config";
+var temp_name = 0;
 
 
 
 export default class AuthOptions extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+
+            tables: [],
+            tableName: null
+        }}
+
+    componentDidMount() {
+        this.getData()
 
 
+    }
+    getData =()=> {
+        console.log(API.baseUri+API.getallTables)
+        fetch(API.baseUri+API.getallTables)
+            .then((response) => {
+                if (response.status === 200) {
+                    return response.json()
+                } else console.log("Get data error ");
+            }).then((json) =>{
+            console.log(json)
+            this.setState({tables: json})
+        }).catch((error) => {
+            console.log('error on .catch', error);
+        });
+    }
+
+    sendName =(name)=> {
+
+
+        temp_name = name
+
+
+        this.setState({tableName: temp_name});
+
+        console.log(this.state.tableName)
+    }
 
     render() {
 
-        const newToAvia = {
-            pathname: '/home/Dishes/'+ "T1",
-            param1: "T1"
+        var newToAvia = {
+            pathname: '/home/Dishes/'+ temp_name,
+            param1: temp_name
         };
-        const newToOrdered = {
+        var newToOrdered = {
             pathname: '/home/CheckDishes/'+ "T2",
             param1: "T2"
         };
@@ -24,15 +61,43 @@ export default class AuthOptions extends Component {
                 <div>大堂</div>
                 {/*<i className="fas fa-qrcode fa-8x"></i>*/}
                 <hr />
-                <div className="row">
-                    <div className="col-lg-4"><Link to={newToAvia} ><Button className="" bsStyle="success" > T1 </Button></Link>
+                <div className="row nova-margin">
+                    {/*<div className="col-lg-4"><Link to={newToAvia} ><Button className="" bsStyle="success" > T1 </Button></Link>*/}
 
+                    {/*</div>*/}
+                    {/*<div className="col-lg-4"><Link to={newToOrdered} ><Button className="" bsStyle="danger" > T2 </Button></Link></div>*/}
+                    {/*<div className="col-lg-4"><Button className="" bsStyle="warning" onClick={()=>{console.log("asdf")}}>T3</Button></div>*/}
+
+
+                    {this.state.tables.map((value, key1) =>{
+                        return (
+                            <div key={key1}>
+                                <div className="">
+                                    {value.status!== "Occupied" && value.status!== "Booked"?
+                                        <div className="col-lg-4 nova-margin">
+                                            <Link to={newToAvia} ><Button className="" bsStyle="success" onClick={()=>
+                                            {this.sendName(value.name)}}> {value.name} </Button></Link>
+
+                                        </div>:
+                                        <div className="col-lg-4 nova-margin">
+                                        {value.status !== "Occupied"?
+                                            <div className="">
+                                            <Button className="" bsStyle="warning" > {value.name} </Button>
+                                            </div>
+                                        :
+                                            <div className="">
+                                                <Link to={newToOrdered} ><Button className="" bsStyle="danger" > {value.name} </Button></Link>
+                                            </div>
+                                        }
+                                        </div>
+                                    }
+
+                                </div>
+
+                            </div>
+                        )})}
                     </div>
-                    <div className="col-lg-4"><Link to={newToOrdered} ><Button className="" bsStyle="danger" > T2 </Button></Link></div>
-                    <div className="col-lg-4"><Button className="" bsStyle="warning" onClick={()=>{console.log("asdf")}}>T3</Button></div>
 
-
-                    </div>
                 <div className="nova-padding">
                     <li>Green: Empty</li>
                     <li>Red: Occupied</li>
