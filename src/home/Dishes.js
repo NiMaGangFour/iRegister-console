@@ -48,7 +48,7 @@ export default class Dishes extends Component {
 
        //console.log(this.props)
        this.getData()
-}
+  }
 
     getData() {
         //console.log(API.baseUri+API.getAllDishes)
@@ -79,7 +79,6 @@ export default class Dishes extends Component {
             console.log(tempOrder)
             this.setState({order: tempOrder})
             return;
-
         }
         else {
             for (let i = 0; i < this.state.order.length; i++) {
@@ -104,17 +103,9 @@ export default class Dishes extends Component {
                     console.log(this.state.order)
                     return;
                 }
-
-
                 }
-
-
         }
         console.log(this.state.order)
-
-
-
-
         //console.log(this.state.OrderedDish.get('A'));
     }
 
@@ -143,9 +134,6 @@ export default class Dishes extends Component {
     submitDishPackage =() => {
       console.log(this.state.order);
     }
-
-
-
 
 render() {
     return (
