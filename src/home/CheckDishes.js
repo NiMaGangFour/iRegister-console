@@ -187,7 +187,7 @@ export default class CheckDishesDishes extends Component {
         return (
 
             <div>
-                桌号: {this.state.tableNum}
+                 桌号: {this.props.match.params.table}
             <div className="row">
                 <div className="col-lg-9 cust-border nova-card" >
                     {<div>

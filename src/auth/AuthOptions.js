@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Tabs, Tab, ButtonToolbar } from 'react-bootstrap';
 import {API} from "../config";
-var temp_name = 0;
+
 
 
 
@@ -38,24 +38,21 @@ export default class AuthOptions extends Component {
     sendName =(name)=> {
 
 
-        temp_name = name
-
+        var temp_name = name;
+        this.state.props.tableName = name;
 
         this.setState({tableName: temp_name});
 
-        console.log(this.state.tableName)
+        console.log(this.state.props.tableName);
     }
 
     render() {
 
-        var newToAvia = {
-            pathname: '/home/Dishes/'+ temp_name,
-            param1: temp_name
-        };
-        var newToOrdered = {
-            pathname: '/home/CheckDishes/'+ "T2",
-            param1: "T2"
-        };
+        // var newToAvia = {
+        //   pathname: '/home/Dishes/'+ this.state.tableName,
+        //     // param1: temp_name
+        // };
+
         return (
             <div className="join-us  nova-margin nova-padding nova-card cust-border">
                 <div>大堂</div>
@@ -70,14 +67,18 @@ export default class AuthOptions extends Component {
 
 
                     {this.state.tables.map((value, key1) =>{
+                      var newToAvia = {
+                        pathname: '/home/Dishes/'+ value.name,
+                      };
+                      var newToOrdered = {
+                        pathname: '/home/CheckDishes/'+ value.name,
+                      };
                         return (
                             <div key={key1}>
                                 <div className="">
                                     {value.status!== "Occupied" && value.status!== "Booked"?
                                         <div className="col-lg-4 nova-margin">
-                                            <Link to={newToAvia} ><Button className="" bsStyle="success" onClick={()=>
-                                            {this.sendName(value.name)}}> {value.name} </Button></Link>
-
+                                            <Link to={newToAvia} ><Button className="" bsStyle="success" > {value.name} </Button></Link>
                                         </div>:
                                         <div className="col-lg-4 nova-margin">
                                         {value.status !== "Occupied"?
@@ -112,3 +113,8 @@ export default class AuthOptions extends Component {
         )
     }
 }
+
+
+// AuthOptions.defaultProps = {
+//   var tableName = null;
+// }

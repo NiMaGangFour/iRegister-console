@@ -217,3 +217,8 @@ a:hover{
     border-style: ridge;
     border-radius: 1px;
 }
+.cust-margin{
+    margin-right: 10px;
+    margin-top: 10px;
+
+}
