@@ -1,8 +1,9 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { Button, Tabs, Tab, ButtonToolbar } from 'react-bootstrap';
-import { Map } from 'immutable'
-import { API } from '../config'
+import { Map } from 'immutable';
+import { API } from '../config';
+
 
 export default class Dishes extends Component {
     constructor(props) {
@@ -33,20 +34,16 @@ export default class Dishes extends Component {
                     "price": 30,
                     "ava": true
                 }
-
             ],
             order: [],
             alldishes: [],
             tableNum: null,
-            totalOrderName: [],
-            totalOrderNum: []
-
-
-    }}
+            sumTotal: 0
+    }
+    this.submitOrder = this.submitOrder.bind(this);
+  }
 
    componentDidMount() {
-
-       //console.log(this.props)
        this.getData()
   }
 
@@ -58,7 +55,7 @@ export default class Dishes extends Component {
                     return response.json()
                 } else console.log("Get data error ");
             }).then((json) =>{
-            console.log(json)
+            // console.log(json)
             this.setState({alldishes: json})
         }).catch((error) => {
             console.log('error on .catch', error);
@@ -67,11 +64,11 @@ export default class Dishes extends Component {
 
     setOrder(POST) {
         // console.log(POST)
-
         if (this.state.order.length == 0) {
             var newD = {
                 "name": POST.name,
                 "price": POST.price,
+                "DishID": POST.dishId,
                 "num": 1
             }
             let tempOrder = this.state.order
@@ -94,6 +91,7 @@ export default class Dishes extends Component {
                     var newD = {
                         "name": POST.name,
                         "price": POST.price,
+                        "DishID": POST.dishId,
                         "num": 1
                     }
                     let tempOrder = this.state.order
@@ -106,11 +104,9 @@ export default class Dishes extends Component {
                 }
         }
         console.log(this.state.order)
-        //console.log(this.state.OrderedDish.get('A'));
     }
 
     SumUp= ()=> {
-
         var total = this.state.order.reduce((sum, price) =>{
             return sum + price.num * price.price
         }, 0)
@@ -131,9 +127,44 @@ export default class Dishes extends Component {
 
     }
 
-    submitDishPackage =() => {
-      console.log(this.state.order);
+    submitOrder = () => {
+      var date = new Date();
+      var time = date.toLocaleTimeString();
+        // console.log(time)
+        // console.log(this.SumUp())
+        console.log(this.props.match.params.tablenum)
+        console.log(JSON.stringify(this.state.order))
+
+      fetch(API.baseUri+API.postOrder, {
+          method: "POST",
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        // req.body.creatTime, req.body.totalPrice, req.body.tableID
+        body: JSON.stringify({
+                "items": this.state.order,
+                "creatTime": time,
+                "totalPrice": this.SumUp(),
+                "tableID": this.props.match.params.tablenum
+            })
+      } ).then(res =>{
+          if(res.status===200) {
+            // console.log(res.json())
+            return res.json();
+          }
+          else console.log(res)
+      }).then(json => {
+        console.log(json.success)
+        if (json.success === true){
+          console.log("SuccessSuccessSuccess")
+        }
+      })
     }
+
+
+
+
 
 render() {
     return (
@@ -227,7 +258,8 @@ render() {
                         <div className="col-lg-2">{this.SumUp()}</div>
                     </div>
                     <div className="row nova-margin">
-                        <Button className="" bsStyle="success" onClick={()=>{this.submitDishPackage()}}>提交订单</Button>
+
+                          <Button className="" bsStyle="success" onClick={()=>{this.submitOrder()}}>提交订单</Button>
                     </div>
                 </div>
 

@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Tabs, Tab, ButtonToolbar } from 'react-bootstrap';
-import {API} from "../config";
+import {API} from '../config';
+
+import { getData } from '../home/GetTables';
 
 
 
@@ -14,14 +16,25 @@ export default class AuthOptions extends Component {
             tables: [],
             tableName: null
         }}
+    componentWillMount() {
+      // this.setState({
+      //   tables:getData()
+      // })
+      console.log(getData().json)
+    }
 
     componentDidMount() {
-        this.getData()
-
+      // this.setState({
+      //   tables:getData()
+      // })
+      //
+      // console.log(this.state.tables);
+      //
+      this.getData();
 
     }
     getData =()=> {
-        console.log(API.baseUri+API.getallTables)
+        // console.log(API.baseUri+API.getallTables)
         fetch(API.baseUri+API.getallTables)
             .then((response) => {
                 if (response.status === 200) {
@@ -36,8 +49,6 @@ export default class AuthOptions extends Component {
     }
 
     sendName =(name)=> {
-
-
         var temp_name = name;
         this.state.props.tableName = name;
 
@@ -47,12 +58,6 @@ export default class AuthOptions extends Component {
     }
 
     render() {
-
-        // var newToAvia = {
-        //   pathname: '/home/Dishes/'+ this.state.tableName,
-        //     // param1: temp_name
-        // };
-
         return (
             <div className="join-us  nova-margin nova-padding nova-card cust-border">
                 <div>大堂</div>
@@ -68,7 +73,7 @@ export default class AuthOptions extends Component {
 
                     {this.state.tables.map((value, key1) =>{
                       var newToAvia = {
-                        pathname: '/home/Dishes/'+ value.name,
+                        pathname: '/home/Dishes/'+ value.id,
                       };
                       var newToOrdered = {
                         pathname: '/home/CheckDishes/'+ value.name,
