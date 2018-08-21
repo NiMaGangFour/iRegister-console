@@ -3,16 +3,10 @@ import { Link } from 'react-router-dom'
 import { Button, Tabs, Tab, ButtonToolbar } from 'react-bootstrap';
 import {API} from '../config';
 
-import { getData } from '../home/GetTables';
-
-
-
-
 export default class AuthOptions extends Component {
     constructor(props) {
         super(props)
         this.state = {
-
             tables: [],
             tableName: null
         }}
@@ -20,20 +14,13 @@ export default class AuthOptions extends Component {
       // this.setState({
       //   tables:getData()
       // })
-      console.log(getData().json)
+      // console.log(getData())
     }
 
     componentDidMount() {
-      // this.setState({
-      //   tables:getData()
-      // })
-      //
-      // console.log(this.state.tables);
-      //
       this.getData();
-
     }
-    getData =()=> {
+     getData =()=> {
         // console.log(API.baseUri+API.getallTables)
         fetch(API.baseUri+API.getallTables)
             .then((response) => {
