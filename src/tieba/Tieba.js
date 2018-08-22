@@ -6,7 +6,7 @@ export default class Tieba extends Component {
     render() {
         return (
             <div>
-                Tieba
+                Tieba   TiebaTiebaTieba
             </div>
         )
     }
