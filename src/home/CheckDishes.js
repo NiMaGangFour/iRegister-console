@@ -10,48 +10,12 @@ import Personal from '../personal/Personal'
 export default class CheckDishesDishes extends Component {
     constructor(props) {
         super(props)
+        this.authOptions = React.createRef();
         this.state = {
           childValue: null,
-            Menu: [{
-                "id": 1,
-                "name": "A",
-                "price": 10,
-                "ava": true
-            },
-                {
-                    "id": 2,
-                    "name": "B",
-                    "price": 20,
-                    "ava": true
-                },
-                {
-                    "id": 3,
-                    "name": "C",
-                    "price": 30,
-                    "ava": true
-                }
-
-            ],
-            order: [
-                {
-                    "name": "A",
-                    "price": 10,
-                    "num": 1
-                },
-                {
-                    "name": "B",
-                    "price": 20,
-                    "num": 2
-                },
-                {
-                    "name": "C",
-                    "price": 30,
-                    "num": 1
-                }
-            ],
-            tableDishes:[],
-            thispropsmatchparamstableid:null
-
+          tableDishes:[],
+          thispropsmatchparamstableid:null,
+          tableModifiedDishes:null
         }}
 
     // componentWillMount(){
@@ -67,12 +31,19 @@ export default class CheckDishesDishes extends Component {
     }
 
     componentWillReceiveProps(){
-      this.getData();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.match.params.tableid){
+          this.props.match.params.tableid = nextProps.match.params.tableid
+          this.getData();
+        }
     }
 
     getData =()=> {
       // let key = "/home/CheckDishes/"+ this.props.match.params.tableid;
         // window.location.reload(true);
+        console.log(this.props.match.params.tableid)
        fetch(API.baseUri+API.getTableDishes + "/" + this.props.match.params.tableid)
            .then((response) => {
                if (response.status === 200) {
@@ -81,10 +52,10 @@ export default class CheckDishesDishes extends Component {
            }).then((json) =>{
            console.log(json)
            this.setState({tableDishes: json})
+           console.log(this.state.tableDishes[0].orderID)
        }).catch((error) => {
            console.log('error on .catch', error);
        });
-
    }
 
     SumUp= ()=> {
@@ -97,14 +68,52 @@ export default class CheckDishesDishes extends Component {
     deleteDish = (nameDish)=> {
         console.log(nameDish)
         var temp_post = [];
+        var temp_modified = [];
         for(let index in this.state.tableDishes){
             // console.log(this.state.myPosts[index].idPOST , idPost)
             if(this.state.tableDishes[index].name !== nameDish){
                 temp_post.push(this.state.tableDishes[index])
             }
-        }this.setState({
-            tableDishes:temp_post
+            else temp_modified.push(this.state.tableDishes[index])
+        }
+        // temp_modified.push(nameDish)
+        this.setState({
+            tableDishes:temp_post,
+            // tableModifiedDishes:temp_modified
         })
+        console.log(temp_modified);
+         this.updateModifiedDiesh(temp_modified);
+    }
+
+    updateModifiedDiesh = (temp_modified) => {
+      var date = new Date();
+      var time = date.toLocaleTimeString();
+
+      fetch(API.baseUri+API.modDish, {
+          method: "POST",
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        // [req.body.orderID, v[i].DishID, req.body.createTime, v[i].num]
+        body: JSON.stringify({
+                "orderID": temp_modified.orderID,
+                "items": temp_modified,
+                "creatTime": time,
+            })
+      } ).then(res =>{
+          if(res.status===200) {
+            // console.log(res.json())
+            return res.json();
+          }
+          else console.log(res)
+      }).then(json => {
+        console.log(json)
+        // if (json.success === true){
+        //    console.log(json.success )
+        // }
+      })
+      // console.log("updateModifiedDiesh");
     }
 
     addNum = (nameDish)=> {
@@ -137,7 +146,6 @@ export default class CheckDishesDishes extends Component {
                     temp_dish.DishCount = temp_dish.DishCount -1;
                     temp_post.push(temp_dish)
                 }
-
             }
             else {
                 temp_post.push(this.state.tableDishes[index])
@@ -147,15 +155,41 @@ export default class CheckDishesDishes extends Component {
         })
     }
 
-    // parentChildOccupied = (value) => {
-    //   this.setState({
-    //     childValue:value
-    //   })
-    //   console.log(value);
-    // }
+    parentChildOccupied = (value) => {
+      this.setState({
+        childValue:value
+      })
+      console.log(value);
+    }
 
-    parentChildOccupied = () => {
-      // this.getData();
+    checkout = () => {
+      fetch(API.baseUri+API.checkOut, {
+          method: "POST",
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+                "orderID": this.state.tableDishes[0].orderID,
+                "tableID": this.props.match.params.tableid
+            })
+      } ).then(res =>{
+          if(res.status===200) {
+            // console.log(res.json())
+            return res.json();
+          }
+          else console.log(res)
+      }).then(json => {
+        console.log(json)
+        if (json.success === true){
+          this.authOptions.current.getData();
+          this.setState({
+            tableDishes:[]
+          })
+          window.location = '/'
+        }
+      })
+      console.log("checkOut");
     }
 
     render() {
@@ -163,14 +197,17 @@ export default class CheckDishesDishes extends Component {
             // pathname: '/home/Dishes/'+ this.state.tableNum,
             // pathname: '/',
             pathname: '/home/Dishes/'+ this.props.match.params.tableid,
-
         };
+        var tableModifiedDishes = <div>{this.state.tableModifiedDishes}</div>
         return (
             <div>
               <div className="row">
                 <div className="col-sm-12 col-lg-2">
 
-                  <AuthOptions parentChildOccupied={this.parentChildOccupied} />
+                  <AuthOptions
+                    ref={this.authOptions}
+                    parentChildOccupied={this.parentChildOccupied}
+                    />
                   <Personal />
 
                   <div className="site-info   nova-margin nova-padding nova-card cust-border">
@@ -181,9 +218,7 @@ export default class CheckDishesDishes extends Component {
                           <li>info@novasoftware.com.au</li>
                       </ul>
                   </div>
-
                 </div>
-
 
               <div className="col-sm-12 col-lg-10 pull-right">
                      桌号: {this.props.match.params.tableid}
@@ -192,7 +227,6 @@ export default class CheckDishesDishes extends Component {
                         {<div>
                             <div>
                                 {this.state.tableDishes.map((value, key1) =>{
-
                                     return (
                                         <div key={key1}>
                                             <div>
@@ -209,11 +243,9 @@ export default class CheckDishesDishes extends Component {
                                                         <div className="col-lg-2"><Button className="" bsStyle="danger" onClick={()=>{this.deleteDish(value.name)}}>删除</Button></div>
                                                     </div>: null}
                                             </div>
-
                                         </div>
                                     )})}
                             </div>
-
                         </div>}
 
                         <div>
@@ -227,8 +259,9 @@ export default class CheckDishesDishes extends Component {
                         <div className="row nova-margin">
                             <Button className="" bsStyle="success" onClick={()=>{}}>返回控制台</Button>
                             <Link to={newToMenu} ><Button className="" bsStyle="success" onClick={()=>{}}>加菜</Button></Link>
-                            <Button className="" bsStyle="success" onClick={()=>{}}>结账&打印</Button>
+                            <Button className="" bsStyle="success" onClick={()=>{this.checkout()}}>结账&打印</Button>
                             <Button className="" bsStyle="danger" onClick={()=>{}}>厨房重新打印</Button>
+                            {tableModifiedDishes}
                         </div>
                     </div>
                 </div>

@@ -6,7 +6,9 @@ export const API = {
     getallTables: 'api/getAllTables',
     getAllDishes: 'api/getAllDishes',
     postOrder: 'neworder',
+    checkOut: 'checkout',
     getModDishes: 'getModDishes',
-    getTableDishes: 'api1/getTableDishes'
+    getTableDishes: 'api1/getTableDishes',
+    modDish: 'modDish'
 
 }

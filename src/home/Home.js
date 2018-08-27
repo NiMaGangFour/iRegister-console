@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Tabs, Tab, ButtonToolbar } from 'react-bootstrap'
 import {API} from '../config'
+import Clock from 'react-live-clock'
 
 
 export default class Home extends Component {
@@ -57,8 +58,13 @@ export default class Home extends Component {
     handleClickOccupiedTable = (tableid) => {
       // this.props.parentChildOccupied(tableid);
     }
+    currentTime = () => {
+
+    }
 
     render() {
+      var date = new Date();
+      var time = date.toLocaleTimeString();
         return (
           <div className="row">
             <div className="col-sm-12 col-lg-2">
@@ -98,7 +104,6 @@ export default class Home extends Component {
                               </div>
                           )})}
                       </div>
-
                   <div className="nova-padding">
                       <li>Green: Empty</li>
                       <li>Red: Occupied</li>
@@ -107,7 +112,9 @@ export default class Home extends Component {
               </div>
             </div>
             <div className="col-sm-12 col-lg-10 pull-right nova-card cust-border cust-margin2 ">
-              <p>空白页面</p>
+              <div><h1>蜀味源餐饮系统</h1><h5>Version 1.1</h5></div><br />
+              <h2>当前时间：<Clock format={'h:mm:ss A'} timezone={'Australia/Sydney'} ticking={true}/></h2>
+              <Clock format={'dddd, MMMM Mo, YYYY'} timezone={'Australia/Sydney'}/>
             </div>
           </div>
         )

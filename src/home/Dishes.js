@@ -161,6 +161,7 @@ export default class Dishes extends Component {
           this.setState({
             order:[]
           })
+          window.location = '/'
         }
       })
     }
@@ -197,7 +198,7 @@ render() {
 
           <div className="col-sm-12 col-lg-10 pull-right">
                 桌号: {this.props.match.params.tableid}
-              
+
             <div className="row">
                 <div className="col-lg-9 cust-border nova-card" >
                     <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
