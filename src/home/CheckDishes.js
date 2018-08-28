@@ -87,10 +87,13 @@ export default class CheckDishesDishes extends Component {
 
     updateModifiedDiesh = (temp_modified) => {
       console.log(temp_modified);
+      var temp_modifiedArray = [];
       var date = new Date();
       var time = date.toLocaleTimeString();
-      temp_modified.createTime= time
-      console.log(temp_modified);
+      temp_modified.createTime= time;
+
+      temp_modifiedArray.push(temp_modified);
+      console.log(temp_modifiedArray);
 
       fetch(API.baseUri+API.modDish, {
           method: "POST",
