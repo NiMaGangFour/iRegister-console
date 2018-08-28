@@ -15,7 +15,7 @@ export default class CheckDishesDishes extends Component {
           childValue: null,
           tableDishes:[],
           thispropsmatchparamstableid:null,
-          tableModifiedDishes:null
+          tableModifiedDishes:[]
         }}
 
     // componentWillMount(){
@@ -66,28 +66,31 @@ export default class CheckDishesDishes extends Component {
     }
 
     deleteDish = (nameDish)=> {
-        console.log(nameDish)
+        // console.log(nameDish)
         var temp_post = [];
-        var temp_modified = [];
+        var temp_modified = {};
         for(let index in this.state.tableDishes){
             // console.log(this.state.myPosts[index].idPOST , idPost)
             if(this.state.tableDishes[index].name !== nameDish){
                 temp_post.push(this.state.tableDishes[index])
             }
-            else temp_modified.push(this.state.tableDishes[index])
+            else temp_modified = this.state.tableDishes[index]
         }
         // temp_modified.push(nameDish)
         this.setState({
             tableDishes:temp_post,
             // tableModifiedDishes:temp_modified
         })
-        console.log(temp_modified);
+        // console.log(temp_modified);
          this.updateModifiedDiesh(temp_modified);
     }
 
     updateModifiedDiesh = (temp_modified) => {
+      console.log(temp_modified);
       var date = new Date();
       var time = date.toLocaleTimeString();
+      temp_modified.createTime= time
+      console.log(temp_modified);
 
       fetch(API.baseUri+API.modDish, {
           method: "POST",
@@ -97,9 +100,9 @@ export default class CheckDishesDishes extends Component {
         },
         // [req.body.orderID, v[i].DishID, req.body.createTime, v[i].num]
         body: JSON.stringify({
-                "orderID": temp_modified.orderID,
+                // "orderID": temp_modified[0].orderID,
                 "items": temp_modified,
-                "creatTime": time,
+                // "createTime": time,
             })
       } ).then(res =>{
           if(res.status===200) {
@@ -108,13 +111,33 @@ export default class CheckDishesDishes extends Component {
           }
           else console.log(res)
       }).then(json => {
-        console.log(json)
-        // if (json.success === true){
-        //    console.log(json.success )
-        // }
+        // console.log(json)
+        if (json.success === true){
+          console.log(json.success)
+          // this.getModifiedData(temp_modified);
+           // this.setState({
+           //   tableModifiedDishes:temp_modified
+           // })
+        }
+        // console.log(this.state.tableModifiedDishes)
       })
       // console.log("updateModifiedDiesh");
     }
+
+    getModifiedData =(temp_modified)=> {
+      console.log(temp_modified[0].orderID)
+       fetch(API.baseUri+API.getModDish + "/" + temp_modified[0].orderID)
+           .then((response) => {
+               if (response.status === 200) {
+                   return response.json()
+               } else console.log("Get data error ");
+           }).then((json) =>{
+           console.log(json)
+           // this.setState({tables: json})
+       }).catch((error) => {
+           console.log('error on .catch', error);
+       });
+   }
 
     addNum = (nameDish)=> {
         var temp_post = [];
@@ -191,14 +214,32 @@ export default class CheckDishesDishes extends Component {
       })
       console.log("checkOut");
     }
-
     render() {
         const newToMenu = {
-            // pathname: '/home/Dishes/'+ this.state.tableNum,
-            // pathname: '/',
             pathname: '/home/Dishes/'+ this.props.match.params.tableid,
         };
-        var tableModifiedDishes = <div>{this.state.tableModifiedDishes}</div>
+        var tableModifiedDishes =
+        <div>
+          {this.state.tableDishes.map((value, key1) =>{
+            return (
+                <div key={key1}>
+                    <div>
+                        {value!==0?
+                            <div className="row nova-margin">
+                                <div className="col-lg-4">{value.name}</div>
+                                <div className="col-lg-1">X</div>
+                                <div className="col-lg-2 row">
+                                    <Button className="" bsStyle="danger" onClick={()=>{this.minusNum(value.name)}}>-</Button>
+                                    {value.DishCount}
+                                    <Button className="" bsStyle="danger" onClick={()=>{this.addNum(value.name)}}>+</Button>
+                                </div>
+
+                                <div className="col-lg-2"><Button className="" bsStyle="danger" onClick={()=>{this.deleteDish(value.name)}}>删除</Button></div>
+                            </div>: null}
+                    </div>
+                </div>
+            )})}
+          </div>
         return (
             <div>
               <div className="row">
@@ -261,7 +302,7 @@ export default class CheckDishesDishes extends Component {
                             <Link to={newToMenu} ><Button className="" bsStyle="success" onClick={()=>{}}>加菜</Button></Link>
                             <Button className="" bsStyle="success" onClick={()=>{this.checkout()}}>结账&打印</Button>
                             <Button className="" bsStyle="danger" onClick={()=>{}}>厨房重新打印</Button>
-                            {tableModifiedDishes}
+
                         </div>
                     </div>
                 </div>
