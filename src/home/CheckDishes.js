@@ -15,7 +15,8 @@ export default class CheckDishesDishes extends Component {
           childValue: null,
           tableDishes:[],
           thispropsmatchparamstableid:null,
-          tableModifiedDishes:[]
+          tableModifiedDishes:[],
+          tableStatus: "Occupied"
         }}
 
     // componentWillMount(){
@@ -86,7 +87,7 @@ export default class CheckDishesDishes extends Component {
     }
 
     updateModifiedDiesh = (temp_modified) => {
-      console.log(temp_modified);
+      // console.log(temp_modified);
       var temp_modifiedArray = [];
       var date = new Date();
       var time = date.toLocaleTimeString();
@@ -104,7 +105,7 @@ export default class CheckDishesDishes extends Component {
         // [req.body.orderID, v[i].DishID, req.body.createTime, v[i].num]
         body: JSON.stringify({
                 // "orderID": temp_modified[0].orderID,
-                "items": temp_modified,
+                "items": temp_modifiedArray,
                 // "createTime": time,
             })
       } ).then(res =>{
@@ -117,26 +118,24 @@ export default class CheckDishesDishes extends Component {
         // console.log(json)
         if (json.success === true){
           console.log(json.success)
-          // this.getModifiedData(temp_modified);
-           // this.setState({
-           //   tableModifiedDishes:temp_modified
-           // })
+          this.getModifiedData(temp_modifiedArray);
         }
         // console.log(this.state.tableModifiedDishes)
       })
       // console.log("updateModifiedDiesh");
     }
 
-    getModifiedData =(temp_modified)=> {
-      console.log(temp_modified[0].orderID)
-       fetch(API.baseUri+API.getModDish + "/" + temp_modified[0].orderID)
+    getModifiedData =(temp_modifiedArray)=> {
+      console.log(temp_modifiedArray[0].orderID)
+       fetch(API.baseUri+API.getModDish + "/" + temp_modifiedArray[0].orderID)
            .then((response) => {
                if (response.status === 200) {
                    return response.json()
                } else console.log("Get data error ");
            }).then((json) =>{
-           console.log(json)
-           // this.setState({tables: json})
+
+           this.setState({tableModifiedDishes: json})
+           console.log(this.state.tableModifiedDishes)
        }).catch((error) => {
            console.log('error on .catch', error);
        });
@@ -221,9 +220,10 @@ export default class CheckDishesDishes extends Component {
         const newToMenu = {
             pathname: '/home/Dishes/'+ this.props.match.params.tableid,
         };
+
         var tableModifiedDishes =
-        <div>
-          {this.state.tableDishes.map((value, key1) =>{
+        <div >
+          {this.state.tableModifiedDishes.map((value, key1) =>{
             return (
                 <div key={key1}>
                     <div>
@@ -232,17 +232,14 @@ export default class CheckDishesDishes extends Component {
                                 <div className="col-lg-4">{value.name}</div>
                                 <div className="col-lg-1">X</div>
                                 <div className="col-lg-2 row">
-                                    <Button className="" bsStyle="danger" onClick={()=>{this.minusNum(value.name)}}>-</Button>
-                                    {value.DishCount}
-                                    <Button className="" bsStyle="danger" onClick={()=>{this.addNum(value.name)}}>+</Button>
+                                    -{value.num}
                                 </div>
-
-                                <div className="col-lg-2"><Button className="" bsStyle="danger" onClick={()=>{this.deleteDish(value.name)}}>删除</Button></div>
                             </div>: null}
                     </div>
                 </div>
             )})}
           </div>
+
         return (
             <div>
               <div className="row">
@@ -277,12 +274,8 @@ export default class CheckDishesDishes extends Component {
                                                 {value!==0?
                                                     <div className="row nova-margin">
                                                         <div className="col-lg-4">{value.name}</div>
-                                                        <div className="col-lg-1">X</div>
-                                                        <div className="col-lg-2 row">
-                                                            <Button className="" bsStyle="danger" onClick={()=>{this.minusNum(value.name)}}>-</Button>
-                                                            {value.DishCount}
-                                                            <Button className="" bsStyle="danger" onClick={()=>{this.addNum(value.name)}}>+</Button>
-                                                        </div>
+                                                        <div className="col-lg-1">x</div>
+                                                        <div className="col-lg-2 row">{value.DishCount}</div>
 
                                                         <div className="col-lg-2"><Button className="" bsStyle="danger" onClick={()=>{this.deleteDish(value.name)}}>删除</Button></div>
                                                     </div>: null}
@@ -293,16 +286,34 @@ export default class CheckDishesDishes extends Component {
                         </div>}
 
                         <div>
+                            <div className="cust-border2 cust-margin3">
+                              {tableModifiedDishes}
+                            </div>
+                        </div>
+
+                        <div>
                             <div className="row nova-margin">
                                 <div className="col-lg-3">总价: </div>
                                 <div className="col-lg-2">{this.SumUp()}</div>
                             </div>
-
                         </div>
 
                         <div className="row nova-margin">
                             <Button className="" bsStyle="success" onClick={()=>{}}>返回控制台</Button>
-                            <Link to={newToMenu} ><Button className="" bsStyle="success" onClick={()=>{}}>加菜</Button></Link>
+                            <Link to={{
+                                pathname: '/home/Dishes/'+ this.props.match.params.tableid,
+                                state:{
+                                ss:9,
+                                tableDishes: this.state.tableDishes,
+                                tableModifiedDishes: this.state.tableModifiedDishes
+                                }
+                            }}><Button className="" bsStyle="success" onClick={()=>{}}>加菜</Button>
+                          </Link>
+
+
+
+
+
                             <Button className="" bsStyle="success" onClick={()=>{this.checkout()}}>结账&打印</Button>
                             <Button className="" bsStyle="danger" onClick={()=>{}}>厨房重新打印</Button>
 

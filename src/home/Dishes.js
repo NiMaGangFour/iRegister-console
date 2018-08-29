@@ -12,36 +12,10 @@ export default class Dishes extends Component {
         this.authOptions = React.createRef();
         this.state = {
           childValue:'',
-            Dish: new Map({
-                'A': 0,
-                'B': 0,
-                'C': 0,
-                'D': 0,
-                'E': 0,
-            }),
-            Menu: [{
-             "id": 1,
-            "name": "A",
-            "price": 10,
-            "ava": true
-            },
-                {
-                    "id": 2,
-                    "name": "B",
-                    "price": 20,
-                    "ava": true
-                },
-                {
-                    "id": 3,
-                    "name": "C",
-                    "price": 30,
-                    "ava": true
-                }
-            ],
-            order: [],
-            alldishes: [],
-            tableNum: null,
-            sumTotal: 0
+          order: [],
+          alldishes: [],
+          tableNum: null,
+          sumTotal: 0
     }
 
     // this.submitOrder = this.submitOrder.bind(this);
@@ -202,13 +176,13 @@ render() {
             <div className="row">
                 <div className="col-lg-9 cust-border nova-card" >
                     <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
-                        <Tab eventKey={1} title="炒菜" className="nova-padding">
+                        <Tab eventKey={1} title="小吃" className="nova-padding">
                             <ButtonToolbar>
                                 {this.state.alldishes.map((dish, i) =>{
                                     return (
                                       <div key={i}>
-                                        {dish.type === "炒菜" ?
-                                          <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                        {dish.type === "小吃" ?
+                                          <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}<br/>$ {dish.price}</Button>
                                         :null}
                                       </div>
                                     )
@@ -288,7 +262,7 @@ render() {
                         </div>
                         <div className="row nova-margin">
 
-                              <Button className="" bsStyle="success" onClick={()=>{this.submitOrder()}}>提交订单</Button>
+
                         </div>
                     </div>
                 </div>

@@ -224,3 +224,9 @@ a:hover{
 .cust-margin2{
     margin-top: 10px;
 }
+.cust-margin3{
+    margin-top: 10px;
+}
+.cust-border2{
+  border-style: solid none none none;
+}
