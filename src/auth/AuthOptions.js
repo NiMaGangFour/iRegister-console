@@ -69,7 +69,7 @@ export default class AuthOptions extends Component {
 
     render() {
         return (
-            <div className="join-us  nova-margin nova-padding nova-card cust-border">
+            <div className="join-us  cust-margin3 nova-padding nova-card cust-border">
                 <div>大堂</div>
                 <hr />
                 <div className="row nova-margin">
@@ -79,6 +79,7 @@ export default class AuthOptions extends Component {
                       };
                       var newToOrdered = {
                         pathname: '/home/CheckDishes/'+ value.id,
+                        state: {}
                         // pathname: '/home/CheckDishes/',
                       };
                         return (
@@ -96,6 +97,7 @@ export default class AuthOptions extends Component {
                                         :
                                             <div className="">
                                                 <Link to={newToOrdered} ><Button onClick={()=>{this.handleClickOccupiedTable(value.id)}} bsStyle="danger" > {value.name} </Button></Link>
+
                                             </div>
                                         }
                                         </div>

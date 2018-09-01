@@ -67,7 +67,6 @@ a:hover{
 
 .nova-margin{
     margin-top: 10px;
-
 }
 .nova-padding{
     padding: 15px;
@@ -223,10 +222,76 @@ a:hover{
 }
 .cust-margin2{
     margin-top: 10px;
+
 }
 .cust-margin3{
     margin-top: 10px;
+    margin-left: 16px;
 }
 .cust-border2{
   border-style: solid none none none;
+}
+.cust-p-color{
+  color: #FF0000;
+}
+.cust-p-color2{
+  color: #32CD32;
+}
+.cust-margin-menus{
+  margin-right: 30px;
+  margin-top: 3px;
+}
+.button-menus {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 2px 8px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+
+  margin-right: 30px;
+  margin-top: 3px;
+  width: 170px;
+  height: 70px;
+}
+
+.button {
+    position: relative;
+    background-color: #4CAF50;
+    border: none;
+    margin-right: 30px;
+    margin-top: 3px;
+    width: 170px;
+    height: 70px;
+
+    color: #FFFFFF;
+    padding: 20px;
+    width: 200px;
+    text-align: center;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.7s;
+    text-decoration: none;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.button:after {
+    content: "";
+    background: #f1f1f1;
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -90px !important;
+    margin-top: -220%;
+    opacity: 0;
+    transition: all 1.0s
+}
+
+.button:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link} from 'react-router-dom'
-import { Button, Tabs, Tab, ButtonGroup } from 'react-bootstrap';
+import { Button, Tabs, Tab, ButtonGroup } from 'react-bootstrap'
 
 export default class Personal extends Component {
     constructor(props) {
@@ -38,7 +38,7 @@ export default class Personal extends Component {
             param1: "D2"
         };
         return (
-            <div className="profile  nova-margin nova-padding nova-card cust-border">
+            <div className="profile  cust-margin3 nova-padding nova-card cust-border">
                 外卖
                 <hr />
                 <div>
