@@ -92,7 +92,7 @@ export default class Dishes extends Component {
         // console.log(POST)
         if (this.state.tableModifiedDishes.length == 0) {
             var newD = {
-              "orderID": this.props.location.state.tableDishes[0].orderID,
+              "orderID": this.props.location.state.tableDishes_orderID,
               "name": POST.name,
               "price": POST.price,
               "DishID": POST.dishId,
@@ -135,50 +135,62 @@ export default class Dishes extends Component {
     }
     //将再次添加的菜品信息 上传至 数据库dishmode表
     updateModifiedDiesh = () => {
-      // console.log(temp_modified);
-      var temp_modifiedArray = [];
-      var date = new Date();
-      var time = date.toLocaleTimeString();
-      let tempTableModifiedDishes = this.state.tableModifiedDishes
-      for (let i = 0; i < tempTableModifiedDishes.length; i++){
-
-        tempTableModifiedDishes[i].createTime = time
-        temp_modifiedArray.push(tempTableModifiedDishes[i])
+      console.log(this.state.tableModifiedDishes)
+      if (this.state.tableModifiedDishes.length === 0){
+        // window.location = '/'
+        console.log("this.state.tableModifiedDishes.length === 0")
       }
-      console.log(temp_modifiedArray);
-
-      fetch(API.baseUri+API.modDish, {
-          method: "POST",
-          headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        // [req.body.orderID, v[i].DishID, req.body.createTime, v[i].num]
-        body: JSON.stringify({
-                // "orderID": temp_modified[0].orderID,
-                "items": temp_modifiedArray,
-                // "createTime": time,
-            })
-      } ).then(res =>{
-          if(res.status===200) {
-            // console.log(res.json())
-            return res.json();
-          }
-          else console.log(res)
-      }).then(json => {
-        // console.log(json)
-        if (json.success === true){
-          console.log(json.success)
-          // this.getModifiedData(temp_modifiedArray);
+      else{
+        var temp_modifiedArray = [];
+        var date = new Date();
+        var time = date.toLocaleTimeString();
+        let tempTableModifiedDishes = this.state.tableModifiedDishes
+        for (let i = 0; i < tempTableModifiedDishes.length; i++){
+          tempTableModifiedDishes[i].createTime = time
+          temp_modifiedArray.push(tempTableModifiedDishes[i])
         }
-        // console.log(this.state.tableModifiedDishes)
-      })
-      // console.log("");
+        console.log(temp_modifiedArray);
+
+        fetch(API.baseUri+API.modDish, {
+            method: "POST",
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          // [req.body.orderID, v[i].DishID, req.body.createTime, v[i].num]
+          body: JSON.stringify({
+                  // "orderID": temp_modified[0].orderID,
+                  "items": temp_modifiedArray,
+                  // "createTime": time,
+              })
+        } ).then(res =>{
+            if(res.status===200) {
+              // console.log(res.json())
+              return res.json();
+            }
+            else console.log(res)
+        }).then(json => {
+          // console.log(json)
+          if (json.success === true){
+            console.log(json.success)
+            // window.location = '/'
+            // this.getModifiedData(temp_modifiedArray);
+          }
+          // console.log(this.state.tableModifiedDishes)
+        })
+        // console.log("");
+      }
     }
 
     SumUp= ()=> {
         var total = this.state.order.reduce((sum, price) =>{
             return sum + price.num * price.price
+        }, 0)
+        return total;
+    }
+    SumUpModified= ()=> {
+        var total = this.props.location.state.tableDishes.reduce((sum, price) =>{
+            return sum + price.DishCount * price.price
         }, 0)
         return total;
     }
@@ -253,7 +265,7 @@ render() {
               parentChild={this.parentChild} />
             <Personal />
 
-            <div className="site-info   nova-margin nova-padding nova-card cust-border">
+            <div className="site-info cust-margin3 nova-padding nova-card cust-border">
                 <ul>
                     <li>Nova Software </li>
                     <li>Canberra House</li>
@@ -282,7 +294,7 @@ render() {
                                           {this.props.location.hasOwnProperty("state")!== true ?
                                             <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
                                             :
-                                            <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}>{dish.name}<br/>$ {dish.price}</Button>
+                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
                                           }
                                         </div>
                                         :null}
@@ -373,6 +385,7 @@ render() {
                           </div>
                           <div className="cust-border2 cust-margin3">
                             {console.log(this.props.location.state.tableModifiedDishes)}
+                            {console.log(this.props.location.state.tableDishes)}
                             {console.log(this.state.tableModifiedDishes)}
 
                             {this.props.location.state.tableModifiedDishes.map((value, key1) =>{
@@ -383,7 +396,7 @@ render() {
                                                 <div className="row nova-margin">
                                                     <div className="col-lg-6">{value.name}</div>
                                                     <div className="col-lg-1">x</div>
-                                                    <div className="col-lg-1"><p className="cust-p-color">-{value.num}</p></div>
+                                                    <div className="col-lg-1"><p className="cust-p-color">{value.num}</p></div>
                                                 </div>: null}
                                         </div>
                                     </div>
@@ -417,7 +430,7 @@ render() {
                                   {this.SumUp()}
                                 </div>:
                                 <div>
-                                  999
+                                  {this.SumUpModified()}
                                 </div>
                               }
 

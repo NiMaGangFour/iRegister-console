@@ -140,7 +140,6 @@ export default class Home extends Component {
             </div>
             <div className="col-sm-12 col-lg-10 pull-right nova-card cust-border cust-margin2 ">
             <div className="">
-              <button className="button">TEST</button>
               <div><h1>蜀味源餐饮系统</h1><h5>Version 1.1</h5></div><br />
               <h2>当前时间：<Clock format={'h:mm:ss A'} timezone={'Australia/Sydney'} ticking={true}/></h2>
               <Clock format={'dddd, MMMM Mo, YYYY'} timezone={'Australia/Sydney'}/>

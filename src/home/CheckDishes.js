@@ -16,7 +16,8 @@ export default class CheckDishesDishes extends Component {
           tableDishes:[],
           thispropsmatchparamstableid:null,
           tableModifiedDishes:[],
-          tableStatus: "Occupied"
+          tableStatus: "Occupied",
+          tableDishes_orderID: null
         }}
 
     componentDidMount() {
@@ -42,8 +43,11 @@ export default class CheckDishesDishes extends Component {
                } else console.log("Get data error ");
            }).then((json) =>{
            console.log(json)
-           this.setState({tableDishes: json})
-           console.log(this.state.tableDishes[0].orderID)
+           this.setState({
+             tableDishes: json,
+             tableDishes_orderID: json[0].orderID
+           })
+           console.log(this.state.tableDishes_orderID)
            this.getModifiedData();
        }).catch((error) => {
            console.log('error on .catch', error);
@@ -66,7 +70,11 @@ export default class CheckDishesDishes extends Component {
             if(this.state.tableDishes[index].name !== nameDish){
                 temp_post.push(this.state.tableDishes[index])
             }
-            else temp_modified = this.state.tableDishes[index]
+            else{
+              this.state.tableDishes[index].DishCount = -this.state.tableDishes[index].DishCount
+              temp_modified = this.state.tableDishes[index]
+              console.log(this.state.tableDishes[index].DishCount)
+            }
         }
         this.setState({
             tableDishes:temp_post,
@@ -114,7 +122,7 @@ export default class CheckDishesDishes extends Component {
     //从数据库dishMod表中 获取 改动菜的信息
     getModifiedData =()=> {
       // console.log(temp_modifiedArray)
-       fetch(API.baseUri+API.getModDish + "/" + this.state.tableDishes[0].orderID)
+       fetch(API.baseUri+API.getModDish + "/" + this.state.tableDishes_orderID)
            .then((response) => {
                if (response.status === 200) {
                    return response.json()
@@ -219,9 +227,7 @@ export default class CheckDishesDishes extends Component {
                             <div className="row nova-margin">
                                 <div className="col-lg-4">{value.name}</div>
                                 <div className="col-lg-1">X</div>
-                                <div className="col-lg-2 row">
-                                    -{value.num}
-                                </div>
+                                <div className="col-lg-2 row">{value.num}</div>
                             </div>: null}
                     </div>
                 </div>
@@ -286,17 +292,20 @@ export default class CheckDishesDishes extends Component {
                         </div>
 
                         <div className="row nova-margin">
-                            <Button className="" bsStyle="success" onClick={()=>{}}>返回控制台</Button>
+                            <Button className="col-lg-2 button2" bsStyle="success" onClick={()=>{}}>返回控制台</Button>
+
                             <Link to={{
                                 pathname: '/home/Dishes/'+ this.props.match.params.tableid,
                                 state:{
+                                tableDishes_orderID: this.state.tableDishes_orderID,
                                 tableDishes: this.state.tableDishes,
                                 tableModifiedDishes: this.state.tableModifiedDishes
                                 }
-                            }}><Button className="" bsStyle="success" onClick={()=>{}}>加菜</Button>
+                            }}><Button className="col-lg-2 button2" bsStyle="success" onClick={()=>{}}>加菜</Button>
                             </Link>
-                            <Button className="" bsStyle="success" onClick={()=>{this.checkout()}}>结账&打印</Button>
-                            <Button className="" bsStyle="danger" onClick={()=>{}}>厨房重新打印</Button>
+
+                            <Button className="col-lg-2 button2" bsStyle="success" onClick={()=>{this.checkout()}}>结账&打印</Button>
+                            <Button className="col-lg-2 button2" bsStyle="danger" onClick={()=>{}}>厨房重新打印</Button>
                         </div>
                     </div>
                 </div>

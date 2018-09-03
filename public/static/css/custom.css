@@ -228,6 +228,10 @@ a:hover{
     margin-top: 10px;
     margin-left: 16px;
 }
+.cust-margin4{
+    margin-top: 3px;
+
+}
 .cust-border2{
   border-style: solid none none none;
 }
@@ -250,9 +254,9 @@ a:hover{
   text-decoration: none;
   display: inline-block;
 
-  margin-right: 30px;
-  margin-top: 3px;
-  width: 170px;
+  margin-right: 5px;
+  margin-top: 10px;
+  width: 140px;
   height: 70px;
 }
 
@@ -294,4 +298,9 @@ a:hover{
     margin: 0;
     opacity: 1;
     transition: 0s
+}
+
+.button2{
+
+  margin-right: 30px;
 }

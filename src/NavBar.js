@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import {Nav, Navbar, NavItem, MenuItem}  from 'react-bootstrap'
+import {Nav, Navbar, NavItem, MenuItem, SplitButton, DropdownButton}  from 'react-bootstrap'
 import {LinkContainer } from 'react-router-bootstrap'
+import Clock from 'react-live-clock'
 
 export default class NavBar extends Component{
     render(){
@@ -37,12 +38,25 @@ export default class NavBar extends Component{
                                 {/*</div>*/}
                             </form>
                             <ul className="nav navbar-nav navbar-right">
-                                <li ><i className="fas fa-comments fa-1x message"><span className="">42</span></i></li>
+                                <li ><i className="fas fa-clock fa-1x message"><span className=""><Clock format={'h:mm:ss A'} timezone={'Australia/Sydney'} ticking={true}/></span></i></li>
                                 <li><a href="#">
                                     <div className="user_logo_nav">
-                                        <img src="/static/img/car.jpeg" />
+                                        <img src="/static/img/user-icon.png" />
+
                                     </div>
                                 </a></li>
+                                <DropdownButton
+                                  className="fas fa-list-alt fa-1x message "
+                                  title=""
+                                  key=""
+                                  id=""
+                                >
+                                  <MenuItem eventKey="1">功能1</MenuItem>
+                                  <MenuItem eventKey="2">功能2</MenuItem>
+                                  <MenuItem eventKey="3">功能3</MenuItem>
+                                  <MenuItem divider />
+                                  <MenuItem eventKey="4">注销用户</MenuItem>
+                                </DropdownButton>
                             </ul>
                         </div>
                     </div>
