@@ -10,6 +10,8 @@ export const API = {
     getModDishes: 'getModDishes',
     getTableDishes: 'api1/getTableDishes',
     modDish: 'modDish',
-    getModDish: 'api1/getModDish'
+    getModDish: 'api1/getModDish',
+    getOrderComment: 'api1/getOrderComment',
+    addDish: 'addDish'
 
 }

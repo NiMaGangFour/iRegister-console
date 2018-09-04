@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Tabs, Tab, ButtonToolbar } from 'react-bootstrap';
+import { Button, Tabs, Tab, ButtonToolbar, ControlLabel, FormControl, FormGroup} from 'react-bootstrap';
 import { Map } from 'immutable';
 import { API } from '../config';
 import AuthOptions from '../auth/AuthOptions';
@@ -17,15 +17,14 @@ export default class Dishes extends Component {
           alldishes: [],
           tableNum: null,
           sumTotal: 0,
-          tableModifiedDishes:[]
+          tableModifiedDishes:[],
+          textareaValue: ""
         }
-        const wellStyles = { maxWidth: 400, margin: '0 auto 10px' };
-
-    // this.submitOrder = this.submitOrder.bind(this);
   }
 
    componentDidMount() {
        this.getData()
+       this.getInitialState()
   }
 
     getData() {
@@ -138,7 +137,8 @@ export default class Dishes extends Component {
       console.log(this.state.tableModifiedDishes)
       if (this.state.tableModifiedDishes.length === 0){
         // window.location = '/'
-        console.log("this.state.tableModifiedDishes.length === 0")
+        console.log(this.state.textareaValue)
+        console.log(this.props.location.state.tableDishes_orderID)
       }
       else{
         var temp_modifiedArray = [];
@@ -151,7 +151,7 @@ export default class Dishes extends Component {
         }
         console.log(temp_modifiedArray);
 
-        fetch(API.baseUri+API.modDish, {
+        fetch(API.baseUri + API.addDish, {
             method: "POST",
             headers: {
             'Accept': 'application/json',
@@ -161,6 +161,8 @@ export default class Dishes extends Component {
           body: JSON.stringify({
                   // "orderID": temp_modified[0].orderID,
                   "items": temp_modifiedArray,
+                  "comment": this.state.textareaValue,
+                  "orderID": this.props.location.state.tableDishes_orderID
                   // "createTime": time,
               })
         } ).then(res =>{
@@ -172,7 +174,7 @@ export default class Dishes extends Component {
         }).then(json => {
           // console.log(json)
           if (json.success === true){
-            console.log(json.success)
+            console.log(json.msg)
             // window.location = '/'
             // this.getModifiedData(temp_modifiedArray);
           }
@@ -188,10 +190,20 @@ export default class Dishes extends Component {
         }, 0)
         return total;
     }
-    SumUpModified= ()=> {
+    SumUpModified = ()=> {
         var total = this.props.location.state.tableDishes.reduce((sum, price) =>{
             return sum + price.DishCount * price.price
         }, 0)
+        return total;
+    }
+    SumUpFurtherModified = ()=> {
+        var total = this.state.tableModifiedDishes.reduce((sum, price) =>{
+            return sum + price.DishCount * price.price
+        }, 0)
+        return total;
+    }
+    SumUpEntirePrice = ()=> {
+        var total = this.SumUpModified() + this.SumUpFurtherModified();
         return total;
     }
 
@@ -209,10 +221,54 @@ export default class Dishes extends Component {
 
     }
 
+    deleteModifiedDish = (nameDish)=> {
+        console.log(nameDish)
+        var temp_post = [];
+        for(let index in this.state.tableModifiedDishes){
+            // console.log(this.state.myPosts[index].idPOST , idPost)
+            if(this.state.tableModifiedDishes[index].name !== nameDish){
+                temp_post.push(this.state.tableModifiedDishes[index])
+            }
+        }this.setState({
+            tableModifiedDishes:temp_post
+        })
+    }
+
+    handleChange = (event) => {
+      this.setState({textareaValue: event.target.value});
+    }
+
+    // componentWillReceiveProps(nextProps) {
+    //     if (nextProps.location.hasOwnProperty("state") === true){
+    //       this.setState({
+    //         textareaValue: this.props.location.state.comment
+    //       })
+    //       console.log(this.state.textareaValue)
+    //     }
+    // }
+
+    getInitialState = () => {
+      if (this.props.location.hasOwnProperty("state") === true){
+        this.setState({
+          textareaValue: this.props.location.state.comment
+        })
+        console.log(this.state.textareaValue)
+      }
+
+      // this.setState({
+      //   textareaValue: this.props.location.state.comment
+      // })
+      // console.log("getInitialState")
+    }
+
+
+
+
     submitOrder = () => {
       var date = new Date();
       var time = date.toLocaleTimeString();
       console.log(JSON.stringify(this.state.order))
+      console.log(this.state.textareaValue)
 
       fetch(API.baseUri+API.postOrder, {
           method: "POST",
@@ -224,7 +280,9 @@ export default class Dishes extends Component {
                 "items": this.state.order,
                 "creatTime": time,
                 "totalPrice": this.SumUp(),
-                "tableID": this.props.match.params.tableid
+                "tableID": this.props.match.params.tableid,
+                "comment":this.state.textareaValue
+
             })
       } ).then(res =>{
           if(res.status===200) {
@@ -234,12 +292,13 @@ export default class Dishes extends Component {
           else console.log(res)
       }).then(json => {
         console.log(json.success)
+        console.log(json)
         if (json.success === true){
           this.authOptions.current.getData();
           this.setState({
             order:[]
           })
-          window.location = '/'
+          // window.location = '/'
         }
       })
     }
@@ -383,7 +442,7 @@ render() {
                                     </div>
                                 )})}
                           </div>
-                          <div className="cust-border2 cust-margin3">
+                          <div className="cust-border2 nova-margin">
                             {console.log(this.props.location.state.tableModifiedDishes)}
                             {console.log(this.props.location.state.tableDishes)}
                             {console.log(this.state.tableModifiedDishes)}
@@ -396,7 +455,7 @@ render() {
                                                 <div className="row nova-margin">
                                                     <div className="col-lg-6">{value.name}</div>
                                                     <div className="col-lg-1">x</div>
-                                                    <div className="col-lg-1"><p className="cust-p-color">{value.num}</p></div>
+                                                    <div className="col-lg-1"><p className="">{value.num}</p></div>
                                                 </div>: null}
                                         </div>
                                     </div>
@@ -410,6 +469,7 @@ render() {
                                                         <div className="col-lg-6">{value.name}</div>
                                                         <div className="col-lg-1">x</div>
                                                         <div className="col-lg-1"><p className="cust-p-color2">{value.DishCount}</p></div>
+                                                        <div className="col-lg-1"><Button className="" bsStyle="danger" onClick={()=>{this.deleteModifiedDish(value.name)}}>删</Button></div>
                                                     </div>: null}
                                             </div>
                                         </div>
@@ -417,9 +477,6 @@ render() {
                           </div>
                         </div>
                       }
-
-
-                        {/*{this.state.Dish.get('A')}*/}
                     </div>
                     <div>
                         <div className="row nova-margin">
@@ -427,14 +484,28 @@ render() {
                             <div className="col-lg-2">
                               {this.props.location.hasOwnProperty("state") !== true ?
                                 <div>
-                                  {this.SumUp()}
+                                  #{this.SumUp()}
                                 </div>:
                                 <div>
-                                  {this.SumUpModified()}
+                                  {this.SumUpModified()}<br />
+                                  {this.SumUpFurtherModified()}<br />
+                                  {this.SumUpEntirePrice()}
                                 </div>
                               }
-
                             </div>
+                            {this.props.location.hasOwnProperty("state") !== true ?
+                              <div>
+                                <FormGroup controlId="formControlsTextarea">
+                                  <FormControl componentClass="textarea"  value={this.state.textareaValue} onChange={this.handleChange} placeholder="填写备注信息：" />
+                                </FormGroup>
+                              </div>:
+                              <div>
+                                <FormGroup controlId="formControlsTextarea">
+                                  <FormControl componentClass="textarea"  value={this.state.textareaValue} onChange={this.handleChange} placeholder="填写备注信息：" />
+                                </FormGroup>
+                              </div>
+                            }
+
                         </div>
                         <div className="row nova-margin">
                           {this.props.location.hasOwnProperty("state")=== true ?
@@ -443,6 +514,8 @@ render() {
                             </div>:
                             <Button bsStyle="success" onClick={()=>{this.submitOrder()}}>提交订单</Button>
                           }
+
+
 
                         </div>
                     </div>

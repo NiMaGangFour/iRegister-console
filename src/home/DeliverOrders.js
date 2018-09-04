@@ -48,13 +48,10 @@ export default class DeliverOrders extends Component {
          // var x = this.props.match.params.order;
          // this.setState({orderID: x})
         console.log(this.props)
-
-
     }
 
 
     SumUp= ()=> {
-
         var total = this.state.order.reduce((sum, price) =>{
             return sum + price.num * price.price
         }, 0)
@@ -72,7 +69,6 @@ export default class DeliverOrders extends Component {
         }this.setState({
             order:temp_post
         })
-
     }
 
     addNum = (nameDish)=> {
@@ -118,9 +114,7 @@ export default class DeliverOrders extends Component {
 
 
     render() {
-
         return (
-
             <div>
                 外卖订单号: {this.props.match.params.order}
                 <div className="row">

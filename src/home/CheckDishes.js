@@ -17,7 +17,8 @@ export default class CheckDishesDishes extends Component {
           thispropsmatchparamstableid:null,
           tableModifiedDishes:[],
           tableStatus: "Occupied",
-          tableDishes_orderID: null
+          tableDishes_orderID: null,
+          comment:""
         }}
 
     componentDidMount() {
@@ -35,7 +36,7 @@ export default class CheckDishesDishes extends Component {
     }
     //获取对应桌号的 点菜信息
     getData =()=> {
-       console.log(this.props.match.params.tableid)
+       console.log(this.props)
        fetch(API.baseUri+API.getTableDishes + "/" + this.props.match.params.tableid)
            .then((response) => {
                if (response.status === 200) {
@@ -45,21 +46,60 @@ export default class CheckDishesDishes extends Component {
            console.log(json)
            this.setState({
              tableDishes: json,
-             tableDishes_orderID: json[0].orderID
+             tableDishes_orderID: this.props.location.state.currentOrderID
            })
            console.log(this.state.tableDishes_orderID)
            this.getModifiedData();
        }).catch((error) => {
            console.log('error on .catch', error);
-       });
+       }).then(() =>{
+         fetch(API.baseUri+API.getOrderComment + "/" + this.state.tableDishes_orderID)
+             .then((response) => {
+                 if (response.status === 200) {
+                     return response.json()
+                 } else console.log("Get data error ");
+             }).then((json) =>{
+             console.log(json[0].comment)
+             this.setState({
+               comment: json[0].comment,
+             })
+           }).catch((error) => {
+             console.log('error on .catch', error);
+         });
+       })
+
+
    }
     //计算点菜总价
-    SumUp= ()=> {
+    SumUp = ()=> {
         var total = this.state.tableDishes.reduce((sum, price) =>{
             return sum + price.DishCount * price.price
         }, 0)
         return total;
     }
+
+    SumUpModified = ()=> {
+      var temTableModifiedDishesNumPositive = []
+      var temTableModifiedDishes = this.state.tableModifiedDishes
+      for (let index in temTableModifiedDishes)
+      {
+        if(temTableModifiedDishes[index].num >= 0)
+        temTableModifiedDishesNumPositive.push(temTableModifiedDishes[index])
+      }
+
+      var total = temTableModifiedDishesNumPositive.reduce((sum, price) =>{
+          return sum + price.num * price.price
+      }, 0)
+      console.log(temTableModifiedDishesNumPositive)
+      console.log(temTableModifiedDishes)
+      return total;
+    }
+
+    SumUpEntirePrice = ()=> {
+        var total = this.SumUp() + this.SumUpModified();
+        return total;
+    }
+
     //删除已点的菜
     deleteDish = (nameDish)=> {
         // console.log(nameDish)
@@ -79,7 +119,7 @@ export default class CheckDishesDishes extends Component {
         this.setState({
             tableDishes:temp_post,
         })
-        // console.log(temp_modified);
+         console.log(temp_modified);
          this.updateModifiedDiesh(temp_modified);
     }
     //将已经删除了的菜 上传 到数据库dishMod表
@@ -121,7 +161,7 @@ export default class CheckDishesDishes extends Component {
     }
     //从数据库dishMod表中 获取 改动菜的信息
     getModifiedData =()=> {
-      // console.log(temp_modifiedArray)
+      console.log("getModifiedData =()=>")
        fetch(API.baseUri+API.getModDish + "/" + this.state.tableDishes_orderID)
            .then((response) => {
                if (response.status === 200) {
@@ -183,6 +223,8 @@ export default class CheckDishesDishes extends Component {
     }
     //对应按钮 “结账打印” 并刷新table状态为Available
     checkout = () => {
+      console.log(this.state.tableDishes_orderID)
+      console.log(this.props.match.params.tableid)
       fetch(API.baseUri+API.checkOut, {
           method: "POST",
           headers: {
@@ -190,7 +232,7 @@ export default class CheckDishesDishes extends Component {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-                "orderID": this.state.tableDishes[0].orderID,
+                "orderID": this.state.tableDishes_orderID,
                 "tableID": this.props.match.params.tableid
             })
       } ).then(res =>{
@@ -206,7 +248,7 @@ export default class CheckDishesDishes extends Component {
           this.setState({
             tableDishes:[]
           })
-          window.location = '/'
+          // window.location = '/'
         }
       })
       console.log("checkOut");
@@ -226,8 +268,8 @@ export default class CheckDishesDishes extends Component {
                         {value!==0?
                             <div className="row nova-margin">
                                 <div className="col-lg-4">{value.name}</div>
-                                <div className="col-lg-1">X</div>
-                                <div className="col-lg-2 row">{value.num}</div>
+                                <div className="col-lg-1">x</div>
+                                <div className="col-lg-1 ">{value.num}</div>
                             </div>: null}
                     </div>
                 </div>
@@ -269,8 +311,8 @@ export default class CheckDishesDishes extends Component {
                                                     <div className="row nova-margin">
                                                         <div className="col-lg-4">{value.name}</div>
                                                         <div className="col-lg-1">x</div>
-                                                        <div className="col-lg-2 row">{value.DishCount}</div>
-                                                        <div className="col-lg-2"><Button className="" bsStyle="danger" onClick={()=>{this.deleteDish(value.name)}}>删除</Button></div>
+                                                        <div className="col-lg-1">{value.DishCount}</div>
+                                                        <div className="col-lg-1"><Button className="" bsStyle="danger" onClick={()=>{this.deleteDish(value.name)}}>删除</Button></div>
                                                     </div>: null}
                                             </div>
                                         </div>
@@ -288,6 +330,9 @@ export default class CheckDishesDishes extends Component {
                             <div className="row nova-margin">
                                 <div className="col-lg-3">总价: </div>
                                 <div className="col-lg-2">{this.SumUp()}</div>
+                                <div className="col-lg-2">{this.SumUpModified()}</div>
+                                <div className="col-lg-2">{this.SumUpEntirePrice()}</div>
+
                             </div>
                         </div>
 
@@ -297,6 +342,7 @@ export default class CheckDishesDishes extends Component {
                             <Link to={{
                                 pathname: '/home/Dishes/'+ this.props.match.params.tableid,
                                 state:{
+                                comment:this.state.comment,
                                 tableDishes_orderID: this.state.tableDishes_orderID,
                                 tableDishes: this.state.tableDishes,
                                 tableModifiedDishes: this.state.tableModifiedDishes
@@ -308,6 +354,11 @@ export default class CheckDishesDishes extends Component {
                             <Button className="col-lg-2 button2" bsStyle="danger" onClick={()=>{}}>厨房重新打印</Button>
                         </div>
                     </div>
+                    {this.state.comment !== "" ?
+                      <div className="col-lg-3 cust-border nova-card" >
+                        <h2>{this.state.comment}</h2>
+                    </div>:null
+                    }
                 </div>
               </div>
             </div>

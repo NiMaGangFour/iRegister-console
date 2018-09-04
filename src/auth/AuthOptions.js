@@ -74,13 +74,18 @@ export default class AuthOptions extends Component {
                 <hr />
                 <div className="row nova-margin">
                   {console.log(this.state.tables)}
+
                     {this.state.tables.map((value, key1) =>{
                       var newToAvia = {
                         pathname: '/home/Dishes/'+ value.id,
                       };
+                      // console.log(value.id)
                       var newToOrdered = {
                         pathname: '/home/CheckDishes/'+ value.id,
-                        state: {}
+
+                        state: {
+                          currentOrderID: value.currentOrderID,
+                        }
                         // pathname: '/home/CheckDishes/',
                       };
                         return (
