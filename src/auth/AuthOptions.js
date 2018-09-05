@@ -43,7 +43,7 @@ export default class AuthOptions extends Component {
                     return response.json()
                 } else console.log("Get data error ");
             }).then((json) =>{
-            console.log(json)
+            // console.log(json)
             this.setState({tables: json})
         }).catch((error) => {
             console.log('error on .catch', error);
@@ -56,7 +56,7 @@ export default class AuthOptions extends Component {
 
         this.setState({tableName: temp_name});
 
-        console.log(this.state.props.tableName);
+        // console.log(this.state.props.tableName);
     }
     handleClickAvailableTable = (tableid) => {
       // this.props.parentChild(tableid);
@@ -73,20 +73,22 @@ export default class AuthOptions extends Component {
                 <div>大堂</div>
                 <hr />
                 <div className="row nova-margin">
-                  {console.log(this.state.tables)}
+
 
                     {this.state.tables.map((value, key1) =>{
                       var newToAvia = {
                         pathname: '/home/Dishes/'+ value.id,
                       };
-                      // console.log(value.id)
+                      // console.log(value.currentOrderID)
                       var newToOrdered = {
                         pathname: '/home/CheckDishes/'+ value.id,
 
-                        state: {
-                          currentOrderID: value.currentOrderID,
-                        }
-                        // pathname: '/home/CheckDishes/',
+                        // state: {
+                        //   currentOrderID: value.currentOrderID,
+                        // }
+                      };
+                      var newToBooked = {
+                        pathname: '/home/CheckBookings/'+ value.id,
                       };
                         return (
                             <div key={key1}>
@@ -98,12 +100,10 @@ export default class AuthOptions extends Component {
                                         <div className="col-lg-4 nova-margin">
                                         {value.status !== "2" ?
                                             <div className="">
-                                            <Button className="" bsStyle="warning" > {value.name} </Button>
-                                            </div>
-                                        :
+                                              <Link to={newToBooked} ><Button className="" bsStyle="warning" > {value.name} </Button></Link>
+                                            </div>:
                                             <div className="">
                                                 <Link to={newToOrdered} ><Button onClick={()=>{this.handleClickOccupiedTable(value.id)}} bsStyle="danger" > {value.name} </Button></Link>
-
                                             </div>
                                         }
                                         </div>

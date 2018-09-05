@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import {API} from '../config'
 import Clock from 'react-live-clock'
 import { Button, Tabs, Tab, ButtonGroup } from 'react-bootstrap'
-
+import Personal from '../personal/Personal'
 
 export default class Home extends Component {
     constructor(props) {
@@ -86,7 +86,9 @@ export default class Home extends Component {
                         };
                         var newToOrdered = {
                           pathname: '/home/CheckDishes/'+ value.id,
-                          // pathname: '/home/CheckDishes/',
+                          state: {
+                            currentOrderID: value.currentOrderID,
+                          }
                         };
                           return (
                               <div key={key1}>
@@ -118,32 +120,20 @@ export default class Home extends Component {
                       <li>Yellow: Reserved</li>
                   </div>
               </div>
-              <div className="profile  cust-margin3 nova-padding nova-card cust-border">
-                  外卖
-                  <hr />
-                  <div>
-                      <ButtonGroup vertical block>
-                          <Link to={newToAvia}><Button className="col-lg-12">06:50pm</Button></Link>
-                          <Link to={newToOrdered}><Button className="col-lg-12">06:10pm</Button></Link>
-                              <Link to={newToAvia}><Button className="col-lg-12">06:00pm</Button></Link>
-                      </ButtonGroup>
-                      {/*<div className=""><Link to={newToAvia} ><Button className="" bsStyle="success" > 06:50pm </Button></Link>*/}
 
-                      {/*</div>*/}
-                      {/*<div className=""><Link to={newToOrdered} ><Button className="" bsStyle="danger" > 06:10 pm </Button></Link></div>*/}
-                      {/*<div className=""><Button className="" bsStyle="warning" onClick={()=>{console.log("asdf")}}>T3</Button></div>*/}
-
-
-                  </div>
-
-              </div>
+              <Personal />
             </div>
             <div className="col-sm-12 col-lg-10 pull-right nova-card cust-border cust-margin2 ">
-            <div className="">
-              <div><h1>蜀味源餐饮系统</h1><h5>Version 1.1</h5></div><br />
+              <div className="center" >
+                  <img src="/static/img/logo.png" />
+              </div>
+            <div className="center">
+              <div><h1>蜀味源餐饮系统</h1><h5>Version 1.1</h5></div>
+
               <h2>当前时间：<Clock format={'h:mm:ss A'} timezone={'Australia/Sydney'} ticking={true}/></h2>
               <Clock format={'dddd, MMMM Mo, YYYY'} timezone={'Australia/Sydney'}/>
             </div>
+
           </div>
           </div>
         )

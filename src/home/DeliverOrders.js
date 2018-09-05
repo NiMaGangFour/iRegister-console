@@ -45,8 +45,6 @@ export default class DeliverOrders extends Component {
 
 
     componentDidMount() {
-         // var x = this.props.match.params.order;
-         // this.setState({orderID: x})
         console.log(this.props)
     }
 

@@ -12,6 +12,7 @@ import Tieba from './tieba/Tieba'
 import Dishes from './home/Dishes'
 import CheckDishes from './home/CheckDishes'
 import DeliverOrders from './home/DeliverOrders'
+import CheckBookings from './home/CheckBookings'
 
 const Router = () =>{
     return(
@@ -32,6 +33,7 @@ const Router = () =>{
                         <Route exact path='/home/Dishes/:tableid' component={Dishes}/>
 
                         <Route exact path='/home/DeliverOrders/:order' component={DeliverOrders}/>
+                        <Route exact path='/home/CheckBookings/:tableid' component={CheckBookings}/>
                     </Switch>
                 </div>
             </div>

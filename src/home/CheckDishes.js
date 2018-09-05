@@ -26,30 +26,40 @@ export default class CheckDishesDishes extends Component {
 
       // console.log(this.props)
     }
+    componentWillMount() {
+      console.log(this.props);
+    }
 
     //将新传入的props赋值给现存的props
     componentWillReceiveProps(nextProps) {
         if (nextProps.match.params.tableid){
           this.props.match.params.tableid = nextProps.match.params.tableid
           this.getData();
+
         }
     }
     //获取对应桌号的 点菜信息
     getData =()=> {
-       console.log(this.props)
+      this.setState({
+        tableDishes: []
+      })
+       console.log(this.props.match.params.tableid)
+       console.log(this.state.tableDishes)
        fetch(API.baseUri+API.getTableDishes + "/" + this.props.match.params.tableid)
            .then((response) => {
                if (response.status === 200) {
                    return response.json()
                } else console.log("Get data error ");
            }).then((json) =>{
-           console.log(json)
-           this.setState({
-             tableDishes: json,
-             tableDishes_orderID: this.props.location.state.currentOrderID
-           })
-           console.log(this.state.tableDishes_orderID)
-           this.getModifiedData();
+             console.log(json)
+             // console.log(json[0].orderID)
+             // console.log(this.props.location.state.currentOrderID)
+             this.setState({
+               tableDishes: json,
+               tableDishes_orderID: json[0].orderID
+             })
+             // console.log(this.state.tableDishes)
+             this.getModifiedData();
        }).catch((error) => {
            console.log('error on .catch', error);
        }).then(() =>{
@@ -67,8 +77,6 @@ export default class CheckDishesDishes extends Component {
              console.log('error on .catch', error);
          });
        })
-
-
    }
     //计算点菜总价
     SumUp = ()=> {
@@ -113,7 +121,7 @@ export default class CheckDishesDishes extends Component {
             else{
               this.state.tableDishes[index].DishCount = -this.state.tableDishes[index].DishCount
               temp_modified = this.state.tableDishes[index]
-              console.log(this.state.tableDishes[index].DishCount)
+              console.log(this.state.tableDishes[index])
             }
         }
         this.setState({
@@ -153,7 +161,7 @@ export default class CheckDishesDishes extends Component {
         // console.log(json)
         if (json.success === true){
           console.log(json.success)
-          this.getModifiedData(temp_modifiedArray);
+          this.getModifiedData();
         }
         // console.log(this.state.tableModifiedDishes)
       })
@@ -161,13 +169,14 @@ export default class CheckDishesDishes extends Component {
     }
     //从数据库dishMod表中 获取 改动菜的信息
     getModifiedData =()=> {
-      console.log("getModifiedData =()=>")
-       fetch(API.baseUri+API.getModDish + "/" + this.state.tableDishes_orderID)
+      console.log(this.props.match.params.tableid)
+       fetch(API.baseUri+API.getModDishes + "/" + this.props.match.params.tableid)
            .then((response) => {
                if (response.status === 200) {
                    return response.json()
                } else console.log("Get data error ");
            }).then((json) =>{
+           console.log(json)
 
            this.setState({tableModifiedDishes: json})
            console.log(this.state.tableModifiedDishes)
@@ -246,7 +255,8 @@ export default class CheckDishesDishes extends Component {
         if (json.success === true){
           this.authOptions.current.getData();
           this.setState({
-            tableDishes:[]
+            tableDishes:[],
+            tableModifiedDishes:[]
           })
           // window.location = '/'
         }
@@ -254,7 +264,7 @@ export default class CheckDishesDishes extends Component {
       console.log("checkOut");
     }
     render() {
-      console.log(this.props.location);
+      console.log(this.props);
         const newToMenu = {
             pathname: '/home/Dishes/'+ this.props.match.params.tableid,
         };
@@ -270,6 +280,7 @@ export default class CheckDishesDishes extends Component {
                                 <div className="col-lg-4">{value.name}</div>
                                 <div className="col-lg-1">x</div>
                                 <div className="col-lg-1 ">{value.num}</div>
+                                
                             </div>: null}
                     </div>
                 </div>

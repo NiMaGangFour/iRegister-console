@@ -7,11 +7,12 @@ export const API = {
     getAllDishes: 'api/getAllDishes',
     postOrder: 'neworder',
     checkOut: 'checkout',
-    getModDishes: 'getModDishes',
+    getModDishes: 'api1/getModDishes',
     getTableDishes: 'api1/getTableDishes',
     modDish: 'modDish',
     getModDish: 'api1/getModDish',
     getOrderComment: 'api1/getOrderComment',
-    addDish: 'addDish'
+    addDish: 'addDish',
+    getDeliveryOrders: 'getDeliveryOrders'
 
 }

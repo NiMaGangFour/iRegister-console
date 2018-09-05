@@ -115,7 +115,7 @@ export default class Dishes extends Component {
                 }
                 else if (i == this.state.tableModifiedDishes.length-1 && this.state.tableModifiedDishes[i].name !== POST.name){
                     var newD = {
-                      "orderID": this.props.location.state.tableDishes[0].orderID,
+                      "orderID": this.props.location.state.tableDishes_orderID,
                       "name": POST.name,
                       "price": POST.price,
                       "DishID": POST.dishId,
@@ -137,8 +137,42 @@ export default class Dishes extends Component {
       console.log(this.state.tableModifiedDishes)
       if (this.state.tableModifiedDishes.length === 0){
         // window.location = '/'
+
+        // console.log(this.state.textareaValue)
+        // console.log(this.props)
+        console.log(this.state.tableModifiedDishes)
         console.log(this.state.textareaValue)
         console.log(this.props.location.state.tableDishes_orderID)
+        fetch(API.baseUri + API.addDish, {
+            method: "POST",
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            "items": this.state.tableModifiedDishes,
+            "comment": this.state.textareaValue,
+            "orderID": this.props.location.state.tableDishes_orderID
+                  // "createTime": time,
+              })
+        } ).then(res =>{
+            if(res.status===200) {
+              // console.log(res.json())
+              return res.json();
+            }
+            else console.log(res)
+        }).then(json => {
+          console.log(json)
+          // console.log(json)
+          if (json){
+            window.location = '/home/CheckDishes/' + this.props.match.params.tableid
+            console.log(json.msg)
+            console.log(this.props.match.params.tableid)
+            // window.location = '/'
+            // this.getModifiedData(temp_modifiedArray);
+          }
+          // console.log(this.state.tableModifiedDishes)
+        })
       }
       else{
         var temp_modifiedArray = [];
@@ -150,6 +184,9 @@ export default class Dishes extends Component {
           temp_modifiedArray.push(tempTableModifiedDishes[i])
         }
         console.log(temp_modifiedArray);
+        console.log(this.state.tableModifiedDishes)
+        console.log(this.state.textareaValue)
+        // console.log(this.props.location.state.tableDishes_orderID)
 
         fetch(API.baseUri + API.addDish, {
             method: "POST",
@@ -172,9 +209,12 @@ export default class Dishes extends Component {
             }
             else console.log(res)
         }).then(json => {
+          console.log(json)
           // console.log(json)
           if (json.success === true){
             console.log(json.msg)
+            window.location = '/home/CheckDishes/' + this.props.match.params.tableid
+            console.log(this.props.match.params.tableid)
             // window.location = '/'
             // this.getModifiedData(temp_modifiedArray);
           }
@@ -182,6 +222,7 @@ export default class Dishes extends Component {
         })
         // console.log("");
       }
+
     }
 
     SumUp= ()=> {
@@ -196,14 +237,30 @@ export default class Dishes extends Component {
         }, 0)
         return total;
     }
-    SumUpFurtherModified = ()=> {
+
+    SumUpLastTimeModified = ()=> {
+      var tempLastTimeModifiedPositive = []
+      var tempLastTimeModified = this.props.location.state.tableModifiedDishes
+      for (let index in tempLastTimeModified)
+      {
+        if(tempLastTimeModified[index].num >= 0)
+        tempLastTimeModifiedPositive.push(tempLastTimeModified[index])
+      }
+
+        var total = tempLastTimeModifiedPositive.reduce((sum, price) =>{
+            return sum + price.num * price.price
+        }, 0)
+        return total;
+    }
+    SumUpCurrentModified = ()=> {
         var total = this.state.tableModifiedDishes.reduce((sum, price) =>{
             return sum + price.DishCount * price.price
         }, 0)
         return total;
     }
+
     SumUpEntirePrice = ()=> {
-        var total = this.SumUpModified() + this.SumUpFurtherModified();
+        var total = this.SumUpModified() + this.SumUpLastTimeModified() + this.SumUpCurrentModified();
         return total;
     }
 
@@ -298,6 +355,7 @@ export default class Dishes extends Component {
           this.setState({
             order:[]
           })
+          window.location = '/home/CheckDishes/' + this.props.match.params.tableid
           // window.location = '/'
         }
       })
@@ -487,9 +545,10 @@ render() {
                                   #{this.SumUp()}
                                 </div>:
                                 <div>
-                                  {this.SumUpModified()}<br />
-                                  {this.SumUpFurtherModified()}<br />
-                                  {this.SumUpEntirePrice()}
+                                  originalPrice-{this.SumUpModified()}<br />
+                                  lastModified-{this.SumUpLastTimeModified()}<br />
+                                  currentModified-{this.SumUpCurrentModified()}<br />
+                                  total-{this.SumUpEntirePrice()}
                                 </div>
                               }
                             </div>
@@ -512,7 +571,14 @@ render() {
                             <div>
                               <Button className="" bsStyle="success" onClick={()=>{this.updateModifiedDiesh()}}>确认加菜</Button>
                             </div>:
-                            <Button bsStyle="success" onClick={()=>{this.submitOrder()}}>提交订单</Button>
+                            <div className="row">
+                              <div className="col-lg-6">
+                                <Button bsStyle="warning" onClick={()=>{}}>预定桌位</Button>
+                              </div>
+                              <div className="col-lg-6">
+                                <Button bsStyle="success" onClick={()=>{this.submitOrder()}}>提交订单</Button>
+                              </div>
+                            </div>
                           }
 
 
