@@ -311,3 +311,8 @@ a:hover{
     margin-right: auto;
     width: 50%;
 }
+
+.modal {
+    display: block;
+    margin-left: 100px;
+}

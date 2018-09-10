@@ -28,7 +28,7 @@ const Router = () =>{
                         <Route exact path='/personal/post' component={MyPost} />
                         <Route exact path='/personal/favorit' component={MyFavorit} />
                         <Route exact path='/personal/comment' component={MyComment} />
-                        <Route exact path='/home/CheckDishes/:tableid' component={CheckDishes} />
+                        <Route exact path='/home/CheckDishes/:tableid?/:orderid?' component={CheckDishes} />
 
                         <Route exact path='/home/Dishes/:tableid' component={Dishes}/>
 

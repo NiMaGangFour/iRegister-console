@@ -44,7 +44,7 @@ export default class Dishes extends Component {
 
     setOrder = (POST) => {
         // console.log(POST)
-        if (this.state.order.length == 0) {
+        if (this.state.order.length === 0) {
             var newD = {
                 "name": POST.name,
                 "price": POST.price,
@@ -67,7 +67,7 @@ export default class Dishes extends Component {
                     // console.log(this.state.order)
                     return;
                 }
-                else if (i == this.state.order.length-1 && this.state.order[i].name !== POST.name){
+                else if (i === this.state.order.length-1 && this.state.order[i].name !== POST.name){
                     var newD = {
                         "name": POST.name,
                         "price": POST.price,
@@ -88,8 +88,9 @@ export default class Dishes extends Component {
 
     //将再次添加的菜品信息 生成并添加到 购物车 分割线下方
     setModifiedOrder = (POST) => {
-        // console.log(POST)
-        if (this.state.tableModifiedDishes.length == 0) {
+
+        if (this.state.tableModifiedDishes.length === 0) {
+          console.log(this.props.location.state.tableDishes_orderID)
             var newD = {
               "orderID": this.props.location.state.tableDishes_orderID,
               "name": POST.name,
@@ -113,7 +114,8 @@ export default class Dishes extends Component {
                     console.log(this.state.tableModifiedDishes)
                     return;
                 }
-                else if (i == this.state.tableModifiedDishes.length-1 && this.state.tableModifiedDishes[i].name !== POST.name){
+                else if (i === this.state.tableModifiedDishes.length-1 && this.state.tableModifiedDishes[i].name !== POST.name){
+                  console.log(this.props.location.state.tableDishes_orderID)
                     var newD = {
                       "orderID": this.props.location.state.tableDishes_orderID,
                       "name": POST.name,
@@ -136,10 +138,6 @@ export default class Dishes extends Component {
     updateModifiedDiesh = () => {
       console.log(this.state.tableModifiedDishes)
       if (this.state.tableModifiedDishes.length === 0){
-        // window.location = '/'
-
-        // console.log(this.state.textareaValue)
-        // console.log(this.props)
         console.log(this.state.tableModifiedDishes)
         console.log(this.state.textareaValue)
         console.log(this.props.location.state.tableDishes_orderID)
@@ -153,11 +151,9 @@ export default class Dishes extends Component {
             "items": this.state.tableModifiedDishes,
             "comment": this.state.textareaValue,
             "orderID": this.props.location.state.tableDishes_orderID
-                  // "createTime": time,
               })
-        } ).then(res =>{
+        }).then(res =>{
             if(res.status===200) {
-              // console.log(res.json())
               return res.json();
             }
             else console.log(res)
@@ -165,9 +161,9 @@ export default class Dishes extends Component {
           console.log(json)
           // console.log(json)
           if (json){
-            window.location = '/home/CheckDishes/' + this.props.match.params.tableid
+            window.location = '/home/CheckDishes/' + this.props.match.params.tableid + "/" + this.props.location.state.tableDishes_orderID
             console.log(json.msg)
-            console.log(this.props.match.params.tableid)
+            console.log(this.props)
             // window.location = '/'
             // this.getModifiedData(temp_modifiedArray);
           }
@@ -185,7 +181,7 @@ export default class Dishes extends Component {
         }
         console.log(temp_modifiedArray);
         console.log(this.state.tableModifiedDishes)
-        console.log(this.state.textareaValue)
+        // console.log(this.state.textareaValue)
         // console.log(this.props.location.state.tableDishes_orderID)
 
         fetch(API.baseUri + API.addDish, {
@@ -213,7 +209,7 @@ export default class Dishes extends Component {
           // console.log(json)
           if (json.success === true){
             console.log(json.msg)
-            window.location = '/home/CheckDishes/' + this.props.match.params.tableid
+            window.location = '/home/CheckDishes/' + this.props.match.params.tableid + "/" + this.props.location.state.tableDishes_orderID
             console.log(this.props.match.params.tableid)
             // window.location = '/'
             // this.getModifiedData(temp_modifiedArray);
@@ -394,7 +390,13 @@ render() {
           </div>
 
           <div className="col-sm-12 col-lg-10 pull-right">
-                桌号: {this.props.match.params.tableid}
+                桌号: {this.props.match.params.tableid}<br />
+              {this.props.location.hasOwnProperty("state") === true ?
+                <div>
+                  {"存在 this.props.location.state.tableDishes_orderID"}
+                </div>:null}
+
+
 
 
             <div className="row">
@@ -567,7 +569,7 @@ render() {
 
                         </div>
                         <div className="row nova-margin">
-                          {this.props.location.hasOwnProperty("state")=== true ?
+                          {this.props.location.hasOwnProperty("state") === true ?
                             <div>
                               <Button className="" bsStyle="success" onClick={()=>{this.updateModifiedDiesh()}}>确认加菜</Button>
                             </div>:

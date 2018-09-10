@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Tabs, Tab, ButtonToolbar } from 'react-bootstrap'
+import { Button, Tabs, Tab, ButtonToolbar, Modal, OverlayTrigger } from 'react-bootstrap'
 import { Map } from 'immutable'
 import { API } from '../config'
 import AuthOptions from '../auth/AuthOptions'
 import Personal from '../personal/Personal'
-
 
 export default class CheckDishesDishes extends Component {
     constructor(props) {
@@ -18,64 +17,81 @@ export default class CheckDishesDishes extends Component {
           tableModifiedDishes:[],
           tableStatus: "Occupied",
           tableDishes_orderID: null,
-          comment:""
+          comment:"",
+          show: false
         }}
 
     componentDidMount() {
       this.getData();
-
+      this.getModifiedData();
       // console.log(this.props)
     }
+
     componentWillMount() {
       console.log(this.props);
     }
 
     //将新传入的props赋值给现存的props
     componentWillReceiveProps(nextProps) {
-        if (nextProps.match.params.tableid){
+      console.log(nextProps)
+        if (nextProps.match.params.tableid || nextProps.match.params.orderid){
           this.props.match.params.tableid = nextProps.match.params.tableid
+          this.props.match.params.orderid = nextProps.match.params.orderid
           this.getData();
-
+          this.getModifiedData();
+          console.log(this.props.match.params.orderid)
         }
     }
     //获取对应桌号的 点菜信息
     getData =()=> {
+      console.log(this.props)
       this.setState({
         tableDishes: []
       })
-       console.log(this.props.match.params.tableid)
+       console.log(this.props)
        console.log(this.state.tableDishes)
-       fetch(API.baseUri+API.getTableDishes + "/" + this.props.match.params.tableid)
+       fetch(API.baseUri+API.getallTables)
            .then((response) => {
                if (response.status === 200) {
                    return response.json()
                } else console.log("Get data error ");
            }).then((json) =>{
-             console.log(json)
-             // console.log(json[0].orderID)
-             // console.log(this.props.location.state.currentOrderID)
-             this.setState({
-               tableDishes: json,
-               tableDishes_orderID: json[0].orderID
-             })
-             // console.log(this.state.tableDishes)
-             this.getModifiedData();
+           console.log(json)
+           console.log(this.props.match.params.tableid)
+           console.log(json[this.props.match.params.tableid - 1].currentOrderID)
+           this.setState({tableDishes_orderID: json[this.props.match.params.tableid - 1].currentOrderID})
        }).catch((error) => {
            console.log('error on .catch', error);
        }).then(() =>{
-         fetch(API.baseUri+API.getOrderComment + "/" + this.state.tableDishes_orderID)
+         fetch(API.baseUri+API.getTableDishes + "/" + this.props.match.params.tableid)
              .then((response) => {
                  if (response.status === 200) {
                      return response.json()
                  } else console.log("Get data error ");
              }).then((json) =>{
-             console.log(json[0].comment)
-             this.setState({
-               comment: json[0].comment,
-             })
-           }).catch((error) => {
+               console.log(json)
+               console.log(json[0].orderID)
+                 this.setState({
+                   tableDishes: json,
+                 })
+         }).catch((error) => {
              console.log('error on .catch', error);
-         });
+         }).then(() =>{
+           console.log(this.state.tableDishes_orderID)
+           fetch(API.baseUri+API.getOrderComment + "/" + this.state.tableDishes_orderID)
+               .then((response) => {
+                   if (response.status === 200) {
+                       return response.json()
+                   } else console.log("Get data error ");
+               }).then((json) =>{
+               console.log(json[0].comment)
+               this.setState({
+                 comment: json[0].comment,
+               })
+             }).catch((error) => {
+               console.log('error on .catch', error);
+           });
+         })
        })
    }
     //计算点菜总价
@@ -86,12 +102,13 @@ export default class CheckDishesDishes extends Component {
         return total;
     }
 
+    //计算改动菜品总价
     SumUpModified = ()=> {
       var temTableModifiedDishesNumPositive = []
       var temTableModifiedDishes = this.state.tableModifiedDishes
       for (let index in temTableModifiedDishes)
       {
-        if(temTableModifiedDishes[index].num >= 0)
+        if(temTableModifiedDishes[index].num > 0)
         temTableModifiedDishesNumPositive.push(temTableModifiedDishes[index])
       }
 
@@ -108,8 +125,71 @@ export default class CheckDishesDishes extends Component {
         return total;
     }
 
+    //删除 新增菜品
+    deleteModifiedDish = (nameDish)=> {
+      console.log(this.state.tableModifiedDishes)
+        // console.log(nameDish)
+        var temp_post = [];
+        var temp_deletedModifiedDish = {};
+        for(let index in this.state.tableModifiedDishes){
+            // console.log(this.state.myPosts[index].idPOST , idPost)
+            if(this.state.tableModifiedDishes[index].name !== nameDish){
+                temp_post.push(this.state.tableModifiedDishes[index])
+            }
+            else{
+              this.state.tableModifiedDishes[index].num = -this.state.tableModifiedDishes[index].num
+              temp_deletedModifiedDish = this.state.tableModifiedDishes[index]
+              console.log(this.state.tableModifiedDishes[index])
+            }
+        }
+        this.setState({
+            tableModifiedDishes:temp_post,
+        })
+         console.log(temp_deletedModifiedDish);
+         this.updateDeletedModifiedDiesh(temp_deletedModifiedDish);
+    }
+
+    //将已经删除了的 新增菜品 上传 数据库dishMod表
+    updateDeletedModifiedDiesh = (temp_deletedModifiedDish) => {
+
+      var temp_deletedModifiedDishArray = [];
+      var date = new Date();
+      var time = date.toLocaleTimeString();
+      temp_deletedModifiedDish.createTime= time;
+
+      temp_deletedModifiedDishArray.push(temp_deletedModifiedDish);
+      console.log(temp_deletedModifiedDishArray);
+
+      fetch(API.baseUri+API.deleteModDish, {
+          method: "POST",
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        // [req.body.orderID, v[i].DishID, req.body.createTime, v[i].num]
+        body: JSON.stringify({
+                "items": temp_deletedModifiedDishArray,
+            })
+      } ).then(res =>{
+          if(res.status===200) {
+            // console.log(res.json())
+            return res.json();
+          }
+          else console.log(res)
+      }).then(json => {
+        // console.log(json)
+        if (json.success === true){
+          console.log(json.success)
+          this.getModifiedData();
+        }
+        // console.log(this.state.tableModifiedDishes)
+      })
+      // console.log("updateModifiedDiesh");
+    }
+
     //删除已点的菜
     deleteDish = (nameDish)=> {
+      console.log(this.state.tableDishes)
         // console.log(nameDish)
         var temp_post = [];
         var temp_modified = {};
@@ -132,7 +212,7 @@ export default class CheckDishesDishes extends Component {
     }
     //将已经删除了的菜 上传 到数据库dishMod表
     updateModifiedDiesh = (temp_modified) => {
-      // console.log(temp_modified);
+
       var temp_modifiedArray = [];
       var date = new Date();
       var time = date.toLocaleTimeString();
@@ -169,6 +249,7 @@ export default class CheckDishesDishes extends Component {
     }
     //从数据库dishMod表中 获取 改动菜的信息
     getModifiedData =()=> {
+      console.log("1111111111111111111");
       console.log(this.props.match.params.tableid)
        fetch(API.baseUri+API.getModDishes + "/" + this.props.match.params.tableid)
            .then((response) => {
@@ -258,12 +339,23 @@ export default class CheckDishesDishes extends Component {
             tableDishes:[],
             tableModifiedDishes:[]
           })
-          // window.location = '/'
+          window.location = '/'
         }
       })
       console.log("checkOut");
     }
+
+    handleClose = () => {
+      this.setState({ show: false });
+    }
+
+    handleShow = () => {
+      this.setState({ show: true });
+    }
+
     render() {
+
+
       console.log(this.props);
         const newToMenu = {
             pathname: '/home/Dishes/'+ this.props.match.params.tableid,
@@ -280,7 +372,7 @@ export default class CheckDishesDishes extends Component {
                                 <div className="col-lg-4">{value.name}</div>
                                 <div className="col-lg-1">x</div>
                                 <div className="col-lg-1 ">{value.num}</div>
-                                
+                                <div className="col-lg-1"><Button className="" bsStyle="danger" onClick={()=>{this.deleteModifiedDish(value.name)}}>删除</Button></div>
                             </div>: null}
                     </div>
                 </div>
@@ -310,6 +402,7 @@ export default class CheckDishesDishes extends Component {
 
               <div className="col-sm-12 col-lg-10 pull-right">
                      <h3>当前桌号: {this.props.match.params.tableid}</h3>
+                     <h3>当前OrderID: {this.props.match.params.orderid}</h3>
                 <div className="row">
                     <div className="col-lg-9 cust-border nova-card" >
                         {<div>
@@ -354,6 +447,7 @@ export default class CheckDishesDishes extends Component {
                                 pathname: '/home/Dishes/'+ this.props.match.params.tableid,
                                 state:{
                                 comment:this.state.comment,
+
                                 tableDishes_orderID: this.state.tableDishes_orderID,
                                 tableDishes: this.state.tableDishes,
                                 tableModifiedDishes: this.state.tableModifiedDishes
@@ -361,8 +455,9 @@ export default class CheckDishesDishes extends Component {
                             }}><Button className="col-lg-2 button2" bsStyle="success" onClick={()=>{}}>加菜</Button>
                             </Link>
 
-                            <Button className="col-lg-2 button2" bsStyle="success" onClick={()=>{this.checkout()}}>结账&打印</Button>
+                            <Button className="col-lg-2 button2" bsStyle="success" onClick={()=>{this.handleShow()}}>结账&打印</Button>
                             <Button className="col-lg-2 button2" bsStyle="danger" onClick={()=>{}}>厨房重新打印</Button>
+
                         </div>
                     </div>
                     {this.state.comment !== "" ?
@@ -372,6 +467,57 @@ export default class CheckDishesDishes extends Component {
                     }
                 </div>
               </div>
+            </div>
+
+            <div>
+              <Modal show={this.state.show} onHide={this.handleClose}>
+              <Modal.Header closeButton>
+                <Modal.Title>{this.props.match.params.tableid}号桌菜品总预览</Modal.Title>
+              </Modal.Header>
+              <Modal.Body className="modal">
+                <h4>菜品列表：</h4>
+                  {this.state.tableDishes.map((value, key1) =>{
+                    return (
+                        <div key={key1} >
+                            <div >
+                                {value!==0?
+                                    <div className="row nova-margin">
+                                        <div className="col-lg-4">{value.name}</div>
+                                        <div className="col-lg-1">x</div>
+                                        <div className="col-lg-1 ">{value.DishCount}</div>
+
+                                    </div>: null}
+                            </div>
+                        </div>
+                    )})}
+              </Modal.Body>
+              <hr />
+
+              <Modal.Body className="modal">
+                    {this.state.tableModifiedDishes.map((value, key1) =>{
+                      return (
+                          <div key={key1}>
+                              <div>
+                                  {value!==0?
+                                      <div className="row nova-margin">
+                                          <div className="col-lg-4">{value.name}</div>
+                                          <div className="col-lg-1">x</div>
+                                          <div className="col-lg-1 ">{value.num}</div>
+                                      </div>: null}
+                              </div>
+                          </div>
+                      )})}
+
+                <hr />
+
+                <h4 className="modal2">总价：{this.SumUpEntirePrice()} $AUD</h4>
+
+              </Modal.Body>
+              <Modal.Footer>
+                <Button onClick={this.handleClose}>返回</Button>
+                <Button onClick={this.checkout}>确认结账</Button>
+              </Modal.Footer>
+            </Modal>
             </div>
           </div>
         )

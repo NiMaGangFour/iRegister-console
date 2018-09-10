@@ -1,7 +1,7 @@
 export const API = {
     // baseUri: 'http://pte.novasoftware.com.au:3060/',
-    // baseUri: 'http://localhost:3003/',
-    baseUri: 'http://iregiester.novasoftware.com.au:3060/',
+    baseUri: 'http://localhost:3003/',
+    // baseUri: 'http://iregiester.novasoftware.com.au:3060/',
     initPosts: 'api/restaurants',
     getallTables: 'api/getAllTables',
     getAllDishes: 'api/getAllDishes',
@@ -13,6 +13,8 @@ export const API = {
     getModDish: 'api1/getModDish',
     getOrderComment: 'api1/getOrderComment',
     addDish: 'addDish',
-    getDeliveryOrders: 'getDeliveryOrders'
+    getDeliveryOrders: 'api/getDeliveryOrders',
+    getAllOrders: 'api/getAllOrders',
+    deleteModDish: 'deleteModDish'
 
 }
