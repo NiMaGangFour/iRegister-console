@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { Link} from 'react-router-dom'
-import { Button, Tabs, Tab, ButtonGroup, ListGroupItem, ListGroup } from 'react-bootstrap'
-import { API } from '../config'
+import { Link } from 'react-router-dom'
 
+import {  Tabs, ListGroupItem, ListGroup } from 'react-bootstrap'
+import { API } from '../config'
+import DeliverOrders from '../home/DeliverOrders'
 
 export default class Personal extends Component {
     constructor(props) {
@@ -43,7 +44,7 @@ export default class Personal extends Component {
                    return response.json()
                } else console.log("Get data error ");
            }).then((json) =>{
-           console.log(json)
+           // console.log(json)
            this.setState({getDeliveryOrders: json})
        }).catch((error) => {
            console.log('error on .catch', error);
@@ -51,15 +52,8 @@ export default class Personal extends Component {
    }
 
     render() {
-      // console.log(this.state.getDeliveryOrders)
-      const newToAvia = {
-          pathname: '/home/DeliverOrders/'+ "D1",
-          param1: "D1"
-      };
-      const newToOrdered = {
-          pathname: '/home/DeliverOrders/'+ "D2",
-          param1: "D2"
-      };
+
+
       return (
 
           <div className="profile  cust-margin3 nova-padding nova-card cust-border">
@@ -67,10 +61,13 @@ export default class Personal extends Component {
               <hr />
               <div>
                   <ListGroup>
-                    {this.state.getDeliveryOrders.map((dish, i) =>{
+                    {this.state.getDeliveryOrders.map((value, i) =>{
+                      var ToDeliver = {
+                        pathname: '/home/DeliverOrders/'+ value.id,
+                      }
                         return (
                           <div key={i}>
-                              <ListGroupItem  header={dish.id} onClick={() => {}}>{dish.creatTime}</ListGroupItem>
+                                <Link to={ToDeliver} ><ListGroupItem  header={value.id} onClick={() => {}}></ListGroupItem></Link>
                           </div>
                         )
                     })}

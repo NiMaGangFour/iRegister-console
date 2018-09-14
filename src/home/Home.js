@@ -4,6 +4,7 @@ import {API} from '../config'
 import Clock from 'react-live-clock'
 import { Button, Tabs, Tab, ButtonGroup } from 'react-bootstrap'
 import Personal from '../personal/Personal'
+import AuthOptions from '../auth/AuthOptions'
 
 export default class Home extends Component {
     constructor(props) {
@@ -63,63 +64,11 @@ export default class Home extends Component {
     }
 
     render() {
-      var date = new Date();
-      var time = date.toLocaleTimeString();
-      const newToAvia = {
-          pathname: '/home/DeliverOrders/'+ "D1",
-          param1: "D1"
-      };
-      const newToOrdered = {
-          pathname: '/home/DeliverOrders/'+ "D2",
-          param1: "D2"
-      };
+
         return (
           <div className="row">
             <div className="col-sm-12 col-lg-2">
-              <div className="join-us  cust-margin3 nova-padding nova-card cust-border">
-                  <div>大堂</div>
-                  <hr />
-                  <div className="row nova-margin">
-                      {this.state.tables.map((value, key1) =>{
-                        var newToAvia = {
-                          pathname: '/home/Dishes/'+ value.id,
-                        };
-                        var newToOrdered = {
-                          pathname: '/home/CheckDishes/'+ value.id,
-                          state: {
-                            currentOrderID: value.currentOrderID,
-                          }
-                        };
-                          return (
-                              <div key={key1}>
-                                  <div className="">
-                                      {value.status!== "2" && value.status!== "3"?
-                                          <div className="col-lg-4 nova-margin">
-                                              <Link to={newToAvia} ><Button onClick={()=>{this.handleClickAvailableTable(value.id)}} bsStyle="success" > {value.name} </Button></Link>
-                                          </div>:
-                                          <div className="col-lg-4 nova-margin">
-                                          {value.status !== "2"?
-                                              <div className="">
-                                              <Button className="" bsStyle="warning" > {value.name} </Button>
-                                              </div>
-                                          :
-                                              <div className="">
-                                                  <Link to={newToOrdered} ><Button onClick={()=>{this.handleClickOccupiedTable(value.id)}} bsStyle="danger" > {value.name} </Button></Link>
-                                              </div>
-                                          }
-                                          </div>
-                                      }
-                                  </div>
-
-                              </div>
-                          )})}
-                      </div>
-                  <div className="nova-padding">
-                      <li>Green: Empty</li>
-                      <li>Red: Occupied</li>
-                      <li>Yellow: Reserved</li>
-                  </div>
-              </div>
+              <AuthOptions />  
 
               <Personal />
             </div>

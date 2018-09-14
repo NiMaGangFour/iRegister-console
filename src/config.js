@@ -15,6 +15,10 @@ export const API = {
     addDish: 'addDish',
     getDeliveryOrders: 'api/getDeliveryOrders',
     getAllOrders: 'api/getAllOrders',
-    deleteModDish: 'deleteModDish'
+    deleteModDish: 'deleteModDish',
+    BookTable: 'api1/BookTable',
+    CancleBookTable: 'api1/CancleBookTable',
+    getDeliveryOrderDetails: "api1/getDeliveryOrderDetails",
+    CompleteDeliveryOrder: 'api1/CompleteDeliveryOrder'
 
 }

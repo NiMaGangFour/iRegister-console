@@ -1,11 +1,9 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Button, Tabs, Tab, ButtonToolbar, ControlLabel, FormControl, FormGroup} from 'react-bootstrap';
-import { Map } from 'immutable';
-import { API } from '../config';
-import AuthOptions from '../auth/AuthOptions';
-import Personal from '../personal/Personal';
-import { Textfit } from 'react-textfit';
+import React, { Component } from 'react'
+import { Button} from 'react-bootstrap'
+import { Link } from 'react-router-dom'
+import { API } from '../config'
+import AuthOptions from '../auth/AuthOptions'
+import Personal from '../personal/Personal'
 
 export default class Dishes extends Component {
     constructor(props) {
@@ -22,355 +20,27 @@ export default class Dishes extends Component {
         }
   }
 
-  //  componentDidMount() {
-  //      this.getData()
-  //      this.getInitialState()
-  // }
-
-    // getData() {
-    //     //console.log(API.baseUri+API.getAllDishes)
-    //     fetch(API.baseUri+API.getAllDishes)
-    //         .then((response) => {
-    //             if (response.status === 200) {
-    //                 return response.json()
-    //             } else console.log("Get data error ");
-    //         }).then((json) =>{
-    //         // console.log(json)
-    //         this.setState({alldishes: json})
-    //     }).catch((error) => {
-    //         console.log('error on .catch', error);
-    //     });
-    // }
-
-    // setOrder = (POST) => {
-    //     // console.log(POST)
-    //     if (this.state.order.length == 0) {
-    //         var newD = {
-    //             "name": POST.name,
-    //             "price": POST.price,
-    //             "DishID": POST.dishId,
-    //             "num": 1
-    //         }
-    //         let tempOrder = this.state.order
-    //             tempOrder.push(newD)
-    //         // console.log(tempOrder)
-    //         this.setState({order: tempOrder})
-    //         return;
-    //     }
-    //     else {
-    //         for (let i = 0; i < this.state.order.length; i++) {
-    //             if (this.state.order[i].name === POST.name) {
-    //                 let tempOrder = this.state.order
-    //                 tempOrder[i].num = this.state.order[i].num + 1
-    //
-    //                 this.setState({order: tempOrder})
-    //                 // console.log(this.state.order)
-    //                 return;
-    //             }
-    //             else if (i == this.state.order.length-1 && this.state.order[i].name !== POST.name){
-    //                 var newD = {
-    //                     "name": POST.name,
-    //                     "price": POST.price,
-    //                     "DishID": POST.dishId,
-    //                     "num": 1
-    //                 }
-    //                 let tempOrder = this.state.order
-    //                     tempOrder.push(newD)
-    //                 // console.log(tempOrder)
-    //                 this.setState({order: tempOrder})
-    //                 // console.log(this.state.order)
-    //                 return;
-    //             }
-    //             }
-    //     }
-    //     // console.log(this.state.order)
-    // }
-    //
-    // //将再次添加的菜品信息 生成并添加到 购物车 分割线下方
-    // setModifiedOrder = (POST) => {
-    //     // console.log(POST)
-    //     if (this.state.tableModifiedDishes.length == 0) {
-    //         var newD = {
-    //           "orderID": this.props.location.state.tableDishes_orderID,
-    //           "name": POST.name,
-    //           "price": POST.price,
-    //           "DishID": POST.dishId,
-    //           "DishCount": 1
-    //         }
-    //         let tempOrder = this.state.tableModifiedDishes
-    //             tempOrder.push(newD)
-    //         console.log(tempOrder)
-    //         this.setState({tableModifiedDishes: tempOrder})
-    //         return;
-    //     }
-    //     else {
-    //         for (let i = 0; i < this.state.tableModifiedDishes.length; i++) {
-    //             if (this.state.tableModifiedDishes[i].name === POST.name) {
-    //                 let tempOrder = this.state.tableModifiedDishes
-    //                 tempOrder[i].DishCount = this.state.tableModifiedDishes[i].DishCount + 1
-    //
-    //                 this.setState({tableModifiedDishes: tempOrder})
-    //                 console.log(this.state.tableModifiedDishes)
-    //                 return;
-    //             }
-    //             else if (i == this.state.tableModifiedDishes.length-1 && this.state.tableModifiedDishes[i].name !== POST.name){
-    //                 var newD = {
-    //                   "orderID": this.props.location.state.tableDishes_orderID,
-    //                   "name": POST.name,
-    //                   "price": POST.price,
-    //                   "DishID": POST.dishId,
-    //                   "DishCount": 1
-    //                 }
-    //                 let tempOrder = this.state.tableModifiedDishes
-    //                     tempOrder.push(newD)
-    //                 // console.log(tempOrder)
-    //                 this.setState({tableModifiedDishes: tempOrder})
-    //                 // console.log(this.state.order)
-    //                 return;
-    //             }
-    //             }
-    //     }
-    //     console.log(this.state.tableModifiedDishes)
-    // }
-    // //将再次添加的菜品信息 上传至 数据库dishmode表
-    // updateModifiedDiesh = () => {
-    //   console.log(this.state.tableModifiedDishes)
-    //   if (this.state.tableModifiedDishes.length === 0){
-    //     // window.location = '/'
-    //
-    //     // console.log(this.state.textareaValue)
-    //     // console.log(this.props)
-    //     console.log(this.state.tableModifiedDishes)
-    //     console.log(this.state.textareaValue)
-    //     console.log(this.props.location.state.tableDishes_orderID)
-    //     fetch(API.baseUri + API.addDish, {
-    //         method: "POST",
-    //         headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json'
-    //       },
-    //       body: JSON.stringify({
-    //         "items": this.state.tableModifiedDishes,
-    //         "comment": this.state.textareaValue,
-    //         "orderID": this.props.location.state.tableDishes_orderID
-    //               // "createTime": time,
-    //           })
-    //     } ).then(res =>{
-    //         if(res.status===200) {
-    //           // console.log(res.json())
-    //           return res.json();
-    //         }
-    //         else console.log(res)
-    //     }).then(json => {
-    //       console.log(json)
-    //       // console.log(json)
-    //       if (json){
-    //         window.location = '/home/CheckDishes/' + this.props.match.params.tableid
-    //         console.log(json.msg)
-    //         console.log(this.props.match.params.tableid)
-    //         // window.location = '/'
-    //         // this.getModifiedData(temp_modifiedArray);
-    //       }
-    //       // console.log(this.state.tableModifiedDishes)
-    //     })
-    //   }
-    //   else{
-    //     var temp_modifiedArray = [];
-    //     var date = new Date();
-    //     var time = date.toLocaleTimeString();
-    //     let tempTableModifiedDishes = this.state.tableModifiedDishes
-    //     for (let i = 0; i < tempTableModifiedDishes.length; i++){
-    //       tempTableModifiedDishes[i].createTime = time
-    //       temp_modifiedArray.push(tempTableModifiedDishes[i])
-    //     }
-    //     console.log(temp_modifiedArray);
-    //     console.log(this.state.tableModifiedDishes)
-    //     console.log(this.state.textareaValue)
-    //     // console.log(this.props.location.state.tableDishes_orderID)
-    //
-    //     fetch(API.baseUri + API.addDish, {
-    //         method: "POST",
-    //         headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json'
-    //       },
-    //       // [req.body.orderID, v[i].DishID, req.body.createTime, v[i].num]
-    //       body: JSON.stringify({
-    //               // "orderID": temp_modified[0].orderID,
-    //               "items": temp_modifiedArray,
-    //               "comment": this.state.textareaValue,
-    //               "orderID": this.props.location.state.tableDishes_orderID
-    //               // "createTime": time,
-    //           })
-    //     } ).then(res =>{
-    //         if(res.status===200) {
-    //           // console.log(res.json())
-    //           return res.json();
-    //         }
-    //         else console.log(res)
-    //     }).then(json => {
-    //       console.log(json)
-    //       // console.log(json)
-    //       if (json.success === true){
-    //         console.log(json.msg)
-    //         window.location = '/home/CheckDishes/' + this.props.match.params.tableid
-    //         console.log(this.props.match.params.tableid)
-    //         // window.location = '/'
-    //         // this.getModifiedData(temp_modifiedArray);
-    //       }
-    //       // console.log(this.state.tableModifiedDishes)
-    //     })
-    //     // console.log("");
-    //   }
-    //
-    // }
-    //
-    // SumUp= ()=> {
-    //     var total = this.state.order.reduce((sum, price) =>{
-    //         return sum + price.num * price.price
-    //     }, 0)
-    //     return total;
-    // }
-    // SumUpModified = ()=> {
-    //     var total = this.props.location.state.tableDishes.reduce((sum, price) =>{
-    //         return sum + price.DishCount * price.price
-    //     }, 0)
-    //     return total;
-    // }
-    //
-    // SumUpLastTimeModified = ()=> {
-    //   var tempLastTimeModifiedPositive = []
-    //   var tempLastTimeModified = this.props.location.state.tableModifiedDishes
-    //   for (let index in tempLastTimeModified)
-    //   {
-    //     if(tempLastTimeModified[index].num >= 0)
-    //     tempLastTimeModifiedPositive.push(tempLastTimeModified[index])
-    //   }
-    //
-    //     var total = tempLastTimeModifiedPositive.reduce((sum, price) =>{
-    //         return sum + price.num * price.price
-    //     }, 0)
-    //     return total;
-    // }
-    // SumUpCurrentModified = ()=> {
-    //     var total = this.state.tableModifiedDishes.reduce((sum, price) =>{
-    //         return sum + price.DishCount * price.price
-    //     }, 0)
-    //     return total;
-    // }
-    //
-    // SumUpEntirePrice = ()=> {
-    //     var total = this.SumUpModified() + this.SumUpLastTimeModified() + this.SumUpCurrentModified();
-    //     return total;
-    // }
-    //
-    // deleteDish = (nameDish)=> {
-    //     console.log(nameDish)
-    //     var temp_post = [];
-    //     for(let index in this.state.order){
-    //         // console.log(this.state.myPosts[index].idPOST , idPost)
-    //         if(this.state.order[index].name !== nameDish){
-    //             temp_post.push(this.state.order[index])
-    //         }
-    //     }this.setState({
-    //         order:temp_post
-    //     })
-    //
-    // }
-    //
-    // deleteModifiedDish = (nameDish)=> {
-    //     console.log(nameDish)
-    //     var temp_post = [];
-    //     for(let index in this.state.tableModifiedDishes){
-    //         // console.log(this.state.myPosts[index].idPOST , idPost)
-    //         if(this.state.tableModifiedDishes[index].name !== nameDish){
-    //             temp_post.push(this.state.tableModifiedDishes[index])
-    //         }
-    //     }this.setState({
-    //         tableModifiedDishes:temp_post
-    //     })
-    // }
-    //
-    // handleChange = (event) => {
-    //   this.setState({textareaValue: event.target.value});
-    // }
-    //
-    // // componentWillReceiveProps(nextProps) {
-    // //     if (nextProps.location.hasOwnProperty("state") === true){
-    // //       this.setState({
-    // //         textareaValue: this.props.location.state.comment
-    // //       })
-    // //       console.log(this.state.textareaValue)
-    // //     }
-    // // }
-    //
-    // getInitialState = () => {
-    //   if (this.props.location.hasOwnProperty("state") === true){
-    //     this.setState({
-    //       textareaValue: this.props.location.state.comment
-    //     })
-    //     console.log(this.state.textareaValue)
-    //   }
-    //
-    //   // this.setState({
-    //   //   textareaValue: this.props.location.state.comment
-    //   // })
-    //   // console.log("getInitialState")
-    // }
-
-
-
-
-    // submitOrder = () => {
-    //   var date = new Date();
-    //   var time = date.toLocaleTimeString();
-    //   console.log(JSON.stringify(this.state.order))
-    //   console.log(this.state.textareaValue)
-    //
-    //   fetch(API.baseUri+API.postOrder, {
-    //       method: "POST",
-    //       headers: {
-    //       'Accept': 'application/json',
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({
-    //             "items": this.state.order,
-    //             "creatTime": time,
-    //             "totalPrice": this.SumUp(),
-    //             "tableID": this.props.match.params.tableid,
-    //             "comment":this.state.textareaValue
-    //
-    //         })
-    //   } ).then(res =>{
-    //       if(res.status===200) {
-    //         // console.log(res.json())
-    //         return res.json();
-    //       }
-    //       else console.log(res)
-    //   }).then(json => {
-    //     console.log(json.success)
-    //     console.log(json)
-    //     if (json.success === true){
-    //       this.authOptions.current.getData();
-    //       this.setState({
-    //         order:[]
-    //       })
-    //       window.location = '/home/CheckDishes/' + this.props.match.params.tableid
-    //       // window.location = '/'
-    //     }
-    //   })
-    // }
-    //
-    // parentChild = (value) => {
-    //   this.setState({
-    //     childValue:value
-    //   })
-    //   console.log(value);
-    // }
+    cancleBookTable = () => {
+      fetch(API.baseUri+API.CancleBookTable + "/" + this.props.match.params.tableid)
+          .then((response) => {
+              if (response.status === 200) {
+                  return response.json()
+              } else console.log("Get data error ");
+          }).then((json) =>{
+          console.log(json)
+          window.location = '/'
+      }).catch((error) => {
+          console.log('error on .catch', error);
+      });
+    }
 
 render() {
+
   // console.log(this.props.location)
   // console.log(Object.keys(this.props.location).length)
+  var toHomePage = {
+    pathname: '/',
+  };
 
     return (
       <div>
@@ -401,8 +71,9 @@ render() {
                     <h1>{this.props.match.params.tableid}号桌已被预定</h1>
                 </div>
                 <div>
-                  <Button className="" bsStyle="danger" onClick={()=>{}}>取消预订</Button>
-                  <Button className="" bsStyle="warning" onClick={()=>{}}>返回控制台</Button>
+                  <Button className="button2" bsStyle="danger" onClick={()=>{this.cancleBookTable()}}>取消预订</Button>
+                  <Link to={toHomePage} ><Button className="button2" bsStyle="warning" onClick={()=>{}}>返回控制台</Button></Link>
+
                 </div>
               </div>
 

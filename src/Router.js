@@ -11,8 +11,10 @@ import MyComment from './personal/MyComment'
 import Tieba from './tieba/Tieba'
 import Dishes from './home/Dishes'
 import CheckDishes from './home/CheckDishes'
-import DeliverOrders from './home/DeliverOrders'
 import CheckBookings from './home/CheckBookings'
+import DeliverOrders from './home/DeliverOrders'
+
+
 
 const Router = () =>{
     return(
@@ -29,11 +31,10 @@ const Router = () =>{
                         <Route exact path='/personal/favorit' component={MyFavorit} />
                         <Route exact path='/personal/comment' component={MyComment} />
                         <Route exact path='/home/CheckDishes/:tableid?/:orderid?' component={CheckDishes} />
-
                         <Route exact path='/home/Dishes/:tableid' component={Dishes}/>
-
-                        <Route exact path='/home/DeliverOrders/:order' component={DeliverOrders}/>
                         <Route exact path='/home/CheckBookings/:tableid' component={CheckBookings}/>
+                        <Route exact path='/home/CheckBookings/:tableid' component={CheckBookings}/>
+                        <Route exact path='/home/DeliverOrders/:orderid' component={DeliverOrders}/>
                     </Switch>
                 </div>
             </div>

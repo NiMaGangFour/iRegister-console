@@ -58,12 +58,38 @@ export default class AuthOptions extends Component {
 
         // console.log(this.state.props.tableName);
     }
-    handleClickAvailableTable = (tableid) => {
-      // this.props.parentChild(tableid);
+
+    calculateAvailableTable = () => {
+      var tempTables = []
+      var temp = this.state.tables
+      for (let index in temp)
+      {
+        if(temp[index].status === "1")
+        tempTables.push(temp[index])
+      }
+      return tempTables.length;
     }
 
-    handleClickOccupiedTable = () => {
-      // this.props.parentChildOccupied();
+    calculateOccupiedTable = () => {
+      var tempTables = []
+      var temp = this.state.tables
+      for (let index in temp)
+      {
+        if(temp[index].status === "2")
+        tempTables.push(temp[index])
+      }
+      return tempTables.length;
+    }
+
+    calculateBookedTable = () => {
+      var tempTables = []
+      var temp = this.state.tables
+      for (let index in temp)
+      {
+        if(temp[index].status === "3")
+        tempTables.push(temp[index])
+      }
+      return tempTables.length;
     }
 
 
@@ -95,15 +121,15 @@ export default class AuthOptions extends Component {
                                 <div className="">
                                     {value.status!== "2" && value.status!== "3" ?
                                         <div className="col-lg-4 nova-margin">
-                                            <Link to={newToAvia} ><Button onClick={()=>{this.handleClickAvailableTable(value.id)}} bsStyle="success" > {value.name} </Button></Link>
+                                            <Link to={newToAvia} ><Button className="button-tables" onClick={()=>{}} bsStyle="success" > {value.name} </Button></Link>
                                         </div>:
                                         <div className="col-lg-4 nova-margin">
                                         {value.status !== "2" ?
                                             <div className="">
-                                              <Link to={newToBooked} ><Button className="" bsStyle="warning" > {value.name} </Button></Link>
+                                              <Link to={newToBooked} ><Button className="button-tables" bsStyle="warning" > {value.name} </Button></Link>
                                             </div>:
                                             <div className="">
-                                                <Link to={newToOrdered} ><Button onClick={()=>{this.handleClickOccupiedTable(value.id)}} bsStyle="danger" > {value.name} </Button></Link>
+                                              <Link to={newToOrdered} ><Button className="button-tables" onClick={()=>{}} bsStyle="danger" > {value.name} </Button></Link>
                                             </div>
                                         }
                                         </div>
@@ -115,9 +141,9 @@ export default class AuthOptions extends Component {
                     </div>
 
                 <div className="nova-padding">
-                    <li>Green: Empty</li>
-                    <li>Red: Occupied</li>
-                    <li>Yellow: Reserved</li>
+                    <li>空闲桌位: <b>{this.calculateAvailableTable()}</b> 桌</li>
+                    <li>占用桌位: <b>{this.calculateOccupiedTable()}</b> 桌</li>
+                    <li>预定桌位: <b>{this.calculateBookedTable()}</b> 桌</li>
                 </div>
             </div>
         )

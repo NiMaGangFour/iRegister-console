@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Tabs, Tab, ButtonToolbar, Modal, OverlayTrigger } from 'react-bootstrap'
-import { Map } from 'immutable'
+import { Button, Modal } from 'react-bootstrap'
+
 import { API } from '../config'
 import AuthOptions from '../auth/AuthOptions'
 import Personal from '../personal/Personal'
@@ -25,10 +25,6 @@ export default class CheckDishesDishes extends Component {
       this.getData();
       this.getModifiedData();
       // console.log(this.props)
-    }
-
-    componentWillMount() {
-      console.log(this.props);
     }
 
     //将新传入的props赋值给现存的props
@@ -249,7 +245,6 @@ export default class CheckDishesDishes extends Component {
     }
     //从数据库dishMod表中 获取 改动菜的信息
     getModifiedData =()=> {
-      console.log("1111111111111111111");
       console.log(this.props.match.params.tableid)
        fetch(API.baseUri+API.getModDishes + "/" + this.props.match.params.tableid)
            .then((response) => {
@@ -353,31 +348,82 @@ export default class CheckDishesDishes extends Component {
       this.setState({ show: true });
     }
 
+    SDHPNumberCalculator = () => {
+      var tempSDHPorder = []
+      var reducer = (accumulator, currentValue) => accumulator + currentValue;
+
+      //结算首次点单麻辣香锅数量
+      var temp = this.state.tableDishes
+      for (let index in temp) {
+        if (temp[index].type === "麻辣香锅") {
+          tempSDHPorder.push(temp[index].DishCount)
+        }
+      }
+      //结算再次添加的麻辣香锅数量 （不包含已删除麻辣香锅）
+      var temp = this.state.tableModifiedDishes
+      for (let index in temp) {
+        if (temp[index].type === "麻辣香锅" && temp[index].num > 0) {
+          tempSDHPorder.push(temp[index].num)
+        }
+      }
+
+      if(tempSDHPorder.length !== 0)
+      {
+        console.log(tempSDHPorder.reduce(reducer));
+        var total = tempSDHPorder.reduce(reducer)
+      }
+      else{
+        var total = 0;
+      }
+      return total;
+    }
+
     render() {
-
-
+      console.log(this.state.tableDishes)
       console.log(this.props);
         const newToMenu = {
             pathname: '/home/Dishes/'+ this.props.match.params.tableid,
         };
 
         var tableModifiedDishes =
-        <div >
-          {this.state.tableModifiedDishes.map((value, key1) =>{
-            return (
-                <div key={key1}>
-                    <div>
-                        {value!==0?
-                            <div className="row nova-margin">
-                                <div className="col-lg-4">{value.name}</div>
-                                <div className="col-lg-1">x</div>
-                                <div className="col-lg-1 ">{value.num}</div>
-                                <div className="col-lg-1"><Button className="" bsStyle="danger" onClick={()=>{this.deleteModifiedDish(value.name)}}>删除</Button></div>
-                            </div>: null}
-                    </div>
-                </div>
-            )})}
-          </div>
+        <div>
+          <div >
+            {console.log(this.state.tableModifiedDishes)}
+            {this.state.tableModifiedDishes.map((value, key1) =>{
+              return (
+                  <div key={key1}>
+                      <div className="dishesUnderLine">
+                          {value.num > 0 && value.type !== "麻辣香锅" ?
+                              <div className="row nova-margin">
+                                  <div className="col-lg-4">{value.name}</div>
+                                  <div className="col-lg-1">x</div>
+                                  <div className="col-lg-1 ">{value.num}</div>
+                                  {value.num > 0 ?
+                                    <div className="col-lg-1"><Button className="deleteButton" bsSize="xsmall" bsStyle="danger" onClick={()=>{this.deleteModifiedDish(value.name)}}>删除</Button></div>:null
+                                  }
+                              </div>: null}
+                      </div>
+                  </div>
+              )})}
+            </div>
+            <div className="cust-border2 cust-margin2" >
+                {this.state.tableModifiedDishes.map((value, key1) =>{
+                  return (
+                      <div key={key1}>
+                          <div className="dishesUnderLine">
+                              {value.num < 0 && value.type !== "麻辣香锅" ?
+                                  <div className="row nova-margin">
+                                      <div className="col-lg-4">{value.name}</div>
+                                      <div className="col-lg-1">x</div>
+                                      <div className="col-lg-1 cust-p-color">{value.num}</div>
+                                  </div>: null}
+                          </div>
+
+                      </div>
+                  )})}
+            </div>
+
+        </div>
 
         return (
             <div>
@@ -399,72 +445,229 @@ export default class CheckDishesDishes extends Component {
                       </ul>
                   </div>
                 </div>
+              <div className="row">
+                <div className="nova-card cust-border cust-margin2 col-lg-9">
+                  <h4>当前桌号: {this.props.match.params.tableid}</h4>
+                  <div className="col-sm-12 col-lg-6 ">
+                    <div className="row">
+                        <div className="cust-border nova-card" >
+                            {<div>
+                                <div >
+                                    {this.state.tableDishes.map((value, key1) =>{
+                                      {console.log(value)}
+                                        return (
+                                            <div key={key1}>
+                                                <div className="dishesUnderLine">
+                                                    {value !== 0 && value.type !== "麻辣香锅" ?
+                                                        <div className="row nova-margin ">
+                                                          <div >
+                                                            <div className="col-lg-4">{value.name}</div>
+                                                            <div className="col-lg-1">x</div>
+                                                            <div className="col-lg-1">{value.DishCount}</div>
+                                                            <div className="col-lg-1"><Button className="deleteButton" bsSize="xsmall" bsStyle="danger" onClick={()=>{this.deleteDish(value.name)}}>删除</Button></div>
+                                                          </div>
+                                                        </div>: null}
+                                                </div>
+                                            </div>
+                                        )})}
+                                </div>
+                            </div>}
 
-              <div className="col-sm-12 col-lg-10 pull-right">
-                     <h3>当前桌号: {this.props.match.params.tableid}</h3>
-                     <h3>当前OrderID: {this.props.match.params.orderid}</h3>
-                <div className="row">
-                    <div className="col-lg-9 cust-border nova-card" >
-                        {<div>
                             <div>
-                                {this.state.tableDishes.map((value, key1) =>{
-                                    return (
-                                        <div key={key1}>
-                                            <div>
-                                                {value!==0?
-                                                    <div className="row nova-margin">
-                                                        <div className="col-lg-4">{value.name}</div>
-                                                        <div className="col-lg-1">x</div>
-                                                        <div className="col-lg-1">{value.DishCount}</div>
-                                                        <div className="col-lg-1"><Button className="" bsStyle="danger" onClick={()=>{this.deleteDish(value.name)}}>删除</Button></div>
-                                                    </div>: null}
+                                <div className="cust-border2 cust-margin2">
+                                  {tableModifiedDishes}
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                  </div>
+                  {console.log(this.state.tableDishes)}
+                  {console.log(this.SDHPNumberCalculator())}
+                  {this.SDHPNumberCalculator() > 0 && this.SDHPNumberCalculator() < 5 ?
+                    <div className="col-sm-12 col-lg-6 ">
+                      <div className="row">
+                          <div className="cust-border nova-card" >
+                              <div>
+                                <h4 className="" >麻辣香锅菜品数量: ({this.SDHPNumberCalculator()})</h4>
+                                <h4 className="cust-text1" >少于5份麻辣香锅菜品数量!</h4>
+                              </div>
+                              <div className="" >
+                                  {this.state.tableDishes.map((value, key1) =>{
+                                      return (
+                                          <div key={key1}>
+                                              <div className="dishesUnderLine">
+                                                  {value !== 0 && value.type === "麻辣香锅" ?
+                                                      <div className="row nova-margin ">
+                                                        <div >
+                                                          <div className="col-lg-4">{value.name}</div>
+                                                          <div className="col-lg-1">x</div>
+                                                          <div className="col-lg-1">{value.DishCount}</div>
+                                                          <div className="col-lg-1"><Button className="deleteButton" bsSize="xsmall" bsStyle="danger" onClick={()=>{this.deleteDish(value.name)}}>删除</Button></div>
+                                                        </div>
+                                                      </div>: null}
+                                              </div>
+                                          </div>
+                                      )})}
+                                      <div >
+                                        {console.log(this.state.tableModifiedDishes)}
+                                        {this.state.tableModifiedDishes.map((value, key1) =>{
+                                          return (
+                                              <div key={key1}>
+                                                  <div className="dishesUnderLine">
+                                                      {value.num > 0 && value.type === "麻辣香锅" ?
+                                                          <div className="row nova-margin">
+                                                              <div className="col-lg-4">{value.name}</div>
+                                                              <div className="col-lg-1">x</div>
+                                                              <div className="col-lg-1 ">{value.num}</div>
+                                                              {value.num > 0 ?
+                                                                <div className="col-lg-1"><Button className="deleteButton" bsSize="xsmall" bsStyle="danger" onClick={()=>{this.deleteModifiedDish(value.name)}}>删除</Button></div>:null
+                                                              }
+                                                          </div>: null}
+                                                  </div>
+                                              </div>
+                                          )})}
+                                        </div>
+                                        <div className="cust-border2 cust-margin2">
+                                          <div >
+                                            {console.log(this.state.tableModifiedDishes)}
+                                            {this.state.tableModifiedDishes.map((value, key1) =>{
+                                              return (
+                                                  <div key={key1}>
+                                                      <div className="dishesUnderLine">
+                                                          {value.num < 0 && value.type === "麻辣香锅" ?
+                                                              <div className="row nova-margin">
+                                                                  <div className="col-lg-4">{value.name}</div>
+                                                                  <div className="col-lg-1">x</div>
+                                                                  <div className="col-lg-1 cust-p-color">{value.num}</div>
+                                                                  {value.num > 0 ?
+                                                                    <div className="col-lg-1"><Button className="deleteButton" bsSize="xsmall" bsStyle="danger" onClick={()=>{this.deleteModifiedDish(value.name)}}>删除</Button></div>:null
+                                                                  }
+                                                              </div>: null}
+                                                      </div>
+                                                  </div>
+                                              )})}
                                             </div>
                                         </div>
-                                    )})}
-                            </div>
-                        </div>}
+                              </div>
 
-                        <div>
-                            <div className="cust-border2 cust-margin2">
-                              {tableModifiedDishes}
-                            </div>
-                        </div>
+                          </div>
 
-                        <div>
-                            <div className="row nova-margin">
-                                <div className="col-lg-3">总价: </div>
-                                <div className="col-lg-2">{this.SumUp()}</div>
-                                <div className="col-lg-2">{this.SumUpModified()}</div>
-                                <div className="col-lg-2">{this.SumUpEntirePrice()}</div>
-
-                            </div>
-                        </div>
-
-                        <div className="row nova-margin">
-                            <Button className="col-lg-2 button2" bsStyle="success" onClick={()=>{}}>返回控制台</Button>
-
-                            <Link to={{
-                                pathname: '/home/Dishes/'+ this.props.match.params.tableid,
-                                state:{
-                                comment:this.state.comment,
-
-                                tableDishes_orderID: this.state.tableDishes_orderID,
-                                tableDishes: this.state.tableDishes,
-                                tableModifiedDishes: this.state.tableModifiedDishes
-                                }
-                            }}><Button className="col-lg-2 button2" bsStyle="success" onClick={()=>{}}>加菜</Button>
-                            </Link>
-
-                            <Button className="col-lg-2 button2" bsStyle="success" onClick={()=>{this.handleShow()}}>结账&打印</Button>
-                            <Button className="col-lg-2 button2" bsStyle="danger" onClick={()=>{}}>厨房重新打印</Button>
-
-                        </div>
+                      </div>
                     </div>
-                    {this.state.comment !== "" ?
-                      <div className="col-lg-3 cust-border nova-card" >
-                        <h2>{this.state.comment}</h2>
-                    </div>:null
-                    }
+                  :null}
+
+                  {this.SDHPNumberCalculator() >= 5 ?
+                    <div className="col-sm-12 col-lg-6 ">
+                      <div className="row">
+                          <div className="cust-border nova-card" >
+                              <div>
+                                <h4 className="" >麻辣香锅菜品数量: ({this.SDHPNumberCalculator()})</h4>
+                              </div>
+                              <div className="" >
+                                  {this.state.tableDishes.map((value, key1) =>{
+                                      return (
+                                          <div key={key1}>
+                                              <div className="dishesUnderLine">
+                                                  {value !== 0 && value.type === "麻辣香锅" ?
+                                                      <div className="row nova-margin ">
+                                                        <div >
+                                                          <div className="col-lg-4">{value.name}</div>
+                                                          <div className="col-lg-1">x</div>
+                                                          <div className="col-lg-1">{value.DishCount}</div>
+                                                          <div className="col-lg-1"><Button className="deleteButton" bsSize="xsmall" bsStyle="danger" onClick={()=>{this.deleteDish(value.name)}}>删除</Button></div>
+                                                        </div>
+                                                      </div>: null}
+                                              </div>
+                                          </div>
+                                      )})}
+                                      <div >
+                                        {console.log(this.state.tableModifiedDishes)}
+                                        {this.state.tableModifiedDishes.map((value, key1) =>{
+                                          return (
+                                              <div key={key1}>
+                                                  <div className="dishesUnderLine">
+                                                      {value.num > 0 && value.type === "麻辣香锅" ?
+                                                          <div className="row nova-margin">
+                                                              <div className="col-lg-4">{value.name}</div>
+                                                              <div className="col-lg-1">x</div>
+                                                              <div className="col-lg-1 ">{value.num}</div>
+                                                              {value.num > 0 ?
+                                                                <div className="col-lg-1"><Button className="deleteButton" bsSize="xsmall" bsStyle="danger" onClick={()=>{this.deleteModifiedDish(value.name)}}>删除</Button></div>:null
+                                                              }
+                                                          </div>: null}
+                                                  </div>
+                                              </div>
+                                          )})}
+                                        </div>
+                                        <div className="cust-border2 cust-margin2">
+                                          <div >
+                                            {console.log(this.state.tableModifiedDishes)}
+                                            {this.state.tableModifiedDishes.map((value, key1) =>{
+                                              return (
+                                                  <div key={key1}>
+                                                      <div className="dishesUnderLine">
+                                                          {value.num < 0 && value.type === "麻辣香锅" ?
+                                                              <div className="row nova-margin">
+                                                                  <div className="col-lg-4">{value.name}</div>
+                                                                  <div className="col-lg-1">x</div>
+                                                                  <div className="col-lg-1 cust-p-color">{value.num}</div>
+                                                                  {value.num > 0 ?
+                                                                    <div className="col-lg-1"><Button className="deleteButton" bsSize="xsmall" bsStyle="danger" onClick={()=>{this.deleteModifiedDish(value.name)}}>删除</Button></div>:null
+                                                                  }
+                                                              </div>: null}
+                                                      </div>
+                                                  </div>
+                                              )})}
+                                            </div>
+                                        </div>
+                              </div>
+
+                          </div>
+
+                      </div>
+                    </div>
+                  :null}
+
+
+                </div>
+
+                <div className="nova-card cust-border col-lg-9">
+                  {this.state.comment !== "" ?
+                    <div className="nova-card" >
+                      <h4>备注：{this.state.comment}</h4>
+                  </div>:null
+                  }
+                </div>
+                <div className="nova-card cust-border col-lg-9">
+                  <div>
+                      <div className="row nova-margin">
+                          <div className="col-lg-3">总价: </div>
+                          <div className="col-lg-2">{this.SumUp()}</div>
+                          <div className="col-lg-2">{this.SumUpModified()}</div>
+                          <div className="col-lg-2 cust-p-color2">{this.SumUpEntirePrice()}</div>
+                      </div>
+                  </div>
+                  <div className="row nova-margin cust-margin7">
+                      <Button className="col-lg-3 button2" bsStyle="success" onClick={()=>{}}>返回控制台</Button>
+
+                      <Link to={{
+                          pathname: '/home/Dishes/'+ this.props.match.params.tableid,
+                          state:{
+                          comment:this.state.comment,
+
+                          tableDishes_orderID: this.state.tableDishes_orderID,
+                          tableDishes: this.state.tableDishes,
+                          tableModifiedDishes: this.state.tableModifiedDishes
+                          }
+                      }}><Button className="col-lg-3 button2 " bsStyle="success" onClick={()=>{}}>加菜</Button>
+                      </Link>
+
+                      <Button className="col-lg-3 button2" bsStyle="success" onClick={()=>{this.handleShow()}}>结账&打印</Button>
+                      <Button className="col-lg-3 button2" bsStyle="warning" onClick={()=>{}}>厨房打印</Button>
+
+                  </div>
                 </div>
               </div>
             </div>
@@ -476,42 +679,154 @@ export default class CheckDishesDishes extends Component {
               </Modal.Header>
               <Modal.Body className="modal">
                 <h4>菜品列表：</h4>
-                  {this.state.tableDishes.map((value, key1) =>{
-                    return (
-                        <div key={key1} >
-                            <div >
-                                {value!==0?
-                                    <div className="row nova-margin">
-                                        <div className="col-lg-4">{value.name}</div>
-                                        <div className="col-lg-1">x</div>
-                                        <div className="col-lg-1 ">{value.DishCount}</div>
+                  <div className="col-sm-12 col-lg-12 ">
+                    <div className="row">
+                        <div className=" nova-card" >
+                            {<div>
+                                <div >
+                                    {this.state.tableDishes.map((value, key1) =>{
+                                      {console.log(value)}
+                                        return (
+                                            <div key={key1}>
+                                                <div className="dishesUnderLine">
+                                                    {value !== 0 && value.type !== "麻辣香锅" ?
+                                                        <div className="row nova-margin ">
+                                                          <div >
+                                                            <div className="col-lg-4">{value.name}</div>
+                                                            <div className="col-lg-1">x</div>
+                                                            <div className="col-lg-1">{value.DishCount}</div>
 
-                                    </div>: null}
+                                                          </div>
+                                                        </div>: null}
+                                                </div>
+                                            </div>
+                                        )})}
+                                </div>
+                            </div>}
+
+                            <div>
+                                <div className="cust-border2 cust-margin2">
+                                  <div>
+                                    <div >
+                                      {console.log(this.state.tableModifiedDishes)}
+                                      {this.state.tableModifiedDishes.map((value, key1) =>{
+                                        return (
+                                            <div key={key1}>
+                                                <div className="dishesUnderLine">
+                                                    {value.num > 0 && value.type !== "麻辣香锅" ?
+                                                        <div className="row nova-margin">
+                                                            <div className="col-lg-4">{value.name}</div>
+                                                            <div className="col-lg-1">x</div>
+                                                            <div className="col-lg-1 ">{value.num}</div>
+                                                        </div>: null}
+                                                </div>
+                                            </div>
+                                        )})}
+                                      </div>
+                                      <div className="cust-border2 cust-margin2" >
+                                          {this.state.tableModifiedDishes.map((value, key1) =>{
+                                            return (
+                                                <div key={key1}>
+                                                    <div className="dishesUnderLine">
+                                                        {value.num < 0 && value.type !== "麻辣香锅" ?
+                                                            <div className="row nova-margin">
+                                                                <div className="col-lg-4">{value.name}</div>
+                                                                <div className="col-lg-1">x</div>
+                                                                <div className="col-lg-1 cust-p-color">{value.num}</div>
+                                                            </div>: null}
+                                                    </div>
+
+                                                </div>
+                                            )})}
+                                      </div>
+
+                                  </div>
+                                </div>
+
                             </div>
+
+
+
                         </div>
-                    )})}
+
+                    </div>
+                  </div>
+
               </Modal.Body>
               <hr />
 
               <Modal.Body className="modal">
-                    {this.state.tableModifiedDishes.map((value, key1) =>{
-                      return (
-                          <div key={key1}>
-                              <div>
-                                  {value!==0?
-                                      <div className="row nova-margin">
-                                          <div className="col-lg-4">{value.name}</div>
-                                          <div className="col-lg-1">x</div>
-                                          <div className="col-lg-1 ">{value.num}</div>
-                                      </div>: null}
-                              </div>
+                <div className="col-sm-12 col-lg-12 ">
+                  <div className="row">
+                      <div className=" nova-card" >
+                          <div>
+
                           </div>
-                      )})}
 
+                          <div className="" >
+                              {this.state.tableDishes.map((value, key1) =>{
+                                  return (
+                                      <div key={key1}>
+                                          <div className="dishesUnderLine">
+                                              {value !== 0 && value.type === "麻辣香锅" ?
+                                                  <div className="row nova-margin ">
+                                                    <div >
+                                                      <div className="col-lg-4">{value.name}</div>
+                                                      <div className="col-lg-1">x</div>
+                                                      <div className="col-lg-1">{value.DishCount}</div>
+                                                    </div>
+                                                  </div>: null}
+                                          </div>
+                                      </div>
+                                  )})}
+                                  <div >
+                                    {console.log(this.state.tableModifiedDishes)}
+                                    {this.state.tableModifiedDishes.map((value, key1) =>{
+                                      return (
+                                          <div key={key1}>
+                                              <div className="dishesUnderLine">
+                                                  {value.num > 0 && value.type === "麻辣香锅" ?
+                                                      <div className="row nova-margin">
+                                                          <div className="col-lg-4">{value.name}</div>
+                                                          <div className="col-lg-1">x</div>
+                                                          <div className="col-lg-1 ">{value.num}</div>
+                                                      </div>: null}
+                                              </div>
+                                          </div>
+                                      )})}
+                                    </div>
+                                    <div className="cust-border2 cust-margin2">
+                                      <div >
+                                        {console.log(this.state.tableModifiedDishes)}
+                                        {this.state.tableModifiedDishes.map((value, key1) =>{
+                                          return (
+                                              <div key={key1}>
+                                                  <div className="dishesUnderLine">
+                                                      {value.num < 0 && value.type === "麻辣香锅" ?
+                                                          <div className="row nova-margin">
+                                                              <div className="col-lg-4">{value.name}</div>
+                                                              <div className="col-lg-1">x</div>
+                                                              <div className="col-lg-1 cust-p-color">{value.num}</div>
+                                                              {value.num > 0 ?
+                                                                <div className="col-lg-1"><Button className="deleteButton" bsSize="xsmall" bsStyle="danger" onClick={()=>{this.deleteModifiedDish(value.name)}}>删除</Button></div>:null
+                                                              }
+                                                          </div>: null}
+                                                  </div>
+                                              </div>
+                                          )})}
+                                        </div>
+                                    </div>
+                          </div>
+
+                      </div>
+
+                  </div>
+                </div>
+              </Modal.Body>
+
+              <Modal.Body className="modal">
                 <hr />
-
                 <h4 className="modal2">总价：{this.SumUpEntirePrice()} $AUD</h4>
-
               </Modal.Body>
               <Modal.Footer>
                 <Button onClick={this.handleClose}>返回</Button>

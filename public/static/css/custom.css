@@ -232,6 +232,12 @@ a:hover{
     margin-top: 3px;
 
 }
+.cust-margin5{
+    margin-top: 2px;
+}
+.cust-margin6{
+    margin-top: 1px;
+}
 .cust-border2{
   border-style: solid none none none;
 }
@@ -258,6 +264,18 @@ a:hover{
   margin-top: 10px;
   width: 140px;
   height: 70px;
+}
+
+.button-tables {
+  width: 60px;
+  height: 40px;
+  font-size: 20px;
+}
+
+.button2{
+  font-size: 20px;
+  width: 220px;
+  margin-right: 90px;
 }
 
 .button {
@@ -300,10 +318,7 @@ a:hover{
     transition: 0s
 }
 
-.button2{
 
-  margin-right: 30px;
-}
 
 .center {
     display: block;
@@ -314,5 +329,25 @@ a:hover{
 
 .modal {
     display: block;
-    margin-left: 100px;
+    margin-left: 10px;
+}
+
+.dishesUnderLine {
+    /* border-bottom: 1px solid #f1f1f1; */
+}
+.deleteButton {
+  margin-bottom: 3px;
+}
+.sdhpBorder {
+  border-style: solid;
+  border-width: 1px;
+}
+
+.cust-text {
+  font-weight: bold;
+  color: black;
+}
+.cust-text1 {
+  font-weight: bold;
+  color: red;
 }
