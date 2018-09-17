@@ -241,6 +241,9 @@ a:hover{
 .cust-border2{
   border-style: solid none none none;
 }
+.cust-border3{
+  border-style:   dotted dashed solid double;
+}
 .cust-p-color{
   color: #FF0000;
 }
@@ -350,4 +353,10 @@ a:hover{
 .cust-text1 {
   font-weight: bold;
   color: red;
+}
+.cust-adminLogin{
+  font-size: 30px;
+  width: 330px;
+  margin-top: 170px;
+  margin-left: 70px;
 }

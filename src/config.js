@@ -19,6 +19,9 @@ export const API = {
     BookTable: 'api1/BookTable',
     CancleBookTable: 'api1/CancleBookTable',
     getDeliveryOrderDetails: "api1/getDeliveryOrderDetails",
-    CompleteDeliveryOrder: 'api1/CompleteDeliveryOrder'
+    CompleteDeliveryOrder: 'api1/CompleteDeliveryOrder',
+    getDeliveryOrderDetailswithOrder: 'api1/getDeliveryOrderDetailswithOrder',
+    pointsInfo: 'pointsInfo',
+    redeem: 'redeem'
 
 }

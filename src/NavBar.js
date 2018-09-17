@@ -5,7 +5,13 @@ import {LinkContainer } from 'react-router-bootstrap'
 import Clock from 'react-live-clock'
 
 export default class NavBar extends Component{
+    ToAdminLogin = () => {
+      window.location = '/home/AdminLogin/'
+    }
     render(){
+      var ToAdminLogin = {
+        pathname: '/home/AdminLogin/'
+      }
         return(
             <nav className=" navbar-default">
                 <div className="container-fluid">
@@ -53,7 +59,7 @@ export default class NavBar extends Component{
                                 >
                                   <MenuItem eventKey="1">功能1</MenuItem>
                                   <MenuItem eventKey="2">功能2</MenuItem>
-                                  <MenuItem eventKey="3">功能3</MenuItem>
+                                  <MenuItem onClick={()=>{this.ToAdminLogin()}} eventKey="3">ADMIN界面</MenuItem>
                                   <MenuItem divider />
                                   <MenuItem eventKey="4">注销用户</MenuItem>
                                 </DropdownButton>

@@ -72,6 +72,7 @@ export default class Personal extends Component {
                         )
                     })}
                   </ListGroup>
+              
               </div>
           </div>
       )

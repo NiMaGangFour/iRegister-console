@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Modal } from 'react-bootstrap'
+import { Button, Modal, Label } from 'react-bootstrap'
 
 import { API } from '../config'
 import AuthOptions from '../auth/AuthOptions'
@@ -18,7 +18,13 @@ export default class CheckDishesDishes extends Component {
           tableStatus: "Occupied",
           tableDishes_orderID: null,
           comment:"",
-          show: false
+          show: false,
+          memberExist: null ,
+          memberPhoneNum: '',
+          memberPoints: null,
+          memberDiscount: null,
+          discount: null,
+          sumAfterRedeem: null
         }}
 
     componentDidMount() {
@@ -300,16 +306,17 @@ export default class CheckDishesDishes extends Component {
         })
     }
 
-    parentChildOccupied = (value) => {
-      this.setState({
-        childValue:value
-      })
-      console.log(value);
-    }
+    // parentChildOccupied = (value) => {
+    //   this.setState({
+    //     childValue:value
+    //   })
+    //   console.log(value);
+    // }
     //对应按钮 “结账打印” 并刷新table状态为Available
     checkout = () => {
       console.log(this.state.tableDishes_orderID)
       console.log(this.props.match.params.tableid)
+      console.log(this.sumAfterRedeem())
       fetch(API.baseUri+API.checkOut, {
           method: "POST",
           headers: {
@@ -318,7 +325,10 @@ export default class CheckDishesDishes extends Component {
         },
         body: JSON.stringify({
                 "orderID": this.state.tableDishes_orderID,
-                "tableID": this.props.match.params.tableid
+                "tableID": this.props.match.params.tableid,
+                "originalPrice": this.SumUpEntirePrice(),
+                "finalPrice": this.sumAfterRedeem(),
+                "phone": this.state.memberPhoneNum
             })
       } ).then(res =>{
           if(res.status===200) {
@@ -377,6 +387,103 @@ export default class CheckDishesDishes extends Component {
       }
       return total;
     }
+
+    //监听会员号码输入框input的实时value
+    handleChange = (event) => {
+      this.setState({memberPhoneNum: event.target.value});
+    }
+    // memberPhoneNum
+    //pointsInfo     phone,    /redeem    phone, orderID
+    //检查会员积分
+    checkMembershipPoint = () => {
+      console.log(this.state.memberPhoneNum)
+      fetch(API.baseUri+API.pointsInfo, {
+          method: "POST",
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+                "phone": this.state.memberPhoneNum,
+            })
+      } ).then(res =>{
+          if(res.status===200) {
+            return res.json();
+          }
+          else console.log(res)
+      }).then(json => {
+        console.log(json)
+        if (json.success === true){
+          console.log("会员电话存在")
+          // console.log(json.msg.redeemablePoints)
+          this.setState({
+            memberExist: true,
+            memberPoints:json.msg.points,
+            memberDiscount:json.msg.discount,
+          })} else {
+            this.setState({
+            memberExist: false,
+          })
+        }
+      })
+    }
+
+    redeemMembershipPoint = () => {
+      console.log(this.state.memberPhoneNum)
+      console.log(this.state.tableDishes_orderID)
+      fetch(API.baseUri+API.redeem, {
+          method: "POST",
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+                "phone": this.state.memberPhoneNum,
+                "orderID": this.state.tableDishes_orderID
+            })
+      } ).then(res =>{
+          if(res.status===200) {
+            return res.json();
+          }
+          else console.log(res)
+      }).then(json => {
+        console.log(json)
+        if (json.success === true){
+          console.log(json.discount.discount)
+          this.setState({
+            discount:json.discount.discount
+          })
+
+          // console.log(json.msg.redeemablePoints)
+        }
+        else if (json.success === false) {
+          console.log(json.msg)
+        }
+      })
+    }
+
+    activeOrDisabledRedeemButton = () => {
+      console.log("activeOrDisabledRedeemButton")
+      var disabled = true;
+      if (this.state.memberPoints >= 100){
+        disabled = false;
+      }
+      return disabled
+    }
+
+    sumAfterRedeem = () => {
+      var sum = null
+      if (this.state.discount !== null){
+        sum = this.SumUpEntirePrice() - this.state.discount
+        console.log(sum)
+      }
+      return sum
+    }
+    //0416983772
+    //0416579887
+    //0451487754
+
+
 
     render() {
       console.log(this.state.tableDishes)
@@ -829,8 +936,41 @@ export default class CheckDishesDishes extends Component {
                 <h4 className="modal2">总价：{this.SumUpEntirePrice()} $AUD</h4>
               </Modal.Body>
               <Modal.Footer>
+                <div className="col-sm-12 col-lg-6 pull-left">
+                  <form action="/action_page.php">
+                    会员号码: <input type="text" placeholder="请输入会员号码" name="LastName" onChange={this.handleChange} value={this.state.memberPhoneNum}/><br />
+                  {this.state.memberExist === true ?
+                    <div>
+                      <Label bsStyle="info">当前拥有积分：{this.state.memberPoints}分</Label>
+                      <Label bsStyle="info">共计可兑换：${this.state.memberDiscount}AUD</Label>
+                    </div>
+                    :null
+                  }
+                  {this.state.memberExist === false ?
+                    <div>
+                      <Label bsStyle="danger">此号码没有会员权限</Label>
+                    </div>
+                    :null
+                  }
+                  </form>
+
+                <Button onClick={this.checkMembershipPoint}>查询积分</Button>
+                {this.state.memberPoints >= 100 ?
+                    <Button onClick={this.redeemMembershipPoint}>兑换积分</Button>:null
+                }
+                {this.state.discount !== null ?
+                  <div>
+                    <Label>总价：{this.SumUpEntirePrice()}</Label>
+                    <Label>- {this.state.discount} = </Label>
+                    <Label bsStyle="danger">{this.sumAfterRedeem()} $AUD</Label>
+                  </div>:null
+                }
+
+                </div>
+                <div className="col-lg-6 ">
                 <Button onClick={this.handleClose}>返回</Button>
                 <Button onClick={this.checkout}>确认结账</Button>
+                </div>
               </Modal.Footer>
             </Modal>
             </div>

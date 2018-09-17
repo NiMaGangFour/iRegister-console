@@ -11,7 +11,11 @@ export default class DeliverOrders extends Component {
       super(props)
       this.authOptions = React.createRef();
       this.state = {
-        deliveryDishes: []
+        deliveryDishes: [],
+        customerAddress:null,
+        customerPhoneNO: null,
+        customerName:null,
+        customerComment: []
       }}
 
   componentDidMount() {
@@ -29,15 +33,20 @@ export default class DeliverOrders extends Component {
   }
 
   getData = () => {
-    fetch(API.baseUri + API.getDeliveryOrderDetails + "/" + this.props.match.params.orderid)
+    fetch(API.baseUri + API.getDeliveryOrderDetailswithOrder + "/" + this.props.match.params.orderid)
         .then((response) => {
             if (response.status === 200) {
                 return response.json()
             } else console.log("Get data error ");
         }).then((json) =>{
           console.log(json)
+
           this.setState({
             deliveryDishes: json,
+            customerAddress: json[0].address,
+            customerPhoneNO: json[0].phone,
+            customerName: json[0].customerName,
+            customerComment: json[0].comment,
           })
           console.log(this.state.deliveryDishes)
     }).catch((error) => {
@@ -63,7 +72,12 @@ export default class DeliverOrders extends Component {
 
   }
 
-
+  SumUpDeliveryOrder = ()=> {
+      var total = this.state.deliveryDishes.reduce((sum, order) =>{
+          return sum + order.DishCount * order.price
+      }, 0)
+      return total;
+  }
 
 
 
@@ -74,11 +88,12 @@ export default class DeliverOrders extends Component {
             <div className="row">
               <div className="col-sm-12 col-lg-2 ">
 
+
+                <Personal />
                 <AuthOptions
                   ref={this.authOptions}
                   parentChildOccupied={this.parentChildOccupied}
                   />
-                <Personal />
 
                 <div className="site-info   cust-margin3 nova-padding nova-card cust-border">
                     <ul>
@@ -96,11 +111,13 @@ export default class DeliverOrders extends Component {
               </div>
 
               <div className="nova-card cust-border col-lg-9">
-                {this.state.comment !== "" ?
-                  <div className="nova-card" >
-                    <h4>备注：{this.state.comment}</h4>
-                </div>:null
-                }
+                <div className="">
+                  <div className="col-lg-6">菜品名称</div>
+                  <div className="col-lg-1"></div>
+                  <div className="col-lg-1">数量</div>
+                  <div className="col-lg-1">单价</div>
+                </div>
+
                 <div>
                   {this.state.deliveryDishes.map((value, i) =>{
                     return (
@@ -108,17 +125,33 @@ export default class DeliverOrders extends Component {
                         <div className="col-lg-6">{value.name}</div>
                         <div className="col-lg-1">x</div>
                         <div className="col-lg-1">{value.DishCount}</div>
-                        <div className="col-lg-1">{value.address}</div>
-                        <div className="col-lg-1">{value.customerName}</div>
-                        <div className="col-lg-1">{value.customerName}</div>
-                        <div className="col-lg-1">{value.customerName}</div>
+                        <div className="col-lg-1">{value.price}</div>
                       </div>
                     )
                   })
                 }
-                <div className="col-lg-1">
-                  <Button className="deleteButton" bsSize="xsmall" bsStyle="danger" onClick={()=>{this.completeConfirm(this.props.match.params.orderid)}}>此单已完成</Button>
                 </div>
+                <div className=" col-lg-9">
+                  <hr />
+                    总价：{this.SumUpDeliveryOrder()}
+                </div>
+              </div>
+
+              <div className="nova-card cust-border col-lg-9">
+
+                {this.state.customerComment !== "" ?
+                  <div className="nova-card" >
+                    <h4>备注：{this.state.customerComment}</h4>
+                </div>:null
+                }
+              </div>
+              <div className="nova-card cust-border col-lg-9">
+                <div><h4>顾客姓名：{this.state.customerName}</h4></div>
+                <div><h4>顾客电话：{this.state.customerPhoneNO}</h4></div>
+                <div><h4>送餐地址：{this.state.customerAddress}</h4></div>
+                <div className="row">
+                  <Button className="col-lg-3 button2" bsSize="large" bsStyle="warning" onClick={()=>{console.log("还没写")}}>返回控制台</Button>
+                  <Button className="col-lg-3 button2" bsSize="large" bsStyle="danger" onClick={()=>{this.completeConfirm(this.props.match.params.orderid)}}>此单已完成</Button>
                 </div>
               </div>
             </div>

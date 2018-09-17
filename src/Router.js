@@ -13,6 +13,8 @@ import Dishes from './home/Dishes'
 import CheckDishes from './home/CheckDishes'
 import CheckBookings from './home/CheckBookings'
 import DeliverOrders from './home/DeliverOrders'
+import AdminLogin from './home/AdminLogin'
+import AdminMainPage from './home/AdminMainPage'
 
 
 
@@ -35,6 +37,8 @@ const Router = () =>{
                         <Route exact path='/home/CheckBookings/:tableid' component={CheckBookings}/>
                         <Route exact path='/home/CheckBookings/:tableid' component={CheckBookings}/>
                         <Route exact path='/home/DeliverOrders/:orderid' component={DeliverOrders}/>
+                        <Route exact path='/home/AdminLogin/' component={AdminLogin}/>
+                        <Route exact path='/home/AdminMainPage/' component={AdminMainPage}/>
                     </Switch>
                 </div>
             </div>
