@@ -85,7 +85,6 @@ export default class AdminLogin extends Component {
                 </form>
                 <form>
                    <FormGroup
-
                       validationState={this.getValidationState()}
                     >
                     <ControlLabel>密码：</ControlLabel>
@@ -97,7 +96,7 @@ export default class AdminLogin extends Component {
                     />
                     <input type="checkbox" onClick={() => {this.verifyPasswordFieldType()}}/>  Show Password
                     </FormGroup>
-              </form>
+                  </form>
               <div>
               <Button className="col-lg-3 button2" bsSize="large" bsStyle="warning" onClick={()=>{this.toTerminalPage()}}>返回控制台</Button>
               <Button className="col-lg-3 button2" bsSize="large" bsStyle="danger" onClick={()=>{this.toAdminPage()}}>登陆</Button>

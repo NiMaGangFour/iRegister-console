@@ -278,8 +278,10 @@ a:hover{
 .button2{
   font-size: 20px;
   width: 220px;
-  margin-right: 90px;
+  margin-left: 110px;
 }
+
+
 
 .button {
     position: relative;
@@ -359,4 +361,31 @@ a:hover{
   width: 330px;
   margin-top: 170px;
   margin-left: 70px;
+}
+.div-MembershipPoints{
+  width: 280px;
+  height: 240px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  background: #f2f2f2;
+  margin: 20px auto;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.div-checkout-button{
+  margin: 20px auto;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.cust-font{
+  font-size: 20px;
+}
+.cust-label{
+  font-size: 20px;
+  /* UP/Right/DOWN/Left */
+
+  margin:5px 5px 0px 0px;
+  display:inline-block;
 }
