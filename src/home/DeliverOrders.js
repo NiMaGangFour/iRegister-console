@@ -85,7 +85,7 @@ export default class DeliverOrders extends Component {
 
       return (
           <div>
-            <div className="row">
+            <div className="">
               <div className="col-sm-12 col-lg-2 ">
 
 
@@ -105,7 +105,7 @@ export default class DeliverOrders extends Component {
                 </div>
               </div>
 
-            <div className="row">
+            <div className="">
               <div className="nova-card cust-border cust-margin2 col-lg-9">
                 <h4>当前订单号:{this.props.match.params.orderid}</h4>
               </div>
@@ -149,11 +149,13 @@ export default class DeliverOrders extends Component {
                 <div><h4>顾客姓名：{this.state.customerName}</h4></div>
                 <div><h4>顾客电话：{this.state.customerPhoneNO}</h4></div>
                 <div><h4>送餐地址：{this.state.customerAddress}</h4></div>
-                <div className="row">
-                  <Button className="col-lg-3 button2" bsSize="large" bsStyle="warning" onClick={()=>{console.log("还没写")}}>返回控制台</Button>
-                  <Button className="col-lg-3 button2" bsSize="large" bsStyle="danger" onClick={()=>{this.completeConfirm(this.props.match.params.orderid)}}>此单已完成</Button>
-                </div>
+                
               </div>
+              <div className="nova-card cust-border col-lg-9">
+                  <Button className="col-lg-3 button2" bsSize="large" bsStyle="warning" onClick={()=>{console.log("还没写")}}>返回控制台</Button>
+                  <Button className="col-lg-3 button2" bsStyle="danger" onClick={() => {}}>厨房打印</Button>
+                  <Button className="col-lg-3 button2" bsSize="large" bsStyle="success" onClick={()=>{this.completeConfirm(this.props.match.params.orderid)}}>打包&打印小票</Button>
+                </div>
             </div>
           </div>
         </div>

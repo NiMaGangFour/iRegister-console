@@ -590,7 +590,7 @@ export default class CheckDishesDishes extends Component {
     </div>
 
     return (<div>
-      <div className="row">
+      <div className="">
         <div className="col-sm-12 col-lg-2 ">
 
           <AuthOptions ref={this.authOptions} parentChildOccupied={this.parentChildOccupied}/>
@@ -608,7 +608,7 @@ export default class CheckDishesDishes extends Component {
             </ul>
           </div>
         </div>
-        <div className="row">
+        <div className="">
           <div className="nova-card cust-border cust-margin2 col-lg-9">
             <h4>当前桌号: {this.props.match.params.tableid}</h4>
             <div className="col-sm-12 col-lg-6 ">
@@ -876,16 +876,15 @@ export default class CheckDishesDishes extends Component {
           }
 
           <div className="nova-card cust-border col-lg-9">
-            <div>
-              <div className="row nova-margin">
-                <div className="col-lg-3">总价:
-                </div>
-                <div className="col-lg-2">{this.SumUp()}</div>
-                <div className="col-lg-2">{this.SumUpModified()}</div>
-                <div className="col-lg-2 cust-p-color2">{this.SumUpEntirePrice()}</div>
+              <div className="nova-margin">
+                <div className="col-lg-1">下单: A${this.SumUp()}</div>
+                <div className="col-lg-1">加菜：A${this.SumUpModified()}</div>
+                <div className="col-lg-1 cust-p-color2">总价：A${this.SumUpEntirePrice()}</div>
               </div>
             </div>
-            <div className="row nova-margin cust-margin7">
+
+          <div className="nova-card cust-border col-lg-9">
+            <div className=" nova-margin cust-margin7">
               <Button className="col-lg-3 button2" bsStyle="success" onClick={() => {}}>返回控制台</Button>
 
               <Link to={{

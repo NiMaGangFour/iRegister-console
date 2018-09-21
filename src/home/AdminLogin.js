@@ -64,7 +64,7 @@ export default class AdminLogin extends Component {
         return (
           <div className="row">
             <div className="col-sm-12 col-lg-12 nova-card cust-border cust-margin2 ">
-              <div className="col-lg-4 cust-border">
+            <div className="col-lg-4 cust-border">
             </div>
             <div className="col-lg-8 cust-border">
 
@@ -74,11 +74,11 @@ export default class AdminLogin extends Component {
                      controlId="formBasicText"
                      validationState={this.getValidationState()}
                    >
-                   <ControlLabel>Administrator账号：</ControlLabel>
+                   <ControlLabel>管理员账号：</ControlLabel>
                    <FormControl
                      type="text"
                      value={this.state.valueAccount}
-                     placeholder="请填写Admin账号"
+                     placeholder="请填写管理员账号"
                      onChange={this.handleChangeAccount}
                    />
                  </FormGroup>
@@ -91,16 +91,19 @@ export default class AdminLogin extends Component {
                     <FormControl
                       type={this.state.passwordFieldType}
                       value={this.state.valuePassword}
-                      placeholder="请填写Admin密码"
+                      placeholder="请填写管理员密码"
                       onChange={this.handleChangePassword}
                     />
-                    <input type="checkbox" onClick={() => {this.verifyPasswordFieldType()}}/>  Show Password
+                    <input type="checkbox" onClick={() => {this.verifyPasswordFieldType()}}/> 显示密码
                     </FormGroup>
+                    
                   </form>
-              <div>
-              <Button className="col-lg-3 button2" bsSize="large" bsStyle="warning" onClick={()=>{this.toTerminalPage()}}>返回控制台</Button>
-              <Button className="col-lg-3 button2" bsSize="large" bsStyle="danger" onClick={()=>{this.toAdminPage()}}>登陆</Button>
+              <div  className="nova-padding">
+                <Button bsSize="large" bsStyle="warning" onClick={()=>{this.toTerminalPage()}}>返回控制台</Button>
+                &nbsp; &nbsp;
+                <Button  bsSize="large" bsStyle="success" onClick={()=>{this.toAdminPage()}}>&nbsp; &nbsp;登陆&nbsp; &nbsp;</Button>
               </div>
+              <p>仅指定IP地址可以登录</p>
             </div>
 
           </div>

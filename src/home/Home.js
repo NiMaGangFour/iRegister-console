@@ -66,13 +66,14 @@ export default class Home extends Component {
     render() {
 
         return (
-          <div className="row">
+          <div className="">
             <div className="col-sm-12 col-lg-2">
               <AuthOptions />  
 
               <Personal />
             </div>
             <div className="col-sm-12 col-lg-10 pull-right nova-card cust-border cust-margin2 ">
+            <div className="console-logo">
               <div className="center" >
                   <img src="/static/img/logo.png" />
               </div>
@@ -81,6 +82,7 @@ export default class Home extends Component {
 
               <h2>当前时间：<Clock format={'h:mm:ss A'} timezone={'Australia/Sydney'} ticking={true}/></h2>
               <Clock format={'dddd, MMMM Mo, YYYY'} timezone={'Australia/Sydney'}/>
+            </div>
             </div>
 
           </div>
