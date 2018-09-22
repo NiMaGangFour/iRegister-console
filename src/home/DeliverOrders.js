@@ -82,7 +82,9 @@ export default class DeliverOrders extends Component {
 
 
   render() {
-
+    var toHomePage = {
+      pathname: '/',
+    };
       return (
           <div>
             <div className="row">
@@ -110,7 +112,7 @@ export default class DeliverOrders extends Component {
                 <h4>当前订单号:{this.props.match.params.orderid}</h4>
               </div>
 
-              <div className="nova-card cust-border col-lg-9">
+              <div className="nova-card cust-border col-lg-9 cust-margin11">
                 <div className="">
                   <div className="col-lg-6">菜品名称</div>
                   <div className="col-lg-1"></div>
@@ -137,7 +139,7 @@ export default class DeliverOrders extends Component {
                 </div>
               </div>
 
-              <div className="nova-card cust-border col-lg-9">
+              <div className="nova-card cust-border col-lg-9 cust-margin11">
 
                 {this.state.customerComment !== "" ?
                   <div className="nova-card" >
@@ -145,13 +147,13 @@ export default class DeliverOrders extends Component {
                 </div>:null
                 }
               </div>
-              <div className="nova-card cust-border col-lg-9">
+              <div className="nova-card cust-border col-lg-9 cust-margin11">
                 <div><h4>顾客姓名：{this.state.customerName}</h4></div>
                 <div><h4>顾客电话：{this.state.customerPhoneNO}</h4></div>
                 <div><h4>送餐地址：{this.state.customerAddress}</h4></div>
                 <div className="row">
-                  <Button className="col-lg-3 button2" bsSize="large" bsStyle="warning" onClick={()=>{console.log("还没写")}}>返回控制台</Button>
-                  <Button className="col-lg-3 button2" bsSize="large" bsStyle="danger" onClick={()=>{this.completeConfirm(this.props.match.params.orderid)}}>此单已完成</Button>
+                  <Link to={toHomePage} ><Button className="col-lg-3 button2" bsSize="large" bsStyle="warning" onClick={()=>{console.log("还没写")}}>返回控制台</Button></Link>
+                  <Button className="col-lg-3 button2" bsSize="large" bsStyle="danger" onClick={()=>{this.completeConfirm(this.props.match.params.orderid)}}>确认订单已完成</Button>
                 </div>
               </div>
             </div>

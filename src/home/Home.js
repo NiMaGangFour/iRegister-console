@@ -12,23 +12,6 @@ export default class Home extends Component {
         this.state = {
             tables: [],
             tableName: null,
-            sample: [
-                {
-                    "name": "A",
-                    "price": 10,
-                    "num": 1
-                },
-                {
-                    "name": "B",
-                    "price": 20,
-                    "num": 2
-                },
-                {
-                    "name": "C",
-                    "price": 30,
-                    "num": 1
-                }
-            ]
         }
       }
     componentWillMount() {
@@ -68,16 +51,16 @@ export default class Home extends Component {
         return (
           <div className="row">
             <div className="col-sm-12 col-lg-2">
-              <AuthOptions />  
+              <AuthOptions />
 
               <Personal />
             </div>
-            <div className="col-sm-12 col-lg-10 pull-right nova-card cust-border cust-margin2 ">
+            <div className="col-sm-12 col-lg-10 nova-card cust-border cust-margin2 ">
               <div className="center" >
                   <img src="/static/img/logo.png" />
               </div>
             <div className="center">
-              <div><h1>蜀味源餐饮系统</h1><h5>Version 1.1</h5></div>
+              <div><h1>蜀味源餐饮管理系统</h1><h5>版本编号（Version 1.16 Beta）</h5></div>
 
               <h2>当前时间：<Clock format={'h:mm:ss A'} timezone={'Australia/Sydney'} ticking={true}/></h2>
               <Clock format={'dddd, MMMM Mo, YYYY'} timezone={'Australia/Sydney'}/>

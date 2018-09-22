@@ -10,26 +10,8 @@ export default class Personal extends Component {
         super(props)
         this.state = {
           getDeliveryOrders:[],
-            order: [
-                {
-                    "id": "123",
-                    "price": 10,
-                    "num": 1
-                },
-                {
-                    "id": "124",
-                    "price": 20,
-                    "num": 2
-                },
-                {
-                    "id": "125",
-                    "price": 30,
-                    "num": 1
-                }
-            ],
         }
     }
-
 
    componentDidMount() {
         this.getData()
@@ -52,12 +34,11 @@ export default class Personal extends Component {
    }
 
     render() {
-
-
       return (
 
           <div className="profile  cust-margin3 nova-padding nova-card cust-border">
-              外卖
+
+              <div className="div-centre"><h3>外卖订单</h3></div>
               <hr />
               <div>
                   <ListGroup>
@@ -66,13 +47,13 @@ export default class Personal extends Component {
                         pathname: '/home/DeliverOrders/'+ value.id,
                       }
                         return (
-                          <div key={i}>
+                          <div className="cust-margin8" key={i}>
                                 <Link to={ToDeliver} ><ListGroupItem  header={value.id} onClick={() => {}}></ListGroupItem></Link>
                           </div>
                         )
                     })}
                   </ListGroup>
-              
+
               </div>
           </div>
       )

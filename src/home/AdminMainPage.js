@@ -76,35 +76,44 @@ export default class AdminMainPage extends Component {
 
         return (
           <div className="row">
-            <div className="col-sm-12 col-lg-12 nova-card cust-border cust-margin2 ">
+            <div className="col-sm-12 col-lg-12 nova-card cust-border  ">
               <div className="col-lg-12 cust-border nova-card" >
                   <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
                       <Tab eventKey={1} title="小吃" className="nova-padding">
                         <Table striped bordered condensed hover>
                           <thead>
                             <tr>
-                              <th>#</th>
-                              <th>First Name</th>
-                              <th>Last Name</th>
-                              <th>Username</th>
+                              <th className="th-width-DishID">菜品编号</th>
+                              <th className="th-width-DishName">菜品名称</th>
+                              <th className="th-width-DishPrice">菜品单价</th>
+                              <th className="th-width-DishType">菜品类别</th>
+                              <th className="th-width-DishType">功能按钮</th>
                             </tr>
                           </thead>
+
                               {this.state.alldishes.map((dish, i) =>{
                                   return (
-                                    <div key={i}>
+                                    <tbody key={i}>
                                       {dish.type === "小吃" ?
-                                        <tbody>
+
                                           <tr>
-                                            <td>dish.dishId</td>
-                                            <td>dish.name</td>
-                                            <td>dish.price</td>
-                                            <td>dish.type</td>
+                                            <td>{dish.dishId}</td>
+                                            <td>{dish.name}</td>
+                                            <td>{dish.price}</td>
+                                            <td>{dish.type}</td>
+                                            <td>
+                                              <Button className="deleteButton" bsSize="xsmall" bsStyle="danger" onClick={() => {}}>删除
+                                              </Button>
+                                              <Button className="deleteButton" bsSize="xsmall" bsStyle="warning" onClick={() => {}}>编辑
+                                              </Button>
+                                            </td>
                                           </tr>
-                                        </tbody>
+
                                       :null}
-                                    </div>
+                                    </tbody>
                                   )
                               })}
+
                           </Table>
                       </Tab>
                   </Tabs>

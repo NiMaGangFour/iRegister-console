@@ -95,10 +95,10 @@ export default class AuthOptions extends Component {
 
     render() {
         return (
-            <div className="join-us  cust-margin3 nova-padding nova-card cust-border">
-                <div>大堂</div>
+            <div className="join-us  cust-margin3 cust-padding nova-card cust-border">
+                <div className="div-centre"><h3>大堂</h3></div>
                 <hr />
-                <div className="row nova-margin">
+                <div className="row cust-margin7">
 
 
                     {this.state.tables.map((value, key1) =>{
@@ -120,10 +120,10 @@ export default class AuthOptions extends Component {
                             <div key={key1}>
                                 <div className="">
                                     {value.status!== "2" && value.status!== "3" ?
-                                        <div className="col-lg-4 nova-margin">
+                                        <div className="col-lg-4 cust-margin7">
                                             <Link to={newToAvia} ><Button className="button-tables" onClick={()=>{}} bsStyle="success" > {value.name} </Button></Link>
                                         </div>:
-                                        <div className="col-lg-4 nova-margin">
+                                        <div className="col-lg-4 cust-margin7">
                                         {value.status !== "2" ?
                                             <div className="">
                                               <Link to={newToBooked} ><Button className="button-tables" bsStyle="warning" > {value.name} </Button></Link>

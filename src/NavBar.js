@@ -24,7 +24,7 @@ export default class NavBar extends Component{
                                 <span className="icon-bar"></span>
                                 <span className="icon-bar"></span>
                             </button>
-                            <Link className="navbar-brand" to="/">蜀味源</Link>
+                            <Link className="navbar-brand" to="/">蜀味缘</Link>
                         </div>
 
                         {/* <!-- Collect the nav links, forms, and other content for toggling --> */}
@@ -57,9 +57,10 @@ export default class NavBar extends Component{
                                   key=""
                                   id=""
                                 >
-                                  <MenuItem eventKey="1">功能1</MenuItem>
-                                  <MenuItem eventKey="2">功能2</MenuItem>
-                                  <MenuItem onClick={()=>{this.ToAdminLogin()}} eventKey="3">ADMIN界面</MenuItem>
+                                  <MenuItem eventKey="1">可新增功能1</MenuItem>
+                                  <MenuItem eventKey="2">可新增功能2</MenuItem>
+                                  <MenuItem eventKey="2">可新增功能4</MenuItem>
+                                  <MenuItem onClick={()=>{this.ToAdminLogin()}} eventKey="3">管理界面</MenuItem>
                                   <MenuItem divider />
                                   <MenuItem eventKey="4">注销用户</MenuItem>
                                 </DropdownButton>

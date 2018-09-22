@@ -66,16 +66,19 @@ render() {
           <div className="col-sm-12 col-lg-10 pull-right">
                 桌号: {this.props.match.params.tableid}
             <div className="row">
-              <div className="col-lg-9 cust-border nova-card">
-                <div  >
-                    <h1>{this.props.match.params.tableid}号桌已被预定</h1>
+              <div className="col-lg-12 cust-margin10 cust-border nova-card">
+                <div>
+                  <div className="div-centre"><h1>{this.props.match.params.tableid}号桌已被预定</h1></div>
+
                 </div>
+                <hr />
                 <div>
                   <Button className="button2" bsStyle="danger" onClick={()=>{this.cancleBookTable()}}>取消预订</Button>
                   <Link to={toHomePage} ><Button className="button2" bsStyle="warning" onClick={()=>{}}>返回控制台</Button></Link>
 
                 </div>
               </div>
+
 
             </div>
           </div>

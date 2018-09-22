@@ -689,7 +689,7 @@ render() {
                         </Tab>
                     </Tabs>
                 </div>
-                <div className="col-lg-3 pull-right cust-border nova-card">
+                <div className="col-lg-3 pull-right cust-border nova-card cust-margin9">
                     购物车
                     <div>
                       {this.props.location.hasOwnProperty("state") !== true ?
@@ -933,17 +933,17 @@ render() {
                     </div>
                     <div>
                         <div className="row nova-margin">
-                            <div className="col-lg-3">总价: </div>
-                            <div className="col-lg-2">
+
+                            <div className="col-lg-5">总价:</div>
+
+
+                            <div className="col-lg-6">
                               {this.props.location.hasOwnProperty("state") !== true ?
                                 <div>
-                                  #{this.SumUp()}
+                                  {this.SumUp() + "  " + "$AUD"}
                                 </div>:
                                 <div>
-                                  originalPrice-{this.SumUpModified()}<br />
-                                  lastModified-{this.SumUpLastTimeModified()}<br />
-                                  currentModified-{this.SumUpCurrentModified()}<br />
-                                  total-{this.SumUpEntirePrice()}
+                                  {this.SumUpEntirePrice() + "  " + "$AUD"}
                                 </div>
                               }
                             </div>
@@ -961,17 +961,17 @@ render() {
                             }
 
                         </div>
-                        <div className="row nova-margin">
+                        <div className="row ">
                           {this.props.location.hasOwnProperty("state") === true ?
                             <div>
-                              <Button className="" bsStyle="success" disabled={this.activeOrDisabledModified()} onClick={()=>{this.updateModifiedDiesh()}}>确认加菜</Button>
+                              <Button className="button4 col-lg-4" bsStyle="success" disabled={this.activeOrDisabledModified()} onClick={()=>{this.updateModifiedDiesh()}}>确认加菜</Button>
                             </div>:
-                            <div className="row">
-                              <div className="col-lg-6">
-                                <Button bsStyle="warning" onClick={()=>{this.bookTable()}}>预定桌位</Button>
+                            <div className="row cust-margin8">
+                              <div className="col-lg-5 ">
+                                <Button className="" bsStyle="warning" onClick={()=>{this.bookTable()}}>预定桌位</Button>
                               </div>
-                              <div className="col-lg-6">
-                                <Button bsStyle="success" disabled={this.activeOrDisabled()} onClick={()=>{this.submitOrder()}}>提交订单</Button>
+                              <div className="col-lg-5">
+                                <Button className="" bsStyle="success" disabled={this.activeOrDisabled()} onClick={()=>{this.submitOrder()}}>提交订单</Button>
                               </div>
                             </div>
                           }

@@ -63,10 +63,9 @@ export default class AdminLogin extends Component {
 
         return (
           <div className="row">
-            <div className="col-sm-12 col-lg-12 nova-card cust-border cust-margin2 ">
-              <div className="col-lg-4 cust-border">
-            </div>
-            <div className="col-lg-8 cust-border">
+            <div className="col-sm-12 col-lg-12 nova-card cust-border cust-margin13 ">
+
+
 
               <div className="cust-adminLogin">
                 <form>
@@ -97,13 +96,13 @@ export default class AdminLogin extends Component {
                     <input type="checkbox" onClick={() => {this.verifyPasswordFieldType()}}/>  Show Password
                     </FormGroup>
                   </form>
-              <div>
-              <Button className="col-lg-3 button2" bsSize="large" bsStyle="warning" onClick={()=>{this.toTerminalPage()}}>返回控制台</Button>
-              <Button className="col-lg-3 button2" bsSize="large" bsStyle="danger" onClick={()=>{this.toAdminPage()}}>登陆</Button>
+              <div className="col-lg-3 ">
+              <Button className="div-login-admin" bsSize="large" bsStyle="warning" onClick={()=>{this.toTerminalPage()}}>返回控制台</Button>
+              <Button className="div-login-admin" bsSize="large" bsStyle="danger" onClick={()=>{this.toAdminPage()}}>登陆</Button>
               </div>
             </div>
 
-          </div>
+
           </div>
         </div>
         )
