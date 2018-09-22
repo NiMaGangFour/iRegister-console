@@ -95,7 +95,7 @@ export default class AuthOptions extends Component {
 
     render() {
         return (
-            <div className="join-us  cust-margin3 cust-padding nova-card cust-border">
+            <div className="join-us  cust-margin3 nova-card cust-border">
                 <div className="div-centre"><h3>大堂</h3></div>
                 <hr />
                 <div className="row cust-margin7">

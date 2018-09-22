@@ -15,6 +15,7 @@ import CheckBookings from './home/CheckBookings'
 import DeliverOrders from './home/DeliverOrders'
 import AdminLogin from './home/AdminLogin'
 import AdminMainPage from './home/AdminMainPage'
+import AllCurrentOrders from './home/AllCurrentOrders'
 
 
 
@@ -37,6 +38,7 @@ const Router = () =>{
                 <Route exact path='/home/DeliverOrders/:orderid' component={DeliverOrders}/>
                 <Route exact path='/home/AdminLogin/' component={AdminLogin}/>
                 <Route exact path='/home/AdminMainPage/' component={AdminMainPage}/>
+                <Route exact path='/home/AllCurrentOrders/' component={AllCurrentOrders}/>
             </Switch>
         </div>
     )

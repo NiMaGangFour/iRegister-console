@@ -50,12 +50,12 @@ export default class Home extends Component {
 
         return (
           <div className="">
-            <div className="col-sm-12 col-lg-2">
+            <div className="col-sm-12 col-lg-3 padding-tables">
               <AuthOptions />
 
               <Personal />
             </div>
-            <div className="col-sm-12 col-lg-10 pull-right nova-card cust-border cust-margin2 ">
+            <div className="col-sm-12 col-lg-9 pull-right nova-card cust-border cust-margin2 ">
             <div className="console-logo">
               <div className="center" >
                   <img src="/static/img/logo.png" />

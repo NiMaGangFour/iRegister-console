@@ -723,7 +723,7 @@ export default class CheckDishesDishes extends Component {
 
     return (<div>
       <div className="">
-        <div className="col-sm-12 col-lg-2 ">
+        <div className="col-sm-12 col-lg-3 ">
 
           <AuthOptions ref={this.authOptions} parentChildOccupied={this.parentChildOccupied}/>
           <Personal/>
@@ -744,7 +744,7 @@ export default class CheckDishesDishes extends Component {
           <div className="nova-card cust-border cust-margin2 col-lg-9">
             <h4>当前桌号: {this.props.match.params.tableid}</h4>
             <div className="col-sm-12 col-lg-6 ">
-              <div className="row">
+              <div className="">
                 {console.log(this.state.tableDishes)}
                 {console.log(this.SumUpModifiedNormalDishes())}
 

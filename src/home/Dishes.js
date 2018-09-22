@@ -410,7 +410,7 @@ export default class Dishes extends Component {
       var totalorder = order.concat(SDHPorder)
       console.log(totalorder)
 
-      fetch(API.baseUri+API.postOrder, {
+      fetch(API.baseUri+API.neworder, {
           method: "POST",
           headers: {
           'Accept': 'application/json',
@@ -421,7 +421,7 @@ export default class Dishes extends Component {
                 "creatTime": time,
                 "totalPrice": this.SumUp(),
                 "tableID": this.props.match.params.tableid,
-                "comment":this.state.textareaValue
+                "comment":this.state.textareaValue,
 
             })
       } ).then(res =>{

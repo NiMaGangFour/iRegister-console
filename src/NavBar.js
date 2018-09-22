@@ -30,9 +30,9 @@ export default class NavBar extends Component{
                         {/* <!-- Collect the nav links, forms, and other content for toggling --> */}
                         <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul className="nav navbar-nav">
-                                <li className="active"><a href="#">控制台</a></li>
-                                <li><Link to="/tieba">当前订单</Link></li>
-                                <li className=""><a href="#">已完成订单</a></li>
+                                <Link className="navbar-brand" to="/">控制台</Link>
+                                <Link className="navbar-brand" to="/home/AllCurrentOrders/">当前订单</Link>
+                                <Link className="navbar-brand" to="/">已完成订单</Link>
                                 {/* <li><a href="#">乱七八糟</a></li> */}
                             </ul>
                             <form className="navbar-form navbar-left">
@@ -57,7 +57,7 @@ export default class NavBar extends Component{
                                   key=""
                                   id=""
                                 >
-                                 
+
                                   <MenuItem onClick={()=>{this.ToAdminLogin()}} eventKey="3">管理员界面</MenuItem>
                                   <MenuItem divider />
                                   <MenuItem eventKey="4">退出</MenuItem>
