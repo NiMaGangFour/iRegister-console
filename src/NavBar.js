@@ -32,7 +32,7 @@ export default class NavBar extends Component{
                             <ul className="nav navbar-nav">
                                 <li className="active"><a href="#">控制台</a></li>
                                 <li><Link to="/tieba">当前订单</Link></li>
-                                <li className=""><a href="#">已点订单</a></li>
+                                <li className=""><a href="#">已完成订单</a></li>
                                 {/* <li><a href="#">乱七八糟</a></li> */}
                             </ul>
                             <form className="navbar-form navbar-left">
@@ -57,12 +57,10 @@ export default class NavBar extends Component{
                                   key=""
                                   id=""
                                 >
-                                  <MenuItem eventKey="1">可新增功能1</MenuItem>
-                                  <MenuItem eventKey="2">可新增功能2</MenuItem>
-                                  <MenuItem eventKey="2">可新增功能4</MenuItem>
-                                  <MenuItem onClick={()=>{this.ToAdminLogin()}} eventKey="3">管理界面</MenuItem>
+                                 
+                                  <MenuItem onClick={()=>{this.ToAdminLogin()}} eventKey="3">管理员界面</MenuItem>
                                   <MenuItem divider />
-                                  <MenuItem eventKey="4">注销用户</MenuItem>
+                                  <MenuItem eventKey="4">退出</MenuItem>
                                 </DropdownButton>
                             </ul>
                         </div>

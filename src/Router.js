@@ -21,27 +21,23 @@ import AdminMainPage from './home/AdminMainPage'
 const Router = () =>{
     return(
         <div className="">
-            <div className="row">
-                <div >
-                    <Switch>
-                        <Route exact path='/' component={Home} />
-                        <Route exact path='/post/newpost' component={NewPost} />
+            <Switch>
+                <Route exact path='/' component={Home} />
+                <Route exact path='/post/newpost' component={NewPost} />
 
-                        <Route exact path='/auth/email' component={Email} />
-                        <Route exact path='/auth/google' component={Google} />
-                        <Route exact path='/personal/post' component={MyPost} />
-                        <Route exact path='/personal/favorit' component={MyFavorit} />
-                        <Route exact path='/personal/comment' component={MyComment} />
-                        <Route exact path='/home/CheckDishes/:tableid?/:orderid?' component={CheckDishes} />
-                        <Route exact path='/home/Dishes/:tableid' component={Dishes}/>
-                        <Route exact path='/home/CheckBookings/:tableid' component={CheckBookings}/>
-                        <Route exact path='/home/CheckBookings/:tableid' component={CheckBookings}/>
-                        <Route exact path='/home/DeliverOrders/:orderid' component={DeliverOrders}/>
-                        <Route exact path='/home/AdminLogin/' component={AdminLogin}/>
-                        <Route exact path='/home/AdminMainPage/' component={AdminMainPage}/>
-                    </Switch>
-                </div>
-            </div>
+                <Route exact path='/auth/email' component={Email} />
+                <Route exact path='/auth/google' component={Google} />
+                <Route exact path='/personal/post' component={MyPost} />
+                <Route exact path='/personal/favorit' component={MyFavorit} />
+                <Route exact path='/personal/comment' component={MyComment} />
+                <Route exact path='/home/CheckDishes/:tableid?/:orderid?' component={CheckDishes} />
+                <Route exact path='/home/Dishes/:tableid' component={Dishes}/>
+                <Route exact path='/home/CheckBookings/:tableid' component={CheckBookings}/>
+                <Route exact path='/home/CheckBookings/:tableid' component={CheckBookings}/>
+                <Route exact path='/home/DeliverOrders/:orderid' component={DeliverOrders}/>
+                <Route exact path='/home/AdminLogin/' component={AdminLogin}/>
+                <Route exact path='/home/AdminMainPage/' component={AdminMainPage}/>
+            </Switch>
         </div>
     )
 }

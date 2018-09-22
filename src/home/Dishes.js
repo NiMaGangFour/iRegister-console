@@ -568,7 +568,7 @@ render() {
   console.log(this.props.location.hasOwnProperty("state"));
     return (
       <div>
-        <div className="row">
+        <div className="">
           <div className="col-sm-12 col-lg-2">
 
             <AuthOptions
@@ -597,7 +597,7 @@ render() {
 
 
 
-            <div className="row">
+            <div className="">
                 <div className="col-lg-9 cust-border nova-card" >
                     <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
                         <Tab eventKey={1} title="小吃" className="nova-padding">
@@ -689,8 +689,9 @@ render() {
                         </Tab>
                     </Tabs>
                 </div>
-                <div className="col-lg-3 pull-right cust-border nova-card cust-margin9">
+                <div className="col-lg-3 pull-right cust-border nova-card shopping-cart">
                     购物车
+                    <hr />
                     <div>
                       {this.props.location.hasOwnProperty("state") !== true ?
                         <div>

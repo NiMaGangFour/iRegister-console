@@ -140,10 +140,10 @@ export default class AuthOptions extends Component {
                         )})}
                     </div>
 
-                <div className="nova-padding">
-                    <li>空闲桌位: <b>{this.calculateAvailableTable()}</b> 桌</li>
-                    <li>占用桌位: <b>{this.calculateOccupiedTable()}</b> 桌</li>
-                    <li>预定桌位: <b>{this.calculateBookedTable()}</b> 桌</li>
+                <div className="nova-padding cust-list">
+                    <li>空闲: <b>{this.calculateAvailableTable()}</b> 桌</li>
+                    <li>占用: <b>{this.calculateOccupiedTable()}</b> 桌</li>
+                    <li>预定: <b>{this.calculateBookedTable()}</b> 桌</li>
                 </div>
             </div>
         )
