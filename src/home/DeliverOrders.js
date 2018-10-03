@@ -115,7 +115,7 @@ export default class DeliverOrders extends Component {
               <div className="nova-card cust-border col-lg-9 cust-margin11">
                 <div className="">
                   <div className="col-lg-6">菜品名称</div>
-                  <div className="col-lg-1"></div>
+                  
                   <div className="col-lg-1">数量</div>
                   <div className="col-lg-1">单价</div>
                 </div>
@@ -125,7 +125,7 @@ export default class DeliverOrders extends Component {
                     return (
                       <div key={i}>
                         <div className="col-lg-6">{value.name}</div>
-                        <div className="col-lg-1">x</div>
+
                         <div className="col-lg-1">{value.DishCount}</div>
                         <div className="col-lg-1">{value.price}</div>
                       </div>
@@ -151,7 +151,7 @@ export default class DeliverOrders extends Component {
                 <div><h4>顾客姓名：{this.state.customerName}</h4></div>
                 <div><h4>顾客电话：{this.state.customerPhoneNO}</h4></div>
                 <div><h4>送餐地址：{this.state.customerAddress}</h4></div>
-                
+
               </div>
               <div className="nova-card cust-border col-lg-9">
                   <Button className="col-lg-3 button2" bsSize="large" bsStyle="warning" onClick={()=>{console.log("还没写")}}>返回控制台</Button>

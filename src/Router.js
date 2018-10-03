@@ -16,6 +16,7 @@ import DeliverOrders from './home/DeliverOrders'
 import AdminLogin from './home/AdminLogin'
 import AdminMainPage from './home/AdminMainPage'
 import AllCurrentOrders from './home/AllCurrentOrders'
+import AllTodayFinishedOrders from './home/AllTodayFinishedOrders'
 
 
 
@@ -34,11 +35,11 @@ const Router = () =>{
                 <Route exact path='/home/CheckDishes/:tableid?/:orderid?' component={CheckDishes} />
                 <Route exact path='/home/Dishes/:tableid' component={Dishes}/>
                 <Route exact path='/home/CheckBookings/:tableid' component={CheckBookings}/>
-                <Route exact path='/home/CheckBookings/:tableid' component={CheckBookings}/>
                 <Route exact path='/home/DeliverOrders/:orderid' component={DeliverOrders}/>
                 <Route exact path='/home/AdminLogin/' component={AdminLogin}/>
                 <Route exact path='/home/AdminMainPage/' component={AdminMainPage}/>
                 <Route exact path='/home/AllCurrentOrders/' component={AllCurrentOrders}/>
+                <Route exact path='/home/AllTodayFinishedOrders/' component={AllTodayFinishedOrders}/>
             </Switch>
         </div>
     )

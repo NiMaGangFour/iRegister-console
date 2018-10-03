@@ -43,12 +43,13 @@ export default class Personal extends Component {
               <div>
                   <ListGroup>
                     {this.state.getDeliveryOrders.map((value, i) =>{
+                      console.log(value)
                       var ToDeliver = {
                         pathname: '/home/DeliverOrders/'+ value.id,
                       }
                         return (
                           <div className="cust-margin8" key={i}>
-                                <Link to={ToDeliver} ><ListGroupItem  header={value.id} onClick={() => {}}></ListGroupItem></Link>
+                                <Link to={ToDeliver} ><ListGroupItem onClick={() => {}}> 单号{value.id} （{value.creatTime.slice(value.creatTime.lastIndexOf('T') + 0).replace("T", "").replace("+1000", "").replace("Z", "")}）</ListGroupItem></Link>
                           </div>
                         )
                     })}

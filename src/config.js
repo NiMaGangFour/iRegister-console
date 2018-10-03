@@ -22,6 +22,12 @@ export const API = {
     CompleteDeliveryOrder: 'api1/CompleteDeliveryOrder',
     getDeliveryOrderDetailswithOrder: 'api1/getDeliveryOrderDetailswithOrder',
     pointsInfo: 'pointsInfo',
-    redeem: 'redeem'
+    redeem: 'redeem',
+    getCurrentTime: 'getCurrentTime',
+    getOrderDishes2: 'api1/getOrderDishes2',
+    getModDishesByOrderID: 'api1/getModDishesByOrderID',
+    updateOriginDeleted: 'api1/updateOriginDeleted',
+    updateModifiedDeleted: 'api1/updateModifiedDeleted'
+
 
 }

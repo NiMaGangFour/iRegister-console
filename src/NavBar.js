@@ -32,7 +32,7 @@ export default class NavBar extends Component{
                             <ul className="nav navbar-nav">
                                 <Link className="navbar-brand" to="/">控制台</Link>
                                 <Link className="navbar-brand" to="/home/AllCurrentOrders/">当前订单</Link>
-                                <Link className="navbar-brand" to="/">已完成订单</Link>
+                                <Link className="navbar-brand" to="/home/AllTodayFinishedOrders/">已完成订单</Link>
                                 {/* <li><a href="#">乱七八糟</a></li> */}
                             </ul>
                             <form className="navbar-form navbar-left">

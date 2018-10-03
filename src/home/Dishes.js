@@ -569,7 +569,7 @@ render() {
     return (
       <div>
         <div className="">
-          <div className="col-sm-12 col-lg-2">
+          <div className="col-sm-12 col-lg-2 padding-tables">
 
             <AuthOptions
               ref={this.authOptions}
@@ -587,18 +587,10 @@ render() {
 
           </div>
 
-          <div className="col-sm-12 col-lg-10 pull-right">
-                桌号: {this.props.match.params.tableid}<br />
-              {this.props.location.hasOwnProperty("state") === true ?
-                <div>
-                  {"存在 this.props.location.state.tableDishes_orderID"}
-                </div>:null}
-
-
-
-
+          <div className="col-sm-12 col-lg-10 pull-right cust-margin-top padding-tables">
             <div className="">
                 <div className="col-lg-9 cust-border nova-card" >
+                  当前桌号: {this.props.match.params.tableid}<br />
                     <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
                         <Tab eventKey={1} title="小吃" className="nova-padding">
                             <ButtonToolbar>
@@ -606,6 +598,7 @@ render() {
                                 {this.state.alldishes.map((dish, i) =>{
                                     return (
                                       <div key={i}>
+
                                         {dish.type === "小吃" ?
                                           <div className="">
                                           {this.props.location.hasOwnProperty("state")!== true ?
@@ -701,10 +694,10 @@ render() {
                                       <div>
                                           {value!==0?
                                               <div className="row cust-margin5">
-                                                  <div className="col-lg-6">{value.name}</div>
+                                                  <div className="col-lg-7">{value.name}</div>
                                                   <div className="col-lg-1">x</div>
                                                   <div className="col-lg-1">{value.num}</div>
-                                                  <div className="col-lg-2"><Button className="" bsStyle="danger" onClick={()=>{this.deleteDish(value.name)}}>删除</Button></div>
+                                                  <div className="col-lg-2"><Button className="" bsSize="xsmall" bsStyle="danger" onClick={()=>{this.deleteDish(value.name)}}>删除</Button></div>
                                               </div>: null}
                                       </div>
 
@@ -716,18 +709,71 @@ render() {
                             {this.props.location.state.tableDishes.map((value, key1) =>{
                                 return (
                                     <div key={key1}>
+                                      {console.log(this.props.location.state.tableDishes)}
                                         <div>
-                                            {value!==0 && value.type !== "麻辣香锅"?
-                                                <div className="row cust-margin5">
-                                                    <div className="col-lg-6">{value.name}</div>
-                                                    <div className="col-lg-1">x</div>
-                                                    <div className="col-lg-1">{value.DishCount}</div>
-                                                </div>:null
-                                                }
-                                        </div>
+                                            {value!==0 && value.type !== "麻辣香锅" && value.deleted === 0 ?
+                                              <div className="row cust-margin5">
+                                                  <div className="col-lg-7">{value.name} （原）</div>
+                                                  <div className="col-lg-1">x</div>
+                                                  <div className="col-lg-1">{value.DishCount}</div>
+                                              </div>:null
+                                            }
 
+                                            {value!==0 && value.type !== "麻辣香锅" && value.deleted === 1 ?
+                                              <div className="row cust-margin5">
+                                                  <div className="col-lg-7 strikeThrough">{value.name}（原）</div>
+                                                  <div className="col-lg-1 strikeThrough">x</div>
+                                                  <div className="col-lg-1 strikeThrough">{value.DishCount}</div>
+                                              </div>:null
+                                            }
+                                        </div>
                                     </div>
                                 )})}
+                          </div>
+
+                          <div className="cust-border2 ">
+                            {this.props.location.state.tableModifiedDishes.map((value, key1) =>{
+                                return (
+                                    <div key={key1}>
+                                        <div>
+                                            {value.num > 0 && value.type !== "麻辣香锅" ?
+                                                <div className="row cust-margin5">
+                                                    <div className="col-lg-7">{value.name}（再）</div>
+                                                    <div className="col-lg-1">x</div>
+                                                    <div className="col-lg-1">{value.num}</div>
+                                                </div>: null}
+                                        </div>
+                                    </div>
+                                )})}
+
+                                {this.state.tableModifiedDishes.map((value, key1) =>{
+                                    return (
+                                        <div key={key1}>
+                                            <div>
+                                                {value!== 0 && value.type !== "麻辣香锅" ?
+                                                    <div className="row cust-margin5">
+                                                        <div className="col-lg-7">{value.name} （当）</div>
+                                                        <div className="col-lg-1">x</div>
+                                                        <div className="col-lg-1">{value.DishCount}</div>
+                                                        <div className="col-lg-1"><Button className="" bsSize="xsmall" bsStyle="danger" onClick={()=>{this.deleteModifiedDish(value.name)}}>删除</Button></div>
+                                                    </div>: null}
+                                            </div>
+                                        </div>
+                                    )})}
+
+                                    {this.props.location.state.tableModifiedDishes.map((value, key1) =>{
+                                        return (
+                                            <div key={key1}>
+                                                <div>
+                                                    {value.num < 0 && value.type !== "麻辣香锅" && value.deleted === 1 ?
+                                                        <div className="row cust-margin5">
+                                                            <div className="col-lg-7 strikeThrough">{value.name}</div>
+                                                            <div className="col-lg-1 strikeThrough">x</div>
+                                                            <div className="col-lg-1 cust-p-color strikeThrough"><p>{value.num}</p></div>
+                                                        </div>: null}
+                                                </div>
+                                            </div>
+                                        )})}
                           </div>
                           {this.SDHPNumberCalculatorLater() > 0 && this.SDHPNumberCalculatorLater() < 5  ?
                             <div>
@@ -740,7 +786,7 @@ render() {
                                             <div>
                                                 {value!==0 && value.type === "麻辣香锅"?
                                                     <div className="row cust-margin5">
-                                                        <div className="col-lg-6">{value.name}</div>
+                                                        <div className="col-lg-7">{value.name}</div>
                                                         <div className="col-lg-1">x</div>
                                                         <div className="col-lg-1">{value.DishCount}</div>
                                                     </div>:null
@@ -755,10 +801,10 @@ render() {
                                                 <div>
                                                     {value!== 0 && value.type === "麻辣香锅" ?
                                                         <div className="row cust-margin5">
-                                                            <div className="col-lg-6">{value.name}</div>
+                                                            <div className="col-lg-7">{value.name}</div>
                                                             <div className="col-lg-1">x</div>
-                                                            <div className="col-lg-1"><p className="">{value.DishCount}</p></div>
-                                                            <div className="col-lg-1"><Button className="" bsStyle="danger" onClick={()=>{this.deleteModifiedDish(value.name)}}>删</Button></div>
+                                                            <div className="col-lg-1">{value.DishCount}</div>
+                                                            <div className="col-lg-1"><Button className="" bsSize="xsmall" bsStyle="danger" onClick={()=>{this.deleteModifiedDish(value.name)}}>删</Button></div>
                                                         </div>: null}
                                                 </div>
                                             </div>
@@ -769,9 +815,9 @@ render() {
                                                     <div>
                                                         {value.num > 0 && value.type === "麻辣香锅"?
                                                             <div className="row cust-margin5">
-                                                                <div className="col-lg-6">{value.name}</div>
+                                                                <div className="col-lg-7">{value.name}</div>
                                                                 <div className="col-lg-1">x</div>
-                                                                <div className="col-lg-1"><p className="">{value.num}</p></div>
+                                                                <div className="col-lg-1">{value.num}</div>
                                                             </div>: null}
                                                     </div>
                                                 </div>
@@ -782,9 +828,9 @@ render() {
                                                     <div>
                                                         {value.num < 0 && value.type === "麻辣香锅" ?
                                                             <div className="row cust-margin5">
-                                                                <div className="col-lg-6">{value.name}</div>
-                                                                <div className="col-lg-1">x</div>
-                                                                <div className="col-lg-1 cust-p-color"><p>{value.num}</p></div>
+                                                                <div className="col-lg-7 strikeThrough">{value.name}</div>
+                                                                <div className="col-lg-1 strikeThrough">x</div>
+                                                                <div className="col-lg-1 cust-p-color strikeThrough">{value.num}</div>
                                                             </div>: null}
                                                     </div>
                                                 </div>
@@ -797,115 +843,76 @@ render() {
                             <div>
                               <div className="sdhpBorder">
                                 <h4>麻辣香锅菜品列表：({this.SDHPNumberCalculatorLater()})</h4>
+                                  {this.state.tableModifiedDishes.map((value, key1) =>{
+                                      return (
+                                          <div key={key1}>
+                                              <div>
+                                                  {value!== 0 && value.type === "麻辣香锅" ?
+                                                      <div className="row cust-margin5">
+                                                          <div className="col-lg-7">{value.name}(现添加)</div>
+                                                          <div className="col-lg-1">x</div>
+                                                          <div className="col-lg-1">{value.DishCount}</div>
+                                                          <div className="col-lg-1"><Button className="" bsSize="xsmall" bsStyle="danger" onClick={()=>{this.deleteModifiedDish(value.name)}}>删除</Button></div>
+                                                      </div>: null}
+                                              </div>
+                                          </div>
+                                      )})}
+
                                 {this.props.location.state.tableDishes.map((value, key1) =>{
                                     return (
                                         <div key={key1}>
                                             <div>
-                                                {value!==0 && value.type === "麻辣香锅"?
+                                                {value!==0 && value.type === "麻辣香锅" && value.deleted === 0 ?
                                                     <div className="row cust-margin5">
-                                                        <div className="col-lg-6">{value.name}</div>
+                                                        <div className="col-lg-7">{value.name}</div>
                                                         <div className="col-lg-1">x</div>
                                                         <div className="col-lg-1">{value.DishCount}</div>
                                                     </div>:null
-                                                    }
+                                                }
+
+                                                {value!==0 && value.type === "麻辣香锅" && value.deleted === 1 ?
+                                                    <div className="row cust-margin5">
+                                                        <div className="col-lg-7 strikeThrough">{value.name}</div>
+                                                        <div className="col-lg-1 strikeThrough">x</div>
+                                                        <div className="col-lg-1 strikeThrough">{value.DishCount}</div>
+                                                    </div>:null
+                                                }
                                             </div>
 
                                         </div>
                                     )})}
-                                    {this.state.tableModifiedDishes.map((value, key1) =>{
-                                        return (
-                                            <div key={key1}>
-                                                <div>
-                                                    {value!== 0 && value.type === "麻辣香锅" ?
-                                                        <div className="row cust-margin5">
-                                                            <div className="col-lg-6">{value.name}</div>
-                                                            <div className="col-lg-1">x</div>
-                                                            <div className="col-lg-1"><p className="">{value.DishCount}</p></div>
-                                                            <div className="col-lg-1"><Button className="" bsStyle="danger" onClick={()=>{this.deleteModifiedDish(value.name)}}>删</Button></div>
-                                                        </div>: null}
-                                                </div>
-                                            </div>
-                                        )})}
+
                                         {this.props.location.state.tableModifiedDishes.map((value, key1) =>{
                                             return (
                                                 <div key={key1}>
                                                     <div>
-                                                        {value.num > 0 && value.type === "麻辣香锅"?
+                                                        {
+                                                          value.num > 0 && value.type === "麻辣香锅" && value.deleted === 0 ?
                                                             <div className="row cust-margin5">
-                                                                <div className="col-lg-6">{value.name}</div>
+                                                                <div className="col-lg-7">{value.name}</div>
                                                                 <div className="col-lg-1">x</div>
-                                                                <div className="col-lg-1"><p className="">{value.num}</p></div>
-                                                            </div>: null}
+                                                                <div className="col-lg-1">{value.num}</div>
+                                                            </div>:
+                                                            null
+                                                        }
+
+                                                        {
+                                                          value.num < 0 && value.type === "麻辣香锅" && value.deleted === 1 ?
+                                                            <div className="row cust-margin5">
+                                                                <div className="col-lg-7 strikeThrough">{value.name}</div>
+                                                                <div className="col-lg-1 strikeThrough">x</div>
+                                                                <div className="col-lg-1 strikeThrough">{value.num}</div>
+                                                            </div>:
+                                                            null
+                                                        }
                                                     </div>
                                                 </div>
                                             )})}
-                                        {this.props.location.state.tableModifiedDishes.map((value, key1) =>{
-                                            return (
-                                                <div key={key1}>
-                                                    <div>
-                                                        {value.num < 0 && value.type === "麻辣香锅" ?
-                                                            <div className="row cust-margin5">
-                                                                <div className="col-lg-6">{value.name}</div>
-                                                                <div className="col-lg-1">x</div>
-                                                                <div className="col-lg-1 cust-p-color"><p>{value.num}</p></div>
-                                                            </div>: null}
-                                                    </div>
-                                                </div>
-                                            )})}
+
                               </div>
                             </div>
                             :null
                           }
-
-                          <div className="cust-border2 ">
-                            {console.log(this.props.location.state.tableModifiedDishes)}
-                            {console.log(this.props.location.state.tableDishes)}
-                            {console.log(this.state.tableModifiedDishes)}
-
-                            {this.props.location.state.tableModifiedDishes.map((value, key1) =>{
-                                return (
-                                    <div key={key1}>
-                                        <div>
-                                            {value.num > 0 && value.type !== "麻辣香锅"?
-                                                <div className="row cust-margin5">
-                                                    <div className="col-lg-6">{value.name}</div>
-                                                    <div className="col-lg-1">x</div>
-                                                    <div className="col-lg-1"><p className="">{value.num}</p></div>
-                                                </div>: null}
-                                        </div>
-                                    </div>
-                                )})}
-
-                                {this.state.tableModifiedDishes.map((value, key1) =>{
-                                    return (
-                                        <div key={key1}>
-                                            <div>
-                                                {value!== 0 && value.type !== "麻辣香锅" ?
-                                                    <div className="row cust-margin5">
-                                                        <div className="col-lg-6">{value.name}</div>
-                                                        <div className="col-lg-1">x</div>
-                                                        <div className="col-lg-1"><p className="cust-p-color2">{value.DishCount}</p></div>
-                                                        <div className="col-lg-1"><Button className="" bsStyle="danger" onClick={()=>{this.deleteModifiedDish(value.name)}}>删</Button></div>
-                                                    </div>: null}
-                                            </div>
-                                        </div>
-                                    )})}
-
-                                    {this.props.location.state.tableModifiedDishes.map((value, key1) =>{
-                                        return (
-                                            <div key={key1}>
-                                                <div>
-                                                    {value.num < 0 && value.type !== "麻辣香锅" ?
-                                                        <div className="row cust-margin5">
-                                                            <div className="col-lg-6">{value.name}</div>
-                                                            <div className="col-lg-1">x</div>
-                                                            <div className="col-lg-1 cust-p-color"><p>{value.num}</p></div>
-                                                        </div>: null}
-                                                </div>
-                                            </div>
-                                        )})}
-                          </div>
-
                         </div>
                       }
                     </div>
@@ -922,7 +929,7 @@ render() {
                                   <div>
                                       {value!==0?
                                           <div className="row cust-margin5">
-                                              <div className="col-lg-6">{value.name}</div>
+                                              <div className="col-lg-7">{value.name}</div>
                                               <div className="col-lg-1">x</div>
                                               <div className="col-lg-1">{value.num}</div>
                                               <div className="col-lg-2"><Button className="" bsStyle="danger" onClick={()=>{this.deleteSDHPDish(value.name)}}>删除</Button></div>
@@ -962,11 +969,15 @@ render() {
                             }
 
                         </div>
-                        <div className="row ">
+                        <div>
                           {this.props.location.hasOwnProperty("state") === true ?
                             <div>
-                              <Button className="button4 col-lg-4" bsStyle="success" disabled={this.activeOrDisabledModified()} onClick={()=>{this.updateModifiedDiesh()}}>确认加菜</Button>
-                            </div>:
+                            <div className="col-lg-4"/>
+                            <div className="col-lg-5">
+                              <Button  bsStyle="success" disabled={this.activeOrDisabledModified()} onClick={()=>{this.updateModifiedDiesh()}}>确认加菜</Button>
+                            </div>
+                          </div>
+                            :
                             <div className="row cust-margin8">
                               <div className="col-lg-5 ">
                                 <Button className="" bsStyle="warning" onClick={()=>{this.bookTable()}}>预定桌位</Button>

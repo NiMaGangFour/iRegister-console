@@ -7,7 +7,7 @@ import Personal from '../personal/Personal'
 import AuthOptions from '../auth/AuthOptions'
 import { Textfit } from 'react-textfit'
 
-export default class AllCurrentOrders extends Component {
+export default class AllTodayFinishedOrders extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -253,7 +253,7 @@ export default class AllCurrentOrders extends Component {
                               return (
                                 <tbody key={i}>
                                   {console.log(this.state.AllTodayUnfinishedOrdersWithOriginDishes)}
-                                  {array[0].status !== "4" ?
+                                  {array[0].status === "4" ?
                                     <tr>
                                       <td>
                                         {array[0].orderID}

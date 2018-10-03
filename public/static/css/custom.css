@@ -307,6 +307,10 @@ a:hover{
     margin-top: 10px;
     padding: 20px;
 }
+.cust-margin-top{
+    margin-top: 5px;
+
+}
 .cust-border2{
   /* border-style: solid none none none; */
   border-top: solid 1px gray;
@@ -362,7 +366,8 @@ a:hover{
 
 .button4{
 
-  margin-left: 80px;
+  vertical-align: middle;/*使用元素的垂直对齐*/
+
 }
 
 .button {
@@ -500,4 +505,14 @@ a:hover{
   }
 .padding-tables{
   padding: 0px;
+}
+.padding{
+  padding: 10px;
+}
+
+.strikeThrough{
+  text-decoration: line-through;
+   text-decoration-style: double;
+  -webkit-text-decoration-color: red; /* Safari */
+  text-decoration-color: red;
 }
