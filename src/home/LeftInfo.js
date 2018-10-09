@@ -12,7 +12,6 @@ export default class LeftInfo extends Component {
 
                 <div className="site-info   nova-margin nova-padding nova-card cust-border">
                     <ul>
-
                         <li>Nova Software </li>
                         <li>Canberra House</li>
                         <li>+61 4 52542687</li>

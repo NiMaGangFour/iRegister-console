@@ -3,194 +3,164 @@ import { Link } from 'react-router-dom'
 import { Button, Tabs, Tab, ButtonToolbar } from 'react-bootstrap';
 import { Map } from 'immutable'
 import { API } from '../config'
-
+import AuthOptions from '../auth/AuthOptions'
+import Personal from '../personal/Personal'
 
 export default class DeliverOrders extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
+  constructor(props) {
+      super(props)
+      this.authOptions = React.createRef();
+      this.state = {
+        deliveryDishes: [],
+        customerAddress:null,
+        customerPhoneNO: null,
+        customerName:null,
+        customerComment: []
+      }}
 
-            order: [
-                {
-                    "name": "A",
-                    "price": 10,
-                    "num": 1,
+  componentDidMount() {
+    console.log(this.props)
+    this.getData()
+  }
 
-                },
-                {
-                    "name": "B",
-                    "price": 20,
-                    "num": 2,
+  componentWillReceiveProps(nextProps) {
+    console.log(this.props);
+    console.log(nextProps);
+    if (nextProps.match.params.orderid !== this.props.match.params.orderid){
+      this.props.match.params.orderid = nextProps.match.params.orderid
+      this.getData()
+    }
+  }
 
-                },
-                {
-                    "name": "C",
-                    "price": 30,
-                    "num": 1,
+  getData = () => {
+    fetch(API.baseUri + API.getDeliveryOrderDetailswithOrder + "/" + this.props.match.params.orderid)
+        .then((response) => {
+            if (response.status === 200) {
+                return response.json()
+            } else console.log("Get data error ");
+        }).then((json) =>{
+          console.log(json)
 
+          this.setState({
+            deliveryDishes: json,
+            customerAddress: json[0].address,
+            customerPhoneNO: json[0].phone,
+            customerName: json[0].customerName,
+            customerComment: json[0].comment,
+          })
+          console.log(this.state.deliveryDishes)
+    }).catch((error) => {
+        console.log('error on .catch', error);
+    })
+  }
+
+  completeConfirm = (orderid) => {
+    fetch(API.baseUri + API.CompleteDeliveryOrder + "/" + this.props.match.params.orderid)
+        .then((response) => {
+            if (response.status === 200) {
+                return response.json()
+            } else console.log("Get data error ");
+        }).then((json) =>{
+          console.log(json)
+          if (json) {
+            window.location = '/'
+          }
+
+    }).catch((error) => {
+        console.log('error on .catch', error);
+    })
+
+  }
+
+  SumUpDeliveryOrder = ()=> {
+      var total = this.state.deliveryDishes.reduce((sum, order) =>{
+          return sum + order.DishCount * order.price
+      }, 0)
+      return total;
+  }
+
+
+
+  render() {
+    var toHomePage = {
+      pathname: '/',
+    };
+      return (
+          <div>
+            <div className="">
+              <div className="col-sm-12 col-lg-2 ">
+
+
+                <Personal />
+                <AuthOptions
+                  ref={this.authOptions}
+                  parentChildOccupied={this.parentChildOccupied}
+                  />
+
+                <div className="site-info   cust-margin3 nova-padding nova-card cust-border">
+                    <ul>
+                        <li>Nova Software </li>
+                        <li>Canberra House</li>
+                        <li>+61 4 52542687</li>
+                        <h5><li>info@novasoftware.com.au</li></h5>
+                    </ul>
+                </div>
+              </div>
+
+            <div className="">
+              <div className="nova-card cust-border cust-margin2 col-lg-9">
+                <h4>当前订单号:{this.props.match.params.orderid}</h4>
+              </div>
+
+              <div className="nova-card cust-border col-lg-9 cust-margin11">
+                <div className="">
+                  <div className="col-lg-6">菜品名称</div>
+                  
+                  <div className="col-lg-1">数量</div>
+                  <div className="col-lg-1">单价</div>
+                </div>
+
+                <div>
+                  {this.state.deliveryDishes.map((value, i) =>{
+                    return (
+                      <div key={i}>
+                        <div className="col-lg-6">{value.name}</div>
+
+                        <div className="col-lg-1">{value.DishCount}</div>
+                        <div className="col-lg-1">{value.price}</div>
+                      </div>
+                    )
+                  })
                 }
-            ],
-            delivery: {
-                "address": "47 asdfas, asdf, asdf",
-                "phone": "0411111111",
-                "receiver": "Ming"
-            }
-            ,
+                </div>
+                <div className=" col-lg-9">
+                  <hr />
+                    总价：{this.SumUpDeliveryOrder()}
+                </div>
+              </div>
 
-            orderID: null
+              <div className="nova-card cust-border col-lg-9 cust-margin11">
 
-
-        }}
-
-
-
-    componentDidMount() {
-         // var x = this.props.match.params.order;
-         // this.setState({orderID: x})
-        console.log(this.props)
-
-
-    }
-
-
-    SumUp= ()=> {
-
-        var total = this.state.order.reduce((sum, price) =>{
-            return sum + price.num * price.price
-        }, 0)
-        return total;
-    }
-
-    deleteDish = (nameDish)=> {
-        console.log(nameDish)
-        var temp_post = [];
-        for(let index in this.state.order){
-            // console.log(this.state.myPosts[index].idPOST , idPost)
-            if(this.state.order[index].name !== nameDish){
-                temp_post.push(this.state.order[index])
-            }
-        }this.setState({
-            order:temp_post
-        })
-
-    }
-
-    addNum = (nameDish)=> {
-        var temp_post = [];
-        for(let index in this.state.order){
-            // console.log(this.state.myPosts[index].idPOST , idPost)
-            if(this.state.order[index].name === nameDish){
-
-                var temp_dish = this.state.order[index];
-                temp_dish.num = temp_dish.num +1;
-                temp_post.push(temp_dish)
-            }
-            else {
-                temp_post.push(this.state.order[index])
-            }
-        }this.setState({
-            order:temp_post
-        })
-    }
-
-    minusNum = (nameDish)=> {
-        var temp_post = [];
-        for(let index in this.state.order){
-            // console.log(this.state.myPosts[index].idPOST , idPost)
-            if(this.state.order[index].name === nameDish){
-                if (this.state.order[index].num === 1){
-                    this.deleteDish(nameDish);
+                {this.state.customerComment !== "" ?
+                  <div className="nova-card" >
+                    <h4>备注：{this.state.customerComment}</h4>
+                </div>:null
                 }
-                else {
-                    var temp_dish = this.state.order[index];
-                    temp_dish.num = temp_dish.num -1;
-                    temp_post.push(temp_dish)
-                }
+              </div>
+              <div className="nova-card cust-border col-lg-9 cust-margin11">
+                <div><h4>顾客姓名：{this.state.customerName}</h4></div>
+                <div><h4>顾客电话：{this.state.customerPhoneNO}</h4></div>
+                <div><h4>送餐地址：{this.state.customerAddress}</h4></div>
 
-            }
-            else {
-                temp_post.push(this.state.order[index])
-            }
-        }this.setState({
-            order:temp_post
-        })
-    }
-
-
-    render() {
-
-        return (
-
-            <div>
-                外卖订单号: {this.props.match.params.order}
-                <div className="row">
-                    <div className="col-lg-9 cust-border nova-card" >
-                        {<div>
-                            <div>
-                                {this.state.order.map((value, key1) =>{
-                                    return (
-                                        <div key={key1}>
-                                            <div>
-                                                {value!==0?
-                                                    <div className="row nova-margin">
-                                                        <div className="col-lg-4">{value.name}</div>
-                                                        <div className="col-lg-1">X</div>
-                                                        <div className="col-lg-2 row">
-                                                            <Button className="" bsStyle="danger" onClick={()=>{this.minusNum(value.name)}}>-</Button>
-                                                            {value.num}
-                                                            <Button className="" bsStyle="danger" onClick={()=>{this.addNum(value.name)}}>+</Button>
-                                                        </div>
-
-                                                        <div className="col-lg-2"><Button className="" bsStyle="danger" onClick={()=>{this.deleteDish(value.name)}}>删除</Button></div>
-                                                    </div>: null}
-                                            </div>
-
-                                        </div>
-                                    )})}
-                            </div>
-
-                        </div>}
-
-                        <div>
-                            <div className="row nova-margin">
-                                <div className="col-lg-3">总价: </div>
-                                <div className="col-lg-2">{this.SumUp()}</div>
-                            </div>
-
-                        </div>
-                        <div>
-                            <div className="row nova-margin">
-                                <div className="col-lg-3">地址: </div>
-                                <div className="col-lg-2">{this.state.delivery.address}</div>
-                            </div>
-
-                        </div>
-                        <div>
-                            <div className="row nova-margin">
-                                <div className="col-lg-3">电话: </div>
-                                <div className="col-lg-2">{this.state.delivery.phone}</div>
-                            </div>
-
-                        </div>
-                        <div>
-                            <div className="row nova-margin">
-                                <div className="col-lg-3">收货人: </div>
-                                <div className="col-lg-2">{this.state.delivery.receiver}</div>
-                            </div>
-
-                        </div>
-
-                        <div className="row nova-margin">
-                            <Button className="" bsStyle="success" onClick={()=>{}}>返回控制台</Button>
-                            {/*<Link to={newToMenu} ><Button className="" bsStyle="success" onClick={()=>{}}>加菜</Button></Link>*/}
-                            <Button className="" bsStyle="success" onClick={()=>{}}>结账&打印</Button>
-                            <Button className="" bsStyle="danger" onClick={()=>{}}>厨房重新打印</Button>
-                        </div>
-                    </div>
-
-
+              </div>
+              <div className="nova-card cust-border col-lg-9">
+                  <Button className="col-lg-3 button2" bsSize="large" bsStyle="warning" onClick={()=>{console.log("还没写")}}>返回控制台</Button>
+                  <Button className="col-lg-3 button2" bsStyle="danger" onClick={() => {}}>厨房打印</Button>
+                  <Button className="col-lg-3 button2" bsSize="large" bsStyle="success" onClick={()=>{this.completeConfirm(this.props.match.params.orderid)}}>打包&打印小票</Button>
                 </div>
             </div>
-        )
-    }
-}
+          </div>
+        </div>
+      )
+  }
+  }

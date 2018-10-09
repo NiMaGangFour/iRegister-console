@@ -67,10 +67,13 @@ a:hover{
 
 .nova-margin{
     margin-top: 10px;
-
 }
 .nova-padding{
     padding: 15px;
+}
+.cust-padding{
+    padding-right: 15px;
+    padding-left: 5px;
 }
 .filter{
     background-color: white;
@@ -201,6 +204,9 @@ a:hover{
     background-color: white;
     border-radius: 3px;
 }
+.shopping-cart{
+    border: solid 1px green;
+}
 .nova-card ul{
     padding-left: 10px;
 }
@@ -213,7 +219,300 @@ a:hover{
     background-color: rgb(238, 238, 238);
     cursor: pointer;
 }
+.console-logo{
+    min-height: 900px;
+    padding: 100px;
+}
+.cust-list li{
+    float: left;
+    font-size: 12px;
+}
 .cust-border {
     border-style: ridge;
-    border-radius: 1px;
+    border-radius: 6px;
+    padding: 20px;
+
+}
+.cust-margin{
+    margin-right: 10px;
+    margin-top: 10px;
+}
+.cust-margin2{
+    margin-top: 5px;
+    vertical-align: middle;
+    text-align: left;
+    padding: 10px;
+}
+.cust-margin3{
+    margin-top: 5px;
+    vertical-align: middle;
+    text-align: center;
+}
+.cust-margin4{
+    margin-top: 3px;
+
+}
+.cust-margin5{
+    margin-top: 2px;
+}
+.cust-margin6{
+    margin-top: 1px;
+}
+
+.cust-margin7{
+    margin-top: 5px;
+    vertical-align: middle;
+    text-align: left;
+}
+.cust-margin8{
+    margin-top: 3px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.cust-margin8{
+    margin-left: 15px;
+}
+
+.cust-margin9{
+    width: 270px;
+    margin-right: 30px;
+}
+
+.cust-margin10{
+    width: 1205px;
+    margin-right: 30px;
+}
+
+.cust-margin11{
+    vertical-align: middle;
+    text-align: left;
+}
+.cust-margin12{
+    margin-left: 10px;
+}
+
+.cust-margin13{
+    margin-top: 5px;
+    margin-left: 140px;
+    vertical-align: middle;
+    text-align: left;
+    width:1205px;
+}
+.cust-margin14{
+
+    vertical-align: middle;
+    text-align: left;
+    width:1205px;
+    margin-top: 10px;
+    padding: 20px;
+}
+.cust-margin-top{
+    margin-top: 5px;
+
+}
+.cust-border2{
+  /* border-style: solid none none none; */
+  border-top: solid 1px gray;
+}
+.cust-border3{
+  border-style:   dotted dashed solid double;
+}
+.cust-p-color{
+  color: #FF0000;
+}
+.cust-p-color2{
+  color: #32CD32;
+}
+.cust-margin-menus{
+  margin-right: 30px;
+  margin-top: 3px;
+}
+.button-menus {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 2px 8px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+
+  margin-right: 5px;
+  margin-top: 10px;
+  width: 140px;
+  height: 70px;
+}
+
+.button-tables {
+
+  width: 50px;
+  height: 40px;
+  font-size: 20px;
+}
+
+
+
+.button2{
+  font-size: 20px;
+  width: 220px;
+  margin-left: 200px;
+}
+
+.button3{
+  font-size: 20px;
+  width: 220px;
+  margin-left: 60px;
+}
+
+.button4{
+
+  vertical-align: middle;/*使用元素的垂直对齐*/
+
+}
+
+.button {
+    position: relative;
+    background-color: #4CAF50;
+    border: none;
+    margin-right: 30px;
+    margin-top: 3px;
+    width: 170px;
+    height: 70px;
+
+    color: #FFFFFF;
+    padding: 20px;
+    width: 200px;
+    text-align: center;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.7s;
+    text-decoration: none;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.button:after {
+    content: "";
+    background: #f1f1f1;
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -90px !important;
+    margin-top: -220%;
+    opacity: 0;
+    transition: all 1.0s
+}
+
+.button:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+}
+
+
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    vertical-align: middle;
+    text-align: center;
+    width: 30%;
+}
+
+.modal {
+    display: block;
+    margin-left: 10px;
+}
+
+.dishesUnderLine {
+    /* border-bottom: 1px solid #f1f1f1; */
+}
+.deleteButton {
+  margin-bottom: 3px;
+}
+.sdhpBorder {
+  border-style: solid;
+  border-width: 1px;
+  border-color: gray;
+}
+
+.cust-text {
+  font-weight: bold;
+  color: black;
+}
+.cust-text1 {
+  font-weight: bold;
+  color: red;
+}
+.cust-adminLogin{
+  font-size: 30px;
+  width: 330px;
+  margin-top: 170px;
+  margin-left: 370px;
+}
+.div-MembershipPoints{
+  width: 280px;
+  height: 240px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  background: #f2f2f2;
+  margin: 20px auto;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.div-checkout-button{
+  margin: 20px auto;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.div-login-admin{
+  margin: 20px auto;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.cust-font{
+  font-size: 20px;
+}
+.cust-label{
+  font-size: 20px;
+  /* UP/Right/DOWN/Left */
+
+  margin:5px 5px 0px 0px;
+  display:inline-block;
+}
+
+.div-centre{
+  text-align: center;
+}
+
+.th-width-DishID{
+  width:90px;
+  }
+
+.th-width-DishName{
+  width:150px;
+  }
+.th-width-DishPrice{
+  width:150px;
+  }
+.th-width-DishType{
+  width:150px;
+  }
+.padding-tables{
+  padding: 0px;
+}
+.padding{
+  padding: 10px;
+}
+
+.strikeThrough{
+  text-decoration: line-through;
+   text-decoration-style: double;
+  -webkit-text-decoration-color: red; /* Safari */
+  text-decoration-color: red;
 }
