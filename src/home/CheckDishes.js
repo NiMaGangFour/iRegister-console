@@ -33,7 +33,6 @@ export default class CheckDishesDishes extends Component {
       discountOptions: null,
       verifyTableModifiedDishesNumPositiveExist: null,
       verifyTableModifiedDishesNumNegativeExist: null
-
     }
   }
 
@@ -126,7 +125,7 @@ export default class CheckDishesDishes extends Component {
     var temTableModifiedDishesNumPositive = []
     var temTableModifiedDishes = this.state.tableModifiedDishes
     for (let index in temTableModifiedDishes) {
-      if (temTableModifiedDishes[index].num > 0) {
+      if (temTableModifiedDishes[index].deleted === 0) {
         temTableModifiedDishesNumPositive.push(temTableModifiedDishes[index])
       }
     }
@@ -157,9 +156,6 @@ export default class CheckDishesDishes extends Component {
     return total;
   }
 
-
-
-
   //计算原始菜品(普通菜品)总数量
   SumUpNormalDishes = () => {
     var temTableNormalDishesNumPositive = []
@@ -178,9 +174,6 @@ export default class CheckDishesDishes extends Component {
     return total;
   }
 
-
-
-
   //计算改动菜品(麻辣香锅 已删除)总数量
   SumUpModifiedSDHPDishesNum = () => {
     var temTableModifiedSDHPDishesNumNegative = []
@@ -190,7 +183,6 @@ export default class CheckDishesDishes extends Component {
         temTableModifiedSDHPDishesNumNegative.push(temTableModifiedSDHPDishes[index])
       }
     }
-
     var total = temTableModifiedSDHPDishesNumNegative.reduce((sum, price) => {
       return sum + price.num
     }, 0)
@@ -236,18 +228,17 @@ export default class CheckDishesDishes extends Component {
   }
 
   //删除 新增菜品 (将this.state.tableModifiedDishes.deleted = 1)
-  deleteModifiedDish = (nameDish) => {
+  deleteModifiedDish = (value) => {
     console.log(this.state.tableModifiedDishes)
-    // console.log(nameDish)
+    console.log(value)
+
     var temp_post = [];
-    var temp_deletedModifiedDish = {};
     for (let index in this.state.tableModifiedDishes) {
-      // console.log(this.state.myPosts[index].idPOST , idPost)
-      if (this.state.tableModifiedDishes[index].name !== nameDish) {
+      if ((this.state.tableModifiedDishes[index].name !== value.name )
+      || (this.state.tableModifiedDishes[index].name === value.name && this.state.tableModifiedDishes[index].type !== value.type )
+      || (this.state.tableModifiedDishes[index].deleted === 1 ) ) {
         temp_post.push(this.state.tableModifiedDishes[index])
       } else {
-
-        // this.state.tableModifiedDishes[index].deleted = 1
         console.log(this.state.tableModifiedDishes[index])
         fetch(API.baseUri + API.updateModifiedDeleted + "/" + this.state.tableModifiedDishes[index].DishID)
             .then((response) => {
@@ -259,93 +250,83 @@ export default class CheckDishesDishes extends Component {
         }).catch((error) => {
             console.log('error on .catch', error);
         });
-        temp_deletedModifiedDish = this.state.tableModifiedDishes[index]
       }
     }
-    this.setState({tableModifiedDishes: temp_post})
+  }
+  //删除已点的菜
+  deleteDish = (value) => {
+    console.log(this.state.tableDishes)
+    console.log(value)
+    var temp_post = [];
+    for (let index in this.state.tableDishes) {
+      if (this.state.tableDishes[index].name !== value.name || (this.state.tableDishes[index].name === value.name && this.state.tableDishes[index].type !== value.type) ) {
+        temp_post.push(this.state.tableDishes[index])
+      } else {
+        console.log(this.state.tableDishes[index])
+        fetch(API.baseUri + API.updateOriginDeleted + "/" + this.state.tableDishes[index].DishID)
+            .then((response) => {
+                if (response.status === 200) {
+                    return response.json()
+                } else console.log("Get data error ");
+            }).then((json) =>{
+            this.getOriginData()
+        }).catch((error) => {
+            console.log('error on .catch', error);
+        });
+      }
+    }
   }
 
   //删除已点的菜
-  deleteDish = (nameDish) => {
-    console.log(this.state.tableDishes)
-    // console.log(nameDish)
-    var temp_post = [];
-    var temp_modified = {};
-    for (let index in this.state.tableDishes) {
-      // console.log(this.state.myPosts[index].idPOST , idPost)
-      if (this.state.tableDishes[index].name !== nameDish) {
-        temp_post.push(this.state.tableDishes[index])
-      } else {
-        this.state.tableDishes[index].DishCount = -this.state.tableDishes[index].DishCount
-        temp_modified = this.state.tableDishes[index]
-        console.log(this.state.tableDishes[index])
-      }
-    }
-    this.setState({tableDishes: temp_post})
-    console.log(temp_modified);
-    // this.updateModifiedDiesh(temp_modified);
-    this.updateDeletedDish(temp_modified)
-  }
+  // deleteDish = (value) => {
+  //   console.log(value.name)
+  //   console.log(this.state.tableDishes)
+  //   var temp_post = [];
+  //   var temp_deleted = {};
+  //   for (let index in this.state.tableDishes) {
+  //     if (this.state.tableDishes[index].name !== value.name || (this.state.tableDishes[index].name === value.name && this.state.tableDishes[index].type !== value.type) ) {
+  //       temp_post.push(this.state.tableDishes[index])
+  //     } else {
+  //       this.state.tableDishes[index]
+  //       fetch(API.baseUri + API.updateOriginDeleted + "/" + this.state.tableDishes[index].DishID)
+  //           .then((response) => {
+  //               if (response.status === 200) {
+  //                   return response.json()
+  //               } else console.log("Get data error ");
+  //           }).then((json) =>{
+  //           this.getData()
+  //       }).catch((error) => {
+  //           console.log('error on .catch', error);
+  //       });
+  //     }
+  //   }
+  //   this.setState({tableDishes: temp_post})
+  //   console.log(temp_deleted);
+  //   // this.updateDeletedDish(temp_deleted)
+  // }
   //将原始菜单的deleted 属性 设置为 deleted = 1
-  updateDeletedDish = (temp_modified) => {
-    var temp_modifiedArray = [];
-    var date = new Date();
-    var time = date.toLocaleTimeString();
-    temp_modified.createTime = time;
-    console.log(temp_modified.orderID)
+  // updateDeletedDish = (temp_deleted) => {
+  //   var temp_deletedArray = [];
+  //   var date = new Date();
+  //   var time = date.toLocaleTimeString();
+  //   temp_deleted.createTime = time;
+  //   console.log(temp_deleted.orderID)
+  //
+  //   temp_deletedArray.push(temp_deleted);
+  //   console.log(temp_deletedArray);
+  //
+  //   fetch(API.baseUri + API.updateOriginDeleted + "/" + temp_deleted.DishID)
+  //       .then((response) => {
+  //           if (response.status === 200) {
+  //               return response.json()
+  //           } else console.log("Get data error ");
+  //       }).then((json) =>{
+  //       this.getData()
+  //   }).catch((error) => {
+  //       console.log('error on .catch', error);
+  //   });
+  // }
 
-    temp_modifiedArray.push(temp_modified);
-    console.log(temp_modifiedArray);
-
-    fetch(API.baseUri + API.updateOriginDeleted + "/" + temp_modified.DishID)
-        .then((response) => {
-            if (response.status === 200) {
-                return response.json()
-            } else console.log("Get data error ");
-        }).then((json) =>{
-        this.getData()
-    }).catch((error) => {
-        console.log('error on .catch', error);
-    });
-  }
-
-  //将已经删除了的菜 上传 到数据库dishMod表
-  updateModifiedDiesh = (temp_modified) => {
-
-    var temp_modifiedArray = [];
-    var date = new Date();
-    var time = date.toLocaleTimeString();
-    temp_modified.deleted = 1;
-    temp_modified.createTime = time;
-    console.log(temp_modified)
-
-    temp_modifiedArray.push(temp_modified);
-    console.log(temp_modifiedArray);
-
-    fetch(API.baseUri + API.modDish, {
-      method: "POST",
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      // [req.body.orderID, v[i].DishID, req.body.createTime, v[i].num]
-      body: JSON.stringify({"items": temp_modifiedArray})
-    }).then(res => {
-      if (res.status === 200) {
-        // console.log(res.json())
-        return res.json();
-      } else
-        console.log(res)
-    }).then(json => {
-      // console.log(json)
-      if (json.success === true) {
-        console.log(json.success)
-        this.getModifiedData();
-      }
-      // console.log(this.state.tableModifiedDishes)
-    })
-    // console.log("updateModifiedDiesh");
-  }
   //从数据库dishMod表中 获取 改动菜的信息
   getModifiedData = () => {
     console.log(this.props.match.params.tableid)
@@ -364,12 +345,28 @@ export default class CheckDishesDishes extends Component {
       console.log('error on .catch', error);
     });
   }
+  //从数据库dishMod表中 获取 改动菜的信息
+  getOriginData = () => {
+    console.log(this.props.match.params.tableid)
+    fetch(API.baseUri + API.getTableDishes + "/" + this.props.match.params.tableid).then((response) => {
+      if (response.status === 200) {
+        return response.json()
+      } else
+        console.log("Get data error ");
+      }
+    ).then((json) => {
+      console.log(json)
+      this.setState({tableDishes: json})
+    }).catch((error) => {
+      console.log('error on .catch', error);
+    })
+  }
 
-  addNum = (nameDish) => {
+  addNum = (value) => {
     var temp_post = [];
     for (let index in this.state.tableDishes) {
       // console.log(this.state.myPosts[index].idPOST , idPost)
-      if (this.state.tableDishes[index].name === nameDish) {
+      if (this.state.tableDishes[index].name === value.name && this.state.tableDishes[index].type === value.type) {
         var temp_dish = this.state.tableDishes[index];
         temp_dish.DishCount = temp_dish.DishCount + 1;
         temp_post.push(temp_dish)
@@ -380,13 +377,13 @@ export default class CheckDishesDishes extends Component {
     this.setState({tableDishes: temp_post})
   }
 
-  minusNum = (nameDish) => {
+  minusNum = (value) => {
     var temp_post = [];
     for (let index in this.state.tableDishes) {
       // console.log(this.state.myPosts[index].idPOST , idPost)
-      if (this.state.tableDishes[index].name === nameDish) {
+      if (this.state.tableDishes[index].name === value.name && this.state.tableDishes[index].type === value.type) {
         if (this.state.tableDishes[index].DishCount === 1) {
-          this.deleteDish(nameDish);
+          this.deleteDish(value);
         } else {
           var temp_dish = this.state.tableDishes[index];
           temp_dish.DishCount = temp_dish.DishCount - 1;
@@ -466,7 +463,24 @@ export default class CheckDishesDishes extends Component {
     console.log("checkOut");
   }
 
-
+  SDHPExistCalculator = () => {
+    //结算首次点单(已删除的+未删除的)麻辣香锅数量
+    var tempSDHPorder = []
+    var temp = this.state.tableDishes
+    for (let index in temp) {
+      if (temp[index].type === "麻辣香锅" ) {
+        tempSDHPorder.push(temp[index].DishCount)
+      }
+    }
+    //结算再次添加（已删除的+未删除的）麻辣香锅数量
+    var temp = this.state.tableModifiedDishes
+    for (let index in temp) {
+      if (temp[index].type === "麻辣香锅" ) {
+        tempSDHPorder.push(temp[index].num)
+      }
+    }
+    return tempSDHPorder.length
+  }
 
   SDHPNumberCalculator = () => {
     var tempSDHPorder = []
@@ -494,6 +508,45 @@ export default class CheckDishesDishes extends Component {
       var total = 0;
     }
     return total;
+  }
+
+  checkFishExist = () => {
+    var tempArray = []
+    var temp = this.state.tableDishes
+    console.log(temp)
+    for (let index in temp) {
+      if (temp[index].subtype === "烤鱼" && temp[index].deleted === 0 ) {
+        tempArray.push(temp[index])
+      }
+    }
+    var temp2 = this.state.tableModifiedDishes
+    console.log(temp2)
+    for (let index in temp2) {
+      if (temp2[index].subtype === "烤鱼" && temp2[index].deleted === 0 ) {
+        tempArray.push(temp2[index])
+      }
+    }
+    console.log(tempArray)
+    return tempArray.length
+  }
+
+  checkFishDishesExist = () => {
+    var tempArray = []
+    var temp = this.state.tableDishes
+    var temp2 = this.state.tableModifiedDishes
+    console.log(temp)
+    for (let index in temp) {
+      if (temp[index].type === "特色烤鱼" ) {
+        tempArray.push(temp[index])
+      }
+    }
+    for (let index in temp2) {
+      if (temp2[index].type === "特色烤鱼" ) {
+        tempArray.push(temp2[index])
+      }
+    }
+    console.log(tempArray)
+    return tempArray.length
   }
 
   //监听会员号码输入框input的实时value
@@ -665,7 +718,7 @@ export default class CheckDishesDishes extends Component {
     var tempArray = []
     var temp = this.state.tableModifiedDishes
     for (let index in temp) {
-      if ( temp[index].type !== "麻辣香锅" ) {
+      if ( temp[index].type !== "麻辣香锅" && temp[index].type !== "特色烤鱼" ) {
         tempArray.push(temp[index])
       }
     }
@@ -677,7 +730,7 @@ export default class CheckDishesDishes extends Component {
     var tempArray = []
     var temp = this.state.tableDishes
     for (let index in temp) {
-      if ( temp[index].type !== "麻辣香锅" ) {
+      if ( temp[index].type !== "麻辣香锅" && temp[index].type !== "特色烤鱼" ) {
         tempArray.push(temp[index])
       }
     }
@@ -694,35 +747,32 @@ export default class CheckDishesDishes extends Component {
 
     var tableModifiedDishes = <div>
         {this.verifyModifiedNormalDishesExist() !== 0 ?
-          <div className="cust-border2">
+          <div className="cust-border-top">
             {console.log(this.state.tableModifiedDishes)}
             {
               this.state.tableModifiedDishes.map((value, key1) => {
                 return (<div key={key1}>
                   <div className="dishesUnderLine">
                     {
-                      value.type !== "麻辣香锅" && value.deleted === 0 ?
+                      value.type !== "麻辣香锅" && value.type !== "特色烤鱼" && value.deleted === 0 ?
                         <div className="row nova-margin">
-                          <div className="col-lg-4">{value.name}</div>
-
+                          <div className="col-lg-4">{value.name}后添加</div>
                           <div className="col-lg-1 ">{value.num}</div>
                           <div className="col-lg-1">{value.price}</div>
                           <div className="col-lg-1">
                             <Button className="deleteButton" bsSize="xsmall" bsStyle="danger" onClick={() => {
-                                this.deleteModifiedDish(value.name)
+                                this.deleteModifiedDish(value)
                               }}>删除</Button>
                           </div>
-
                         </div>
                         :
                         null
                     }
 
                     {
-                      value.type !== "麻辣香锅" && value.deleted === 1 ?
+                      value.type !== "麻辣香锅" && value.type !== "特色烤鱼" && value.deleted === 1 ?
                         <div className="row nova-margin strikeThrough">
                           <div className="col-lg-4 strikeThrough">{value.name}</div>
-
                           <div className="col-lg-1 strikeThrough">{value.num}</div>
                           <div className="col-lg-1">{value.price}</div>
                        </div>
@@ -737,7 +787,10 @@ export default class CheckDishesDishes extends Component {
 
     </div>
 
-    return (<div>
+    return (
+
+      <div>
+        {console.log(this.state.tableModifiedDishes)}
       <div className="">
         <div className="col-sm-12 col-lg-2 padding-tables">
 
@@ -758,76 +811,58 @@ export default class CheckDishesDishes extends Component {
         </div>
         <div className="">
           <div className="col-lg-10 cust-border nova-card cust-margin-top">
-            <h4 >当前桌号: {this.props.match.params.tableid}</h4>
+            <center><b><h3>当前桌号: {this.props.match.params.tableid}</h3></b></center>
 
-            <div className="col-sm-12 col-lg-6 ">
-              <div className="">
-                {console.log(this.state.tableDishes)}
-                {console.log(this.SumUpModifiedNormalDishes())}
-                {console.log(this.SumUpModifiedNormalDishesNegaticeNum())}
+
                 {this.verifyNormalDishesExist() !== 0 || this.verifyModifiedNormalDishesExist() !== 0 ?
-                  <div className="cust-border nova-card">
+                  <div className="col-lg-4 cust-border nova-card">
+                    <center><h3><b>普通菜品列表: </b></h3></center>
                     {
-                      <div>
-                          <div >
+                      this.state.tableDishes.map((value, key1) => {
+                        return (
+                          <div className="dishesUnderLine" key={key1}>
                             {
-                              this.state.tableDishes.map((value, key1) => {
-                                return (<div key={key1}>
-                                  <div className="dishesUnderLine">
-                                    {
-                                      value !== 0 && value.type !== "麻辣香锅"
-                                        ? <div className="row nova-margin">
-                                        {console.log(value.deleted)}
-                                            <div >
-                                              {value.deleted === 0 ?
-                                                <div>
-                                                <div className="col-lg-4">{value.name}</div>
-
-                                                <div className="col-lg-1">{value.DishCount}</div>
-                                                <div className="col-lg-1">{value.price}</div>
-                                                <div className="col-lg-1">
-                                                  <Button className="deleteButton" bsSize="xsmall" bsStyle="danger" onClick={() => {
-                                                    this.deleteDish(value.name)}}>删除
-                                                  </Button>
-                                                </div>
-                                              </div>
-                                                :
-                                                <div>
-                                                <div className="col-lg-4 strikeThrough">{value.name}</div>
-
-                                                <div className="col-lg-1 strikeThrough">{value.DishCount}</div>
-                                                <div className="col-lg-1">{value.price}</div>
-                                                </div>
-                                              }
-                                            </div>
-                                          </div>
-                                        : null
-                                    }
-                                  </div>
-                                </div>)
-                              })
+                              value.type !== "麻辣香锅" && value.type !== "特色烤鱼" && value.deleted === 0 ?
+                              <div className="row nova-margin">
+                                <div className="col-lg-4">{value.name}</div>
+                                <div className="col-lg-1">{value.DishCount}</div>
+                                <div className="col-lg-1">{value.price}</div>
+                                <div className="col-lg-1">
+                                  <Button className="deleteButton" bsSize="xsmall" bsStyle="danger" onClick={() => {
+                                    this.deleteDish(value)}}>删除
+                                  </Button>
+                                </div>
+                              </div>
+                            : null
                             }
-                          </div>
-                      </div>
+                            {
+                              value.type !== "麻辣香锅" && value.type !== "特色烤鱼" && value.deleted === 1 ?
+                              <div className="row nova-margin">
+                                <div className="col-lg-4 strikeThrough">{value.name}</div>
+                                <div className="col-lg-1 strikeThrough">{value.DishCount}</div>
+                                <div className="col-lg-1 strikeThrough">{value.price}</div>
+                              </div>
+                            : null
+                            }
+                        </div>)
+                      })
                     }
-                        {tableModifiedDishes}
+                    {tableModifiedDishes}
                   </div>
                 :null}
 
 
-              </div>
-            </div>
-
             {
-              this.SDHPNumberCalculator() > 0 && this.SDHPNumberCalculator() < 5
-                ? <div className="col-sm-12 col-lg-6 ">
-                    <div className="row">
-                      <div className="cust-border nova-card">
-                        <div>
-                          <h4 className="">麻辣香锅菜品数量: ({this.SDHPNumberCalculator()})</h4>
-                          <h4 className="cust-text1">少于5份麻辣香锅菜品数量!</h4>
-                        </div>
-                        <div className="">
+               this.SDHPExistCalculator() !== 0 ?
+               <div className="col-lg-4 cust-border nova-card">
+                <center><h3><b>麻辣香锅菜品列表: </b></h3></center>
+                <h4 className="">麻辣香锅菜品数量: ({this.SDHPNumberCalculator()})</h4>
+                { this.SDHPNumberCalculator() > 0 && this.SDHPNumberCalculator() < 5 ?
+                  <div>
+                    <h4 className="cust-text1">少于5份麻辣香锅菜品数量!</h4>
+                  </div>:null}
+
+                  <div className="">
                           {
                             this.state.tableDishes.map((value, key1) => {
                               return (<div key={key1}>
@@ -842,7 +877,7 @@ export default class CheckDishesDishes extends Component {
                                             <div className="col-lg-1">{value.price}</div>
                                             <div className="col-lg-1">
                                               <Button className="deleteButton" bsSize="xsmall" bsStyle="danger" onClick={() => {
-                                                  this.deleteDish(value.name)
+                                                  this.deleteDish(value)
                                                 }}>删除</Button>
                                             </div>
                                           </div>
@@ -866,23 +901,21 @@ export default class CheckDishesDishes extends Component {
                               </div>)
                             })
                           }
-
-                          <div >
-                            {console.log(this.state.tableModifiedDishes)}
+                          <div className="cust-border-top">
                             {
                               this.state.tableModifiedDishes.map((value, key1) => {
                                 return (<div key={key1}>
                                   <div className="dishesUnderLine">
                                     {
-                                      value.num > 0 && value.type === "麻辣香锅"
+                                      value.type === "麻辣香锅" && value.deleted === 0
                                         ? <div className="row nova-margin">
-                                            <div className="col-lg-4">{value.name}</div>
+                                            <div className="col-lg-4">{value.name}后添加</div>
 
                                             <div className="col-lg-1 ">{value.num}</div>
                                             <div className="col-lg-1">{value.price}</div>
                                             <div className="col-lg-1">
                                               <Button className="deleteButton" bsSize="xsmall" bsStyle="danger" onClick={() => {
-                                                  this.deleteModifiedDish(value.name)
+                                                  this.deleteModifiedDish(value)
                                                 }}>删除
                                               </Button>
                                             </div>
@@ -893,156 +926,131 @@ export default class CheckDishesDishes extends Component {
                                 </div>)
                               })
                             }
-                          </div>
-                          <div className="">
-                            <div >
-                              {console.log(this.state.tableModifiedDishes)}
-                              {
-                                this.state.tableModifiedDishes.map((value, key1) => {
-                                  return (<div key={key1}>
-                                    <div className="dishesUnderLine">
-                                      {
-                                        value.num < 0 && value.type === "麻辣香锅"
-                                          ? <div className="row nova-margin">
-                                              <div className="col-lg-4 strikeThrough">{value.name} (后增) </div>
+                            {
+                              this.state.tableModifiedDishes.map((value, key1) => {
+                                return (<div key={key1}>
+                                  <div className="dishesUnderLine">
+                                    {
+                                       value.type === "麻辣香锅" && value.deleted === 1
+                                        ? <div className="row nova-margin">
+                                            <div className="col-lg-4 strikeThrough">{value.name} (后添加 已删除) </div>
 
-                                              <div className="col-lg-1 cust-p-color strikeThrough">{value.num}</div>
-                                              <div className="col-lg-1">{value.price}</div>
-                                            </div>
-                                          : null
-                                      }
-                                    </div>
-                                  </div>)
-                                })
-                              }
-                            </div>
+                                            <div className="col-lg-1 cust-p-color strikeThrough">{value.num}</div>
+                                            <div className="col-lg-1">{value.price}</div>
+                                          </div>
+                                        : null
+                                    }
+                                  </div>
+                                </div>)
+                              })
+                            }
                           </div>
                         </div>
 
-                      </div>
-
-                    </div>
                   </div>
                 : null
             }
 
             {
-              this.SDHPNumberCalculator() >= 5
-                ? <div className="col-sm-12 col-lg-6 ">
-                    <div className="row">
-                      <div className="cust-border nova-card">
-                        <div>
-                          <h4 className="">麻辣香锅菜品数量: ({this.SDHPNumberCalculator()})</h4>
-                        </div>
-                        <div className="">
-                          {
-                            this.state.tableDishes.map((value, key1) => {
-                              return (<div key={key1}>
-                                <div className="dishesUnderLine">
-                                  {
-                                    value !== 0 && value.type === "麻辣香锅" && value.deleted === 0
-                                      ? <div className="row nova-margin ">
-                                          <div >
-                                            <div className="col-lg-4">{value.name}</div>
+              this.checkFishDishesExist() !== 0 ?
 
-                                            <div className="col-lg-1">{value.DishCount}</div>
-                                            <div className="col-lg-1">{value.price}</div>
-                                            <div className="col-lg-1">
-                                              <Button className="deleteButton" bsSize="xsmall" bsStyle="danger" onClick={() => {
-                                                  this.deleteDish(value.name)
-                                                }}>删除</Button>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      : null
-                                  }
-                                </div>
-                              </div>)
-                            })
-                          }
+                 <div className="col-sm-12 col-lg-4 cust-border nova-card">
+                   <h3 className=""><b>特色烤鱼菜品列表:</b></h3>
+                   {this.checkFishExist() === 0 ?
+                     <div>
+                       <h4 className="cust-text1">未选择烤鱼口味</h4>
+                     </div>
+                     :null}
 
-                          {
-                            this.state.tableDishes.map((value, key1) => {
-                              return (<div key={key1}>
-                                <div className="dishesUnderLine">
-                                  {
-                                    value !== 0 && value.type === "麻辣香锅" && value.deleted === 1
-                                      ? <div className="row nova-margin ">
-                                          <div >
-                                            <div className="col-lg-4 strikeThrough">{value.name} (原始)</div>
-
-                                            <div className="col-lg-1 strikeThrough">{value.DishCount}</div>
-                                            <div className="col-lg-1">{value.price}</div>
-                                          </div>
-                                        </div>
-                                      : null
-                                  }
-                                </div>
-                              </div>)
-                            })
-                          }
-                          <div >
-                            {console.log(this.state.tableModifiedDishes)}
+                    {
+                      this.state.tableDishes.map((value, key1) => {
+                        return (<div key={key1}>
                             {
-                              this.state.tableModifiedDishes.map((value, key1) => {
-                                return (<div key={key1}>
-                                  <div className="dishesUnderLine">
-                                    {
-                                      value.num > 0 && value.type === "麻辣香锅"
-                                        ? <div className="row nova-margin">
-                                            <div className="col-lg-4">{value.name}</div>
-
-                                            <div className="col-lg-1 ">{value.num}</div>
-                                            <div className="col-lg-1">{value.price}</div>
-                                            <div className="col-lg-1">
-                                              <Button className="deleteButton" bsSize="xsmall" bsStyle="danger" onClick={() => {
-                                                  this.deleteModifiedDish(value.name)
-                                                }}>删除
-                                              </Button>
-                                            </div>
-
-                                          </div>
-                                        : null
-                                    }
+                              value !== 0 && value.type === "特色烤鱼" && value.deleted === 0
+                                ? <div className="row nova-margin ">
+                                    <div >
+                                      <div className="col-lg-4">{value.name}</div>
+                                      <div className="col-lg-1">{value.DishCount}</div>
+                                      <div className="col-lg-1">{value.price}</div>
+                                      <div className="col-lg-1">
+                                        <Button className="deleteButton" bsSize="xsmall" bsStyle="danger" onClick={() => {
+                                            this.deleteDish(value)
+                                          }}>删除</Button>
+                                      </div>
+                                    </div>
                                   </div>
-                                </div>)
-                              })
+                                : null
+                            }
+                        </div>)
+                      })
+                    }
+
+                    {
+                      this.state.tableDishes.map((value, key1) => {
+                        return (<div key={key1}>
+                          <div className="dishesUnderLine">
+                            {
+                              value !== 0 && value.type === "特色烤鱼" && value.deleted === 1
+                                ? <div className="row nova-margin ">
+                                    <div >
+                                      <div className="col-lg-4 strikeThrough">{value.name} (烤鱼)</div>
+
+                                      <div className="col-lg-1 strikeThrough">{value.DishCount}</div>
+                                      <div className="col-lg-1">{value.price}</div>
+                                    </div>
+                                  </div>
+                                : null
                             }
                           </div>
-                            {this.SumUpModifiedSDHPDishesNum() < 0 ?
-                          <div className=" ">
-                            <div >
-                              {console.log(this.state.tableModifiedDishes)}
+                        </div>)
+                      })
+                    }
+
+
+                    <div className="cust-border-top">
+                      {
+                        this.state.tableModifiedDishes.map((value, key1) => {
+                          return (
+                            <div key={key1} className="dishesUnderLine">
                               {
-                                this.state.tableModifiedDishes.map((value, key1) => {
-                                  return (<div key={key1}>
-                                    <div className="dishesUnderLine">
-                                      {
-                                        value.num < 0 && value.type === "麻辣香锅"
-                                          ? <div className="row nova-margin">
-                                              <div className="col-lg-4 strikeThrough">{value.name} （后增）</div>
-
-                                              <div className="col-lg-1 cust-p-color strikeThrough">{value.num}</div>
-                                              <div className="col-lg-1">{value.price}</div>
-                                            </div>
-                                          : null
-                                      }
+                                value.num > 0 && value.type === "特色烤鱼"
+                                  ? <div className="row nova-margin">
+                                      <div className="col-lg-4">{value.name}后添加</div>
+                                      <div className="col-lg-1 ">{value.num}</div>
+                                      <div className="col-lg-1">{value.price}</div>
+                                      <div className="col-lg-1">
+                                        <Button className="deleteButton" bsSize="xsmall" bsStyle="danger" onClick={() => {
+                                            this.deleteModifiedDish(value)
+                                          }}>删除
+                                        </Button>
+                                      </div>
                                     </div>
-                                  </div>)
-                                })
+                                  : null
                               }
-                            </div>
-                          </div>
-                          :null}
-                        </div>
+                          </div>)
+                        })
+                      }
+                      {
+                        this.state.tableModifiedDishes.map((value, key1) => {
+                          return (
+                            <div className="dishesUnderLine" key={key1}>
+                              {
+                                value.num < 0 && value.type === "特色烤鱼"
+                                  ? <div className="row nova-margin">
+                                      <div className="col-lg-4 strikeThrough">{value.name} （后增）</div>
 
-                      </div>
-
+                                      <div className="col-lg-1 cust-p-color strikeThrough">{value.num}</div>
+                                      <div className="col-lg-1">{value.price}</div>
+                                    </div>
+                                  : null
+                              }
+                          </div>)
+                        })
+                      }
                     </div>
                   </div>
                 : null
             }
-
           </div>
 
           {this.state.comment !== "" ?
@@ -1055,9 +1063,9 @@ export default class CheckDishesDishes extends Component {
 
           <div className="nova-card cust-border col-lg-10 ">
               <div className="nova-margin">
-                <div className="col-lg-1">下单: A${this.SumUp()}</div>
-                <div className="col-lg-1">加菜：A${this.SumUpModified()}</div>
-                <div className="col-lg-1 cust-p-color2">总价：A${this.SumUpEntirePrice()}</div>
+                <div className="col-lg-1">下单: AUD${this.SumUp()}</div>
+                <div className="col-lg-1">加菜：AUD${this.SumUpModified()}</div>
+                <div className="col-lg-1 cust-p-color2">总价：AUD${this.SumUpEntirePrice()}</div>
               </div>
             </div>
 
@@ -1086,7 +1094,6 @@ export default class CheckDishesDishes extends Component {
           </div>
         </div>
       </div>
-
       <div>
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton="closeButton">
@@ -1104,7 +1111,7 @@ export default class CheckDishesDishes extends Component {
                           <div key={key1}>
                           <div className="dishesUnderLine">
                             {
-                              value !== 0 && value.type !== "麻辣香锅" && value.deleted === 0
+                              value !== 0 && value.type !== "麻辣香锅" && value.type !== "特色烤鱼" && value.deleted === 0
                                 ? <div className="row nova-margin ">
                                     <div >
                                       <div className="col-lg-4">{value.name}</div>
@@ -1130,7 +1137,7 @@ export default class CheckDishesDishes extends Component {
                         return (<div key={key1}>
                           <div className="dishesUnderLine">
                             {
-                              value.num > 0 && value.type !== "麻辣香锅"  && value.deleted === 0
+                              value.num > 0 && value.type !== "麻辣香锅" && value.type !== "特色烤鱼" && value.deleted === 0
                                 ? <div className="row nova-margin">
                                     <div className="col-lg-4">{value.name}</div>
 
@@ -1176,7 +1183,6 @@ export default class CheckDishesDishes extends Component {
                       })
                     }
 
-                    {console.log(this.state.tableModifiedDishes)}
                     {
                       this.state.tableModifiedDishes.map((value, key1) => {
                         return (<div key={key1}>

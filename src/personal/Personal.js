@@ -43,7 +43,7 @@ export default class Personal extends Component {
               <div>
                   <ListGroup>
                     {this.state.getDeliveryOrders.map((value, i) =>{
-                      console.log(value)
+                      // console.log(value)
                       var ToDeliver = {
                         pathname: '/home/DeliverOrders/'+ value.id,
                       }

@@ -231,8 +231,8 @@ a:hover{
     border-style: ridge;
     border-radius: 6px;
     padding: 20px;
-
 }
+
 .cust-margin{
     margin-right: 10px;
     margin-top: 10px;
@@ -311,12 +311,15 @@ a:hover{
     margin-top: 5px;
 
 }
-.cust-border2{
+.cust-border-top{
   /* border-style: solid none none none; */
   border-top: solid 1px gray;
 }
 .cust-border3{
   border-style:   dotted dashed solid double;
+}
+.cust-border4 {
+  border-bottom: solid 1px #d6d2d1;
 }
 .cust-p-color{
   color: #FF0000;
@@ -437,6 +440,11 @@ a:hover{
   border-width: 1px;
   border-color: gray;
 }
+.FishBorder {
+  border-style: dashed;
+  border-width: 1px;
+  border-color: gray;
+}
 
 .cust-text {
   font-weight: bold;
@@ -508,6 +516,18 @@ a:hover{
 }
 .padding{
   padding: 10px;
+}
+
+.padding-cancel{
+  padding: 0px;
+}
+.button-delete {
+  height: 45px;
+  margin-top: 6px;
+}
+.font-number {
+  font-size: 35px;
+  margin-top: 2px;
 }
 
 .strikeThrough{

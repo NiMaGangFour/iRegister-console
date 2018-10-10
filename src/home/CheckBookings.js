@@ -480,17 +480,17 @@ render() {
                       <FormControl componentClass="textarea" placeholder="请输入备注信息" />
                     </FormGroup>
 
-                    <Button type="submit">Submit</Button>
+                    <Button className="col-lg-3" type="submit">Submit</Button>
+                    <div className="col-lg-1"></div>
+                    <Button className="col-lg-3" bsStyle="danger" onClick={()=>{this.cancleBookTable()}}>取消预订</Button>
+                    <div className="col-lg-1"></div>
+                    <Link to={toHomePage} ><Button className="col-lg-3" bsStyle="warning" onClick={()=>{}}>返回控制台</Button></Link>
+
 
                   </form>
 
                 </div>
-                <div className="col-lg-6">
-                  <Button className="button2" bsStyle="danger" onClick={()=>{this.cancleBookTable()}}>取消预订</Button>
-                </div>
-                <div className="col-lg-6">
-                  <Link to={toHomePage} ><Button className="button2" bsStyle="warning" onClick={()=>{}}>返回控制台</Button></Link>
-                </div>
+
             </div>
           </div>
 
