@@ -423,6 +423,11 @@ a:hover{
     text-align: center;
     width: 30%;
 }
+.center-adminLogin{
+  margin-top: 50px;
+  border: 3px solid green;
+  text-align: center;
+}
 
 .modal {
     display: block;

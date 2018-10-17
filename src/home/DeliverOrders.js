@@ -43,12 +43,15 @@ export default class DeliverOrders extends Component {
 
           this.setState({
             deliveryDishes: json,
+            deliveryDeliveryStatus: json[0].status,
+            deliveryDeliveryFee: json[0].deliveryFee,
             customerAddress: json[0].address,
             customerPhoneNO: json[0].phone,
             customerName: json[0].customerName,
             customerComment: json[0].comment,
+
           })
-          console.log(this.state.deliveryDishes)
+          console.log(json)
     }).catch((error) => {
         console.log('error on .catch', error);
     })
@@ -72,11 +75,21 @@ export default class DeliverOrders extends Component {
 
   }
 
-  SumUpDeliveryOrder = ()=> {
-      var total = this.state.deliveryDishes.reduce((sum, order) =>{
+  SumUpDeliveryOrder = (deliveryFee)=> {
+    var tempArray = []
+    var temp = this.state.deliveryDishes
+    console.log(temp)
+    for (let index in temp) {
+      if (temp[index].DishCount > 0 ) {
+        tempArray.push(temp[index])
+      }
+    }
+      var total = tempArray.reduce((sum, order) =>{
           return sum + order.DishCount * order.price
       }, 0)
-      return total;
+      var result = parseInt(total) + parseInt(deliveryFee);
+
+      return [result, total];
   }
 
 
@@ -87,10 +100,7 @@ export default class DeliverOrders extends Component {
     };
       return (
           <div>
-            <div className="">
-              <div className="col-sm-12 col-lg-2 ">
-
-
+            <div className="col-lg-2 padding-tables">
                 <Personal />
                 <AuthOptions
                   ref={this.authOptions}
@@ -108,14 +118,13 @@ export default class DeliverOrders extends Component {
               </div>
 
             <div className="">
-              <div className="nova-card cust-border cust-margin2 col-lg-9">
-                <h4>当前订单号:{this.props.match.params.orderid}</h4>
+              <div className="nova-card cust-border cust-margin2 col-lg-10">
+                <center><b><h3>当前订单号:{this.props.match.params.orderid}</h3></b></center>
               </div>
 
-              <div className="nova-card cust-border col-lg-9 cust-margin11">
+              <div className="nova-card cust-border col-lg-10 cust-margin11">
                 <div className="">
                   <div className="col-lg-6">菜品名称</div>
-                  
                   <div className="col-lg-1">数量</div>
                   <div className="col-lg-1">单价</div>
                 </div>
@@ -125,7 +134,6 @@ export default class DeliverOrders extends Component {
                     return (
                       <div key={i}>
                         <div className="col-lg-6">{value.name}</div>
-
                         <div className="col-lg-1">{value.DishCount}</div>
                         <div className="col-lg-1">{value.price}</div>
                       </div>
@@ -135,31 +143,48 @@ export default class DeliverOrders extends Component {
                 </div>
                 <div className=" col-lg-9">
                   <hr />
-                    总价：{this.SumUpDeliveryOrder()}
+                  菜品总价:{this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[1]}  $AUD <br />
+                  外卖费:{this.state.deliveryDeliveryFee}   $AUD<br/>
+                  <b>订单总价:{this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[0]}  $AUD</b>
                 </div>
               </div>
 
-              <div className="nova-card cust-border col-lg-9 cust-margin11">
-
+              <div className="nova-card cust-border col-lg-10 cust-margin11">
+                {console.log(this.state.customerComment)}
                 {this.state.customerComment !== "" ?
                   <div className="nova-card" >
                     <h4>备注：{this.state.customerComment}</h4>
-                </div>:null
+                </div>
+                :
+                <h4>备注：无</h4>
                 }
               </div>
-              <div className="nova-card cust-border col-lg-9 cust-margin11">
+              <div className="nova-card cust-border col-lg-10 cust-margin11">
                 <div><h4>顾客姓名：{this.state.customerName}</h4></div>
                 <div><h4>顾客电话：{this.state.customerPhoneNO}</h4></div>
                 <div><h4>送餐地址：{this.state.customerAddress}</h4></div>
+              </div>
+
+              <div className="nova-card cust-border col-lg-10">
+                {this.state.deliveryDeliveryStatus !== "4" ?
+                <div>
+                  <Button className="col-lg-2 " bsSize="large" bsStyle="danger" onClick={() => {}}>厨房打印</Button>
+                  <div className="col-lg-1"/>
+                  <Button className="col-lg-2 " bsSize="large" bsStyle="success" onClick={()=>{}}>打包&打印小票</Button>
+                  <div className="col-lg-1"/>
+                  <Button className="col-lg-2 " bsSize="large" bsStyle="success" onClick={()=>{this.completeConfirm(this.props.match.params.orderid)}}>确认完成订单</Button>
+                  <div className="col-lg-1"/>
+                  <Link to={toHomePage}><Button className="col-lg-2" bsSize="large" onClick={()=>{}}>返回控制台</Button></Link>
+                </div>
+                :
+                <div>
+                  <div className="col-lg-4"/>
+                  <Link to={toHomePage}><Button className="col-lg-2" bsSize="large" onClick={()=>{}}>返回控制台</Button></Link>
+                </div>
+               }
 
               </div>
-              <div className="nova-card cust-border col-lg-9">
-                  <Button className="col-lg-3 button2" bsSize="large" bsStyle="warning" onClick={()=>{console.log("还没写")}}>返回控制台</Button>
-                  <Button className="col-lg-3 button2" bsStyle="danger" onClick={() => {}}>厨房打印</Button>
-                  <Button className="col-lg-3 button2" bsSize="large" bsStyle="success" onClick={()=>{this.completeConfirm(this.props.match.params.orderid)}}>打包&打印小票</Button>
-                </div>
             </div>
-          </div>
         </div>
       )
   }

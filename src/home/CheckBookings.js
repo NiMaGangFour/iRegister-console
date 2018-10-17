@@ -1,11 +1,17 @@
-import React, { Component } from 'react';
-
-import { Button, Tabs, Tab, ButtonToolbar, FormControl, FormGroup, ControlLabel} from 'react-bootstrap';
+import React, { Component } from 'react'
+import { Button, Tabs, Tab, ButtonToolbar, FormControl, FormGroup, ControlLabel} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
-import { API } from '../config';
-import AuthOptions from '../auth/AuthOptions';
-import Personal from '../personal/Personal';
-import { Textfit } from 'react-textfit';
+import { API } from '../config'
+import AuthOptions from '../auth/AuthOptions'
+import Personal from '../personal/Personal'
+import { Textfit } from 'react-textfit'
+import Clock from 'react-live-clock'
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+import 'react-datepicker/dist/react-datepicker.css';
+
+var Datetime = require('react-datetime');
+
 
 export default class CheckBookings extends Component {
     constructor(props) {
@@ -20,8 +26,15 @@ export default class CheckBookings extends Component {
           sumTotal: 0,
           tableModifiedDishes:[],
           textareaValue: "",
-          sdhpCalculatorInitiatNumber:null
+          sdhpCalculatorInitiatNumber:null,
+
+          startDate: moment()
         }
+  }
+  handleChangeDate = (date) => {
+    this.setState({
+      startDate: date
+    });
   }
 
    componentDidMount() {
@@ -268,6 +281,23 @@ export default class CheckBookings extends Component {
       return verify
     }
 
+    bookTable = () => {
+      fetch(API.baseUri+API.BookTable + "/" + this.props.match.params.tableid)
+          .then((response) => {
+              if (response.status === 200) {
+                  return response.json()
+              } else console.log("Get data error ");
+          }).then((json) =>{
+          console.log(json)
+          window.location = '/home/CheckBookings/' + this.props.match.params.tableid
+      }).catch((error) => {
+          console.log('error on .catch', error);
+      });
+    }
+
+
+
+
 render() {
   var toHomePage = {
    pathname: '/',
@@ -296,7 +326,7 @@ render() {
           <div className="col-sm-12 col-lg-10 pull-right cust-margin-top padding-tables">
             <div className="">
                 <div className="col-lg-9 cust-border nova-card" >
-                  <h3>当前桌号: {this.props.match.params.tableid}</h3><br />
+                  <center><h3>当前桌号: {this.props.match.params.tableid}</h3></center><br />
                     <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
                         <Tab eventKey={1} title="小吃" className="nova-padding">
                             <ButtonToolbar>
@@ -480,14 +510,34 @@ render() {
                       <FormControl componentClass="textarea" placeholder="请输入备注信息" />
                     </FormGroup>
 
-                    <Button className="col-lg-3" type="submit">Submit</Button>
+                    <FormGroup controlId="formControlsSelect">
+                      <ControlLabel>预定时间</ControlLabel>
+                      <ControlLabel>
+                        <Clock format={'h:mm:ss A'} timezone={'Australia/Sydney'} ticking={true}/>
+                        <Clock format={'  dddd, MMMM Mo, YYYY'} timezone={'Australia/Sydney'}/>
+                      </ControlLabel>
+                    </FormGroup>
+                    <Button className="col-lg-3" bsStyle="warning" onClick={()=>{this.bookTable()}}>预定桌位</Button>
                     <div className="col-lg-1"></div>
                     <Button className="col-lg-3" bsStyle="danger" onClick={()=>{this.cancleBookTable()}}>取消预订</Button>
                     <div className="col-lg-1"></div>
-                    <Link to={toHomePage} ><Button className="col-lg-3" bsStyle="warning" onClick={()=>{}}>返回控制台</Button></Link>
+                    <Link to={toHomePage}><Button className="col-lg-3" onClick={()=>{}}>返回控制台</Button></Link>
+
 
 
                   </form>
+                  <DatePicker
+                    selected={this.state.startDate}
+                    onChange={this.handleChangeDate}
+                    showTimeSelect
+                    timeFormat="HH:mm"
+                    timeIntervals={10}
+                    dateFormat="LLL"
+                    timeCaption="time"
+                    fixedHeight={true}
+                    fixedWidth
+
+                  />
 
                 </div>
 

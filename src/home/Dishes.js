@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import {Link} from 'react-router-dom'
 import { Button, Tabs, Tab, ButtonToolbar, FormControl, FormGroup} from 'react-bootstrap';
 
 import { API } from '../config';
@@ -755,6 +755,9 @@ export default class Dishes extends Component {
 
 render() {
 
+  var toBookingPage = {
+   pathname: '/home/CheckBookings/' + this.props.match.params.tableid,
+  }
   console.log(this.state.SDHPorder)
   console.log(this.state.tableModifiedDishes)
   // console.log(Object.keys(this.props.location).length)
@@ -783,7 +786,7 @@ render() {
           <div className="col-sm-12 col-lg-10 pull-right cust-margin-top padding-tables">
             <div className="">
                 <div className="col-lg-9 cust-border nova-card" >
-                  当前桌号: {this.props.match.params.tableid}<br />
+                  <center><b><h3>当前桌号: {this.props.match.params.tableid}</h3></b></center>
                     <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
                         <Tab eventKey={1} title="小吃" className="nova-padding">
                             <ButtonToolbar>
@@ -820,12 +823,142 @@ render() {
                               })}
                           </ButtonToolbar>
                         </Tab>
-                        <Tab eventKey={3} title="汤" className="nova-padding">
+                        <Tab eventKey={3} title="汤类" className="nova-padding">
                           <ButtonToolbar>
                               {this.state.alldishes.map((dish, i) =>{
                                   return (
                                     <div key={i}>
-                                      {dish.type === "汤" ?
+                                      {dish.type === "汤类" ?
+                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                      :null}
+                                    </div>
+                                  )
+                              })}
+                          </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={6} title="特色炒菜" className="nova-padding">
+                          <ButtonToolbar>
+                              {this.state.alldishes.map((dish, i) =>{
+                                  return (
+                                    <div key={i}>
+                                      {dish.type === "特色炒菜" ?
+                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                      :null}
+                                    </div>
+                                  )
+                              })}
+                          </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={7} title="海鲜" className="nova-padding">
+                          <ButtonToolbar>
+                              {this.state.alldishes.map((dish, i) =>{
+                                  return (
+                                    <div key={i}>
+                                      {dish.type === "海鲜" ?
+                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                      :null}
+                                    </div>
+                                  )
+                              })}
+                          </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={8} title="鸡" className="nova-padding">
+                          <ButtonToolbar>
+                              {this.state.alldishes.map((dish, i) =>{
+                                  return (
+                                    <div key={i}>
+                                      {dish.type === "特色炒菜" ?
+                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                      :null}
+                                    </div>
+                                  )
+                              })}
+                          </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={9} title="鸭" className="nova-padding">
+                          <ButtonToolbar>
+                              {this.state.alldishes.map((dish, i) =>{
+                                  return (
+                                    <div key={i}>
+                                      {dish.type === "鸡" ?
+                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                      :null}
+                                    </div>
+                                  )
+                              })}
+                          </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={10} title="牛" className="nova-padding">
+                          <ButtonToolbar>
+                              {this.state.alldishes.map((dish, i) =>{
+                                  return (
+                                    <div key={i}>
+                                      {dish.type === "牛" ?
+                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                      :null}
+                                    </div>
+                                  )
+                              })}
+                          </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={11} title="羊" className="nova-padding">
+                          <ButtonToolbar>
+                              {this.state.alldishes.map((dish, i) =>{
+                                  return (
+                                    <div key={i}>
+                                      {dish.type === "羊" ?
+                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                      :null}
+                                    </div>
+                                  )
+                              })}
+                          </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={12} title="猪" className="nova-padding">
+                          <ButtonToolbar>
+                              {this.state.alldishes.map((dish, i) =>{
+                                  return (
+                                    <div key={i}>
+                                      {dish.type === "猪" ?
+                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                      :null}
+                                    </div>
+                                  )
+                              })}
+                          </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={13} title="面/米饭" className="nova-padding">
+                          <ButtonToolbar>
+                              {this.state.alldishes.map((dish, i) =>{
+                                  return (
+                                    <div key={i}>
+                                      {dish.type === "面/米饭" ?
+                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                      :null}
+                                    </div>
+                                  )
+                              })}
+                          </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={14} title="甜点" className="nova-padding">
+                          <ButtonToolbar>
+                              {this.state.alldishes.map((dish, i) =>{
+                                  return (
+                                    <div key={i}>
+                                      {dish.type === "甜点" ?
+                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                      :null}
+                                    </div>
+                                  )
+                              })}
+                          </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={14} title="卤味" className="nova-padding">
+                          <ButtonToolbar>
+                              {this.state.alldishes.map((dish, i) =>{
+                                  return (
+                                    <div key={i}>
+                                      {dish.type === "卤味" ?
                                         <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
                                       :null}
                                     </div>
@@ -935,7 +1068,7 @@ render() {
                 </div>
 
                 <div className="col-lg-3 pull-right nova-card shopping-cart">
-                    购物车
+                    <center><b><h3>购物车</h3></b></center>
                     <hr />
                     <div>
                       {this.props.location.hasOwnProperty("state") !== true ?
@@ -1366,7 +1499,7 @@ render() {
                             :
                             <div className="row cust-margin8">
                               <div className="col-lg-5 ">
-                                <Button className="" bsStyle="warning" onClick={()=>{this.bookTable()}}>预定桌位</Button>
+                                <Link to={toBookingPage}><Button className="" bsStyle="warning" >预定桌位</Button></Link>
                               </div>
                               <div className="col-lg-5">
                                 <Button className="" bsStyle="success" disabled={this.activeOrDisabled()} onClick={()=>{this.submitOrder()}}>提交订单</Button>

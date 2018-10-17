@@ -738,6 +738,10 @@ export default class CheckDishesDishes extends Component {
     return tempArray.length
   }
   render() {
+    var toHomePage = {
+     pathname: '/',
+    }
+    
     console.log(this.SumUpModifiedNormalDishes())
     console.log(this.state.tableDishes)
     console.log(this.props);
@@ -756,7 +760,8 @@ export default class CheckDishesDishes extends Component {
                     {
                       value.type !== "麻辣香锅" && value.type !== "特色烤鱼" && value.deleted === 0 ?
                         <div className="row nova-margin">
-                          <div className="col-lg-4">{value.name}后添加</div>
+                          <div className="col-lg-1"/>
+                          <div className="col-lg-6">{value.name}后添加</div>
                           <div className="col-lg-1 ">{value.num}</div>
                           <div className="col-lg-1">{value.price}</div>
                           <div className="col-lg-1">
@@ -772,9 +777,10 @@ export default class CheckDishesDishes extends Component {
                     {
                       value.type !== "麻辣香锅" && value.type !== "特色烤鱼" && value.deleted === 1 ?
                         <div className="row nova-margin strikeThrough">
-                          <div className="col-lg-4 strikeThrough">{value.name}</div>
+                          <div className="col-lg-1" />
+                          <div className="col-lg-6 strikeThrough">{value.name}</div>
                           <div className="col-lg-1 strikeThrough">{value.num}</div>
-                          <div className="col-lg-1">{value.price}</div>
+                          <div className="col-lg-1 strikeThrough">{value.price}</div>
                        </div>
                        :null
                     }
@@ -824,7 +830,8 @@ export default class CheckDishesDishes extends Component {
                             {
                               value.type !== "麻辣香锅" && value.type !== "特色烤鱼" && value.deleted === 0 ?
                               <div className="row nova-margin">
-                                <div className="col-lg-4">{value.name}</div>
+                                <div className="col-lg-1" />
+                                <div className="col-lg-6">{value.name}</div>
                                 <div className="col-lg-1">{value.DishCount}</div>
                                 <div className="col-lg-1">{value.price}</div>
                                 <div className="col-lg-1">
@@ -838,7 +845,8 @@ export default class CheckDishesDishes extends Component {
                             {
                               value.type !== "麻辣香锅" && value.type !== "特色烤鱼" && value.deleted === 1 ?
                               <div className="row nova-margin">
-                                <div className="col-lg-4 strikeThrough">{value.name}</div>
+                                <div className="col-lg-1" />
+                                <div className="col-lg-6 strikeThrough">{value.name}</div>
                                 <div className="col-lg-1 strikeThrough">{value.DishCount}</div>
                                 <div className="col-lg-1 strikeThrough">{value.price}</div>
                               </div>
@@ -856,7 +864,7 @@ export default class CheckDishesDishes extends Component {
                this.SDHPExistCalculator() !== 0 ?
                <div className="col-lg-4 cust-border nova-card">
                 <center><h3><b>麻辣香锅菜品列表: </b></h3></center>
-                <h4 className="">麻辣香锅菜品数量: ({this.SDHPNumberCalculator()})</h4>
+                <center><h4 className="">麻辣香锅菜品数量: ({this.SDHPNumberCalculator()})</h4></center>
                 { this.SDHPNumberCalculator() > 0 && this.SDHPNumberCalculator() < 5 ?
                   <div>
                     <h4 className="cust-text1">少于5份麻辣香锅菜品数量!</h4>
@@ -871,7 +879,8 @@ export default class CheckDishesDishes extends Component {
                                     value !== 0 && value.type === "麻辣香锅" && value.deleted === 0
                                       ? <div className="row nova-margin ">
                                           <div >
-                                            <div className="col-lg-4">{value.name}</div>
+                                            <div className="col-lg-1" />
+                                            <div className="col-lg-6">{value.name}</div>
 
                                             <div className="col-lg-1">{value.DishCount}</div>
                                             <div className="col-lg-1">{value.price}</div>
@@ -889,10 +898,11 @@ export default class CheckDishesDishes extends Component {
                                     value !== 0 && value.type === "麻辣香锅" && value.deleted === 1
                                       ? <div className="row nova-margin ">
                                           <div >
-                                            <div className="col-lg-4 strikeThrough">{value.name}（原始）</div>
+                                            <div className="col-lg-1" />
+                                            <div className="col-lg-6 strikeThrough">{value.name}（原始）</div>
 
                                             <div className="col-lg-1 cust-p-color strikeThrough">{value.DishCount}</div>
-                                            <div className="col-lg-1">{value.price}</div>
+                                            <div className="col-lg-1 strikeThrough">{value.price}</div>
                                           </div>
                                         </div>
                                       : null
@@ -909,7 +919,8 @@ export default class CheckDishesDishes extends Component {
                                     {
                                       value.type === "麻辣香锅" && value.deleted === 0
                                         ? <div className="row nova-margin">
-                                            <div className="col-lg-4">{value.name}后添加</div>
+                                            <div className="col-lg-1" />
+                                            <div className="col-lg-6">{value.name}后添加</div>
 
                                             <div className="col-lg-1 ">{value.num}</div>
                                             <div className="col-lg-1">{value.price}</div>
@@ -933,10 +944,11 @@ export default class CheckDishesDishes extends Component {
                                     {
                                        value.type === "麻辣香锅" && value.deleted === 1
                                         ? <div className="row nova-margin">
-                                            <div className="col-lg-4 strikeThrough">{value.name} (后添加 已删除) </div>
+                                            <div className="col-lg-1" />
+                                            <div className="col-lg-6 strikeThrough">{value.name} (后添加 已删除) </div>
 
                                             <div className="col-lg-1 cust-p-color strikeThrough">{value.num}</div>
-                                            <div className="col-lg-1">{value.price}</div>
+                                            <div className="col-lg-1 strikeThrough">{value.price}</div>
                                           </div>
                                         : null
                                     }
@@ -955,7 +967,7 @@ export default class CheckDishesDishes extends Component {
               this.checkFishDishesExist() !== 0 ?
 
                  <div className="col-sm-12 col-lg-4 cust-border nova-card">
-                   <h3 className=""><b>特色烤鱼菜品列表:</b></h3>
+                   <center><h3><b>特色烤鱼菜品列表:</b></h3></center>
                    {this.checkFishExist() === 0 ?
                      <div>
                        <h4 className="cust-text1">未选择烤鱼口味</h4>
@@ -969,7 +981,8 @@ export default class CheckDishesDishes extends Component {
                               value !== 0 && value.type === "特色烤鱼" && value.deleted === 0
                                 ? <div className="row nova-margin ">
                                     <div >
-                                      <div className="col-lg-4">{value.name}</div>
+                                      <div className="col-lg-1" />
+                                      <div className="col-lg-6">{value.name}</div>
                                       <div className="col-lg-1">{value.DishCount}</div>
                                       <div className="col-lg-1">{value.price}</div>
                                       <div className="col-lg-1">
@@ -981,31 +994,23 @@ export default class CheckDishesDishes extends Component {
                                   </div>
                                 : null
                             }
-                        </div>)
-                      })
-                    }
 
-                    {
-                      this.state.tableDishes.map((value, key1) => {
-                        return (<div key={key1}>
-                          <div className="dishesUnderLine">
                             {
                               value !== 0 && value.type === "特色烤鱼" && value.deleted === 1
                                 ? <div className="row nova-margin ">
                                     <div >
-                                      <div className="col-lg-4 strikeThrough">{value.name} (烤鱼)</div>
+                                      <div className="col-lg-1" />
+                                      <div className="col-lg-6 strikeThrough">{value.name} (烤鱼)</div>
 
                                       <div className="col-lg-1 strikeThrough">{value.DishCount}</div>
-                                      <div className="col-lg-1">{value.price}</div>
+                                      <div className="col-lg-1 strikeThrough">{value.price}</div>
                                     </div>
                                   </div>
                                 : null
                             }
-                          </div>
                         </div>)
                       })
                     }
-
 
                     <div className="cust-border-top">
                       {
@@ -1015,7 +1020,8 @@ export default class CheckDishesDishes extends Component {
                               {
                                 value.num > 0 && value.type === "特色烤鱼"
                                   ? <div className="row nova-margin">
-                                      <div className="col-lg-4">{value.name}后添加</div>
+                                      <div className="col-lg-1" />
+                                      <div className="col-lg-6">{value.name}</div>
                                       <div className="col-lg-1 ">{value.num}</div>
                                       <div className="col-lg-1">{value.price}</div>
                                       <div className="col-lg-1">
@@ -1037,10 +1043,11 @@ export default class CheckDishesDishes extends Component {
                               {
                                 value.num < 0 && value.type === "特色烤鱼"
                                   ? <div className="row nova-margin">
-                                      <div className="col-lg-4 strikeThrough">{value.name} （后增）</div>
+                                      <div className="col-lg-1" />
+                                      <div className="col-lg-6 strikeThrough">{value.name} （后增）</div>
 
                                       <div className="col-lg-1 cust-p-color strikeThrough">{value.num}</div>
-                                      <div className="col-lg-1">{value.price}</div>
+                                      <div className="col-lg-1 strikeThrough">{value.price}</div>
                                     </div>
                                   : null
                               }
@@ -1071,7 +1078,8 @@ export default class CheckDishesDishes extends Component {
 
           <div className="nova-card cust-border col-lg-10">
             <div className=" nova-margin cust-margin7">
-              <Button className="col-lg-3 button2" bsStyle="success" onClick={() => {}}>返回控制台</Button>
+              <Link to={toHomePage}><Button className="col-lg-3 button2" bsStyle="success" onClick={() => {}}>返回控制台</Button></Link>
+
 
               <Link to={{
                   pathname: '/home/Dishes/' + this.props.match.params.tableid,
@@ -1101,10 +1109,10 @@ export default class CheckDishesDishes extends Component {
           </Modal.Header>
 
           <Modal.Body className="modal">
-            <h4>菜品列表：</h4>
+            <center><h4>普通菜品列表：</h4></center>
             <div className="col-sm-12 col-lg-12 ">
                 <div className=" nova-card">
-                  <div className="">
+
                     {
                       this.state.tableDishes.map((value, key1) => {
                         return (
@@ -1114,7 +1122,8 @@ export default class CheckDishesDishes extends Component {
                               value !== 0 && value.type !== "麻辣香锅" && value.type !== "特色烤鱼" && value.deleted === 0
                                 ? <div className="row nova-margin ">
                                     <div >
-                                      <div className="col-lg-4">{value.name}</div>
+                                      <div className="col-lg-1" />
+                                      <div className="col-lg-6">{value.name}</div>
 
                                       <div className="col-lg-1">{value.DishCount}</div>
                                       <div className="col-lg-1">{value.price}</div>
@@ -1126,9 +1135,9 @@ export default class CheckDishesDishes extends Component {
                         </div>)
                       })
                     }
-                  </div>
 
-                <div>
+
+
                   {this.verifyModifiedNormalDishesExist() !== 0 ?
                   <div className="">
                     {console.log(this.state.tableModifiedDishes)}
@@ -1139,8 +1148,8 @@ export default class CheckDishesDishes extends Component {
                             {
                               value.num > 0 && value.type !== "麻辣香锅" && value.type !== "特色烤鱼" && value.deleted === 0
                                 ? <div className="row nova-margin">
-                                    <div className="col-lg-4">{value.name}</div>
-
+                                    <div className="col-lg-1" />
+                                    <div className="col-lg-6">{value.name}</div>
                                     <div className="col-lg-1 ">{value.num}</div>
                                     <div className="col-lg-1">{value.price}</div>
                                   </div>
@@ -1152,7 +1161,7 @@ export default class CheckDishesDishes extends Component {
                       }
                     </div>
                     :null}
-                  </div>
+
                 </div>
             </div>
 
@@ -1160,6 +1169,7 @@ export default class CheckDishesDishes extends Component {
           <hr/>
 
           <Modal.Body className="modal">
+            <center><h4>麻辣香锅菜品列表：</h4></center>
             <div className="col-sm-12 col-lg-12 ">
                 <div className=" nova-card">
                     {
@@ -1167,11 +1177,11 @@ export default class CheckDishesDishes extends Component {
                         return (<div key={key1}>
                           <div className="dishesUnderLine">
                             {
-                              value !== 0 && value.type === "麻辣香锅" && value.deleted === 0
+                              value.type === "麻辣香锅" && value.deleted === 0
                                 ? <div className="row nova-margin">
                                     <div >
-                                      <div className="col-lg-4">{value.name}</div>
-
+                                      <div className="col-lg-1" />
+                                      <div className="col-lg-6">{value.name}</div>
                                       <div className="col-lg-1">{value.DishCount}</div>
                                       <div className="col-lg-1">{value.price}</div>
                                     </div>
@@ -1190,10 +1200,61 @@ export default class CheckDishesDishes extends Component {
                             {
                               value.num > 0 && value.type === "麻辣香锅" && value.deleted === 0
                                 ? <div className="row nova-margin">
-                                    <div className="col-lg-4">{value.name}</div>
+                                    <div className="col-lg-1" />
+                                    <div className="col-lg-6">{value.name}</div>
 
                                     <div className="col-lg-1 ">{value.num}</div>
-                                    <div className="col-lg-1">${value.price}</div>
+                                    <div className="col-lg-1">{value.price}</div>
+                                  </div>
+                                : null
+                            }
+                          </div>
+                        </div>)
+                      })
+                    }
+                  </div>
+              </div>
+
+          </Modal.Body>
+          <hr/>
+
+          <Modal.Body className="modal">
+            <center><h4>特色烤鱼菜品列表：</h4></center>
+            <div className="col-sm-12 col-lg-12 ">
+                <div className=" nova-card">
+                    {
+                      this.state.tableDishes.map((value, key1) => {
+                        return (<div key={key1}>
+                          <div className="dishesUnderLine">
+                            {
+                              value.type === "特色烤鱼" && value.deleted === 0
+                                ? <div className="row nova-margin">
+                                    <div >
+                                      <div className="col-lg-1" />
+                                      <div className="col-lg-6">{value.name}</div>
+                                      <div className="col-lg-1">{value.DishCount}</div>
+                                      <div className="col-lg-1">{value.price}</div>
+                                    </div>
+                                  </div>
+                                : null
+                            }
+                          </div>
+                        </div>)
+                      })
+                    }
+
+                    {
+                      this.state.tableModifiedDishes.map((value, key1) => {
+                        return (<div key={key1}>
+                          <div className="dishesUnderLine">
+                            {
+                              value.num > 0 && value.type === "特色烤鱼" && value.deleted === 0
+                                ? <div className="row nova-margin">
+                                    <div className="col-lg-1" />
+                                    <div className="col-lg-6">{value.name}</div>
+
+                                    <div className="col-lg-1 ">{value.num}</div>
+                                    <div className="col-lg-1">{value.price}</div>
                                   </div>
                                 : null
                             }
@@ -1208,8 +1269,9 @@ export default class CheckDishesDishes extends Component {
 
           <Modal.Body className="modal">
             <hr/>
-            <h4 className="modal2">总价：{this.SumUpEntirePrice()}
-              $AUD</h4>
+            <center>
+              <h4 className="modal2">总价：$AUD {this.SumUpEntirePrice()}</h4>
+            </center>
           </Modal.Body>
           <Modal.Footer>
             <div >
@@ -1265,7 +1327,7 @@ export default class CheckDishesDishes extends Component {
                   }
                 </form>
 
-                <Button onClick={this.checkMembershipPoint}>查询积分</Button>
+                <center><Button onClick={this.checkMembershipPoint}>查询积分</Button></center>
                 {
                   this.state.memberPoints >= 100 && this.state.discount === 0
                     ? <Button onClick={this.redeemMembershipPoint}>兑换积分</Button>
@@ -1282,14 +1344,14 @@ export default class CheckDishesDishes extends Component {
                     ? <div>
                         <Label className="cust-label">{this.SumUpEntirePrice()}- {this.state.discount}</Label>
 
-                        <Label className="cust-label" bsStyle="danger">总价 ：{this.sumAfterRedeem()}$AUD</Label>
+                        <Label className="cust-label" bsStyle="danger">总价 ：{this.sumAfterRedeem()}</Label>
                       </div>
                     : null
                 }
               </div>
 
               <div className="col-lg-6 pull-left div-MembershipPoints">
-                <p>调价管理</p>
+                <center><p>调价管理</p></center>
                 {console.log(this.discountAdminVerification)}
                 {this.state.discountAdminVerification === false ?
                   <div>
@@ -1320,7 +1382,7 @@ export default class CheckDishesDishes extends Component {
                       />
                       <input type="checkbox" onClick={() => {this.verifyPasswordFieldType()}}/>  Show Password
                       </FormGroup>
-                      <Button onClick={() => {this.verifyAuthentication()}}>登陆</Button>
+                      <center><Button onClick={() => {this.verifyAuthentication()}}>登陆</Button></center>
                   </form>
                 </div>
                 :
