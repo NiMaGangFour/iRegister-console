@@ -97,7 +97,7 @@ export default class AuthOptions extends Component {
                         // }
                       };
                       var newToBooked = {
-                        pathname: '/home/CheckBookings/'+ value.id,
+                        pathname: '/home/CheckBookingsDetails/'+ value.id,
                       };
                         return (
                             <div key={key1}>

@@ -27,7 +27,9 @@ export const API = {
     getOrderDishes2: 'api1/getOrderDishes2',
     getModDishesByOrderID: 'api1/getModDishesByOrderID',
     updateOriginDeleted: 'api1/updateOriginDeleted',
-    updateModifiedDeleted: 'api1/updateModifiedDeleted'
-
+    updateModifiedDeleted: 'api1/updateModifiedDeleted',
+    Bookingneworder: 'Bookingneworder',
+    getBookingTableDishes: 'api1/getBookingTableDishes',
+    getOrderBookingDetailsbyTableID: 'api1/getOrderBookingDetailsbyTableID'
 
 }

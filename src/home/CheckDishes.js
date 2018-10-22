@@ -277,56 +277,6 @@ export default class CheckDishesDishes extends Component {
     }
   }
 
-  //删除已点的菜
-  // deleteDish = (value) => {
-  //   console.log(value.name)
-  //   console.log(this.state.tableDishes)
-  //   var temp_post = [];
-  //   var temp_deleted = {};
-  //   for (let index in this.state.tableDishes) {
-  //     if (this.state.tableDishes[index].name !== value.name || (this.state.tableDishes[index].name === value.name && this.state.tableDishes[index].type !== value.type) ) {
-  //       temp_post.push(this.state.tableDishes[index])
-  //     } else {
-  //       this.state.tableDishes[index]
-  //       fetch(API.baseUri + API.updateOriginDeleted + "/" + this.state.tableDishes[index].DishID)
-  //           .then((response) => {
-  //               if (response.status === 200) {
-  //                   return response.json()
-  //               } else console.log("Get data error ");
-  //           }).then((json) =>{
-  //           this.getData()
-  //       }).catch((error) => {
-  //           console.log('error on .catch', error);
-  //       });
-  //     }
-  //   }
-  //   this.setState({tableDishes: temp_post})
-  //   console.log(temp_deleted);
-  //   // this.updateDeletedDish(temp_deleted)
-  // }
-  //将原始菜单的deleted 属性 设置为 deleted = 1
-  // updateDeletedDish = (temp_deleted) => {
-  //   var temp_deletedArray = [];
-  //   var date = new Date();
-  //   var time = date.toLocaleTimeString();
-  //   temp_deleted.createTime = time;
-  //   console.log(temp_deleted.orderID)
-  //
-  //   temp_deletedArray.push(temp_deleted);
-  //   console.log(temp_deletedArray);
-  //
-  //   fetch(API.baseUri + API.updateOriginDeleted + "/" + temp_deleted.DishID)
-  //       .then((response) => {
-  //           if (response.status === 200) {
-  //               return response.json()
-  //           } else console.log("Get data error ");
-  //       }).then((json) =>{
-  //       this.getData()
-  //   }).catch((error) => {
-  //       console.log('error on .catch', error);
-  //   });
-  // }
-
   //从数据库dishMod表中 获取 改动菜的信息
   getModifiedData = () => {
     console.log(this.props.match.params.tableid)
@@ -741,7 +691,7 @@ export default class CheckDishesDishes extends Component {
     var toHomePage = {
      pathname: '/',
     }
-    
+
     console.log(this.SumUpModifiedNormalDishes())
     console.log(this.state.tableDishes)
     console.log(this.props);

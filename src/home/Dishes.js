@@ -102,7 +102,6 @@ export default class Dishes extends Component {
                 }
                 }
         }
-
     }
 
     setSDHPOrder = (POST) => {
@@ -748,10 +747,6 @@ export default class Dishes extends Component {
       }
       return verify
     }
-
-
-
-
 
 render() {
 

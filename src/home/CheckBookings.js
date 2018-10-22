@@ -26,16 +26,18 @@ export default class CheckBookings extends Component {
           sumTotal: 0,
           tableModifiedDishes:[],
           textareaValue: "",
+
+          customerNameValue: "",
+          customerPhoneNOValue: "",
+          customerNumberValue: "",
+          customerCommentValue: "",
+
           sdhpCalculatorInitiatNumber:null,
 
-          startDate: moment()
+          dateTime: moment()
         }
   }
-  handleChangeDate = (date) => {
-    this.setState({
-      startDate: date
-    });
-  }
+
 
    componentDidMount() {
        this.getData()
@@ -188,10 +190,35 @@ export default class CheckBookings extends Component {
         })
     }
 
-    handleChange = (event) => {
+    //菜品备注
+    handleChangeComment = (event) => {
       this.setState({textareaValue: event.target.value});
     }
 
+    //顾客姓名
+    handleChangeCustomerName = (event) => {
+      this.setState({customerNameValue: event.target.value});
+    }
+    //联系电话
+    handleChangeCustomerPhoneNO = (event) => {
+      this.setState({customerPhoneNOValue: event.target.value});
+    }
+    //用餐人数
+    handleChangeCustomerNumber = (event) => {
+      this.setState({customerNumberValue: event.target.value});
+    }
+    //预定备注
+    handleChangeBookingComment = (event) => {
+      this.setState({customerCommentValue: event.target.value});
+    }
+
+    handleChangeDate = (date) => {
+      this.setState({
+        dateTime: date
+      });
+    }
+
+    //预定桌子
     bookTable = () => {
       fetch(API.baseUri+API.BookTable + "/" + this.props.match.params.tableid)
           .then((response) => {
@@ -200,13 +227,17 @@ export default class CheckBookings extends Component {
               } else console.log("Get data error ");
           }).then((json) =>{
           console.log(json)
-          window.location = '/home/CheckBookings/' + this.props.match.params.tableid
+          this.submitBooking()
+          // window.location = '/home/CheckBookings/' + this.props.match.params.tableid
       }).catch((error) => {
           console.log('error on .catch', error);
-      });
+      })
     }
 
-    submitOrder = () => {
+
+    //上传预定信息
+    submitBooking = () => {
+      console.log("11111111111111111111")
       var date = new Date();
       var time = date.toLocaleTimeString();
       // console.log(JSON.stringify(this.state.order))
@@ -217,7 +248,7 @@ export default class CheckBookings extends Component {
       var totalorder = order.concat(SDHPorder)
       console.log(totalorder)
 
-      fetch(API.baseUri+API.neworder, {
+      fetch(API.baseUri+API.Bookingneworder, {
           method: "POST",
           headers: {
           'Accept': 'application/json',
@@ -225,10 +256,16 @@ export default class CheckBookings extends Component {
         },
         body: JSON.stringify({
                 "items": totalorder,
-                "creatTime": time,
+
+                "customerName": this.state.customerNameValue ,
+                "customerPhoneNo": this.state.customerPhoneNOValue,
+                "customerNumber": this.state.customerNumberValue,
+                "bookingComment": this.state.customerCommentValue,
+                "bookingDateTime": this.state.dateTime ,
                 "totalPrice": this.SumUp(),
-                "tableID": this.props.match.params.tableid,
+                "creatTime": time,
                 "comment":this.state.textareaValue,
+                "tableID": this.props.match.params.tableid,
 
             })
       } ).then(res =>{
@@ -246,9 +283,25 @@ export default class CheckBookings extends Component {
             order:[],
             SDHPorder:[]
           })
-          window.location = '/home/CheckDishes/' + this.props.match.params.tableid
+          
+          window.location = '/home/CheckBookingsDetails/' + this.props.match.params.tableid
           // window.location = '/'
         }
+      })
+    }
+
+    //取消预定
+    cancleBookTable = () => {
+      fetch(API.baseUri+API.CancleBookTable + "/" + this.props.match.params.tableid)
+          .then((response) => {
+              if (response.status === 200) {
+                  return response.json()
+              } else console.log("Get data error ");
+          }).then((json) =>{
+          console.log(json)
+          window.location = '/'
+      }).catch((error) => {
+          console.log('error on .catch', error);
       })
     }
 
@@ -280,21 +333,6 @@ export default class CheckBookings extends Component {
       }
       return verify
     }
-
-    bookTable = () => {
-      fetch(API.baseUri+API.BookTable + "/" + this.props.match.params.tableid)
-          .then((response) => {
-              if (response.status === 200) {
-                  return response.json()
-              } else console.log("Get data error ");
-          }).then((json) =>{
-          console.log(json)
-          window.location = '/home/CheckBookings/' + this.props.match.params.tableid
-      }).catch((error) => {
-          console.log('error on .catch', error);
-      });
-    }
-
 
 
 
@@ -337,7 +375,11 @@ render() {
 
                                         {dish.type === "小吃" ?
                                           <div className="">
+                                          {this.props.location.hasOwnProperty("state")!== true ?
                                             <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                            :
+                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                          }
                                         </div>
                                         :null}
                                       </div>
@@ -359,12 +401,142 @@ render() {
                               })}
                           </ButtonToolbar>
                         </Tab>
-                        <Tab eventKey={3} title="汤" className="nova-padding">
+                        <Tab eventKey={3} title="汤类" className="nova-padding">
                           <ButtonToolbar>
                               {this.state.alldishes.map((dish, i) =>{
                                   return (
                                     <div key={i}>
-                                      {dish.type === "汤" ?
+                                      {dish.type === "汤类" ?
+                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                      :null}
+                                    </div>
+                                  )
+                              })}
+                          </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={6} title="特色炒菜" className="nova-padding">
+                          <ButtonToolbar>
+                              {this.state.alldishes.map((dish, i) =>{
+                                  return (
+                                    <div key={i}>
+                                      {dish.type === "特色炒菜" ?
+                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                      :null}
+                                    </div>
+                                  )
+                              })}
+                          </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={7} title="海鲜" className="nova-padding">
+                          <ButtonToolbar>
+                              {this.state.alldishes.map((dish, i) =>{
+                                  return (
+                                    <div key={i}>
+                                      {dish.type === "海鲜" ?
+                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                      :null}
+                                    </div>
+                                  )
+                              })}
+                          </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={8} title="鸡" className="nova-padding">
+                          <ButtonToolbar>
+                              {this.state.alldishes.map((dish, i) =>{
+                                  return (
+                                    <div key={i}>
+                                      {dish.type === "特色炒菜" ?
+                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                      :null}
+                                    </div>
+                                  )
+                              })}
+                          </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={9} title="鸭" className="nova-padding">
+                          <ButtonToolbar>
+                              {this.state.alldishes.map((dish, i) =>{
+                                  return (
+                                    <div key={i}>
+                                      {dish.type === "鸡" ?
+                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                      :null}
+                                    </div>
+                                  )
+                              })}
+                          </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={10} title="牛" className="nova-padding">
+                          <ButtonToolbar>
+                              {this.state.alldishes.map((dish, i) =>{
+                                  return (
+                                    <div key={i}>
+                                      {dish.type === "牛" ?
+                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                      :null}
+                                    </div>
+                                  )
+                              })}
+                          </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={11} title="羊" className="nova-padding">
+                          <ButtonToolbar>
+                              {this.state.alldishes.map((dish, i) =>{
+                                  return (
+                                    <div key={i}>
+                                      {dish.type === "羊" ?
+                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                      :null}
+                                    </div>
+                                  )
+                              })}
+                          </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={12} title="猪" className="nova-padding">
+                          <ButtonToolbar>
+                              {this.state.alldishes.map((dish, i) =>{
+                                  return (
+                                    <div key={i}>
+                                      {dish.type === "猪" ?
+                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                      :null}
+                                    </div>
+                                  )
+                              })}
+                          </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={13} title="面/米饭" className="nova-padding">
+                          <ButtonToolbar>
+                              {this.state.alldishes.map((dish, i) =>{
+                                  return (
+                                    <div key={i}>
+                                      {dish.type === "面/米饭" ?
+                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                      :null}
+                                    </div>
+                                  )
+                              })}
+                          </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={14} title="甜点" className="nova-padding">
+                          <ButtonToolbar>
+                              {this.state.alldishes.map((dish, i) =>{
+                                  return (
+                                    <div key={i}>
+                                      {dish.type === "甜点" ?
+                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
+                                      :null}
+                                    </div>
+                                  )
+                              })}
+                          </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={14} title="卤味" className="nova-padding">
+                          <ButtonToolbar>
+                              {this.state.alldishes.map((dish, i) =>{
+                                  return (
+                                    <div key={i}>
+                                      {dish.type === "卤味" ?
                                         <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
                                       :null}
                                     </div>
@@ -381,7 +553,11 @@ render() {
                                       <div key={i}>
                                         {dish.type === "麻辣香锅" &&  dish.subtype === "荤菜"?
                                           <div className="">
+                                          {this.props.location.hasOwnProperty("state")!== true ?
                                             <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setSDHPOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                            :
+                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                          }
                                         </div>
                                         :null}
                                       </div>
@@ -395,7 +571,69 @@ render() {
                                       <div key={i}>
                                         {dish.type === "麻辣香锅" &&  dish.subtype === "素菜"?
                                           <div className="">
+                                          {this.props.location.hasOwnProperty("state")!== true ?
                                             <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setSDHPOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                            :
+                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                          }
+                                        </div>
+                                        :null}
+                                      </div>
+                                    )
+                                })}
+                              </div>
+                            </ButtonToolbar>
+                        </Tab>
+                        <Tab eventKey={5} title="特色烤鱼" className="nova-padding">
+                            <ButtonToolbar>
+                              <div className="row">
+                                <h2>烤鱼口味</h2>
+                                {this.state.alldishes.map((dish, i) =>{
+                                    return (
+                                      <div key={i}>
+                                        {dish.type === "特色烤鱼" &&  dish.subtype === "烤鱼" ?
+                                          <div className="">
+                                          {this.props.location.hasOwnProperty("state")!== true ?
+                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setFishOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                            :
+                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                          }
+                                        </div>
+                                        :null}
+                                      </div>
+                                    )
+                                })}
+                              </div>
+                              <div className="row">
+                                <h2>荤菜</h2>
+                                {this.state.alldishes.map((dish, i) =>{
+                                    return (
+                                      <div key={i}>
+                                        {dish.type === "特色烤鱼" &&  dish.subtype === "荤菜"?
+                                          <div className="">
+                                          {this.props.location.hasOwnProperty("state")!== true ?
+                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setFishOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                            :
+                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                          }
+                                        </div>
+                                        :null}
+                                      </div>
+                                    )
+                                })}
+                              </div>
+                              <div className="row">
+                                <h2>素菜</h2>
+                                {this.state.alldishes.map((dish, i) =>{
+                                    return (
+                                      <div key={i}>
+                                        {dish.type === "特色烤鱼" &&  dish.subtype === "素菜"?
+                                          <div className="">
+                                          {this.props.location.hasOwnProperty("state")!== true ?
+                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setFishOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                            :
+                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                          }
                                         </div>
                                         :null}
                                       </div>
@@ -456,7 +694,6 @@ render() {
 
                             <div className="col-lg-5">总价:</div>
 
-
                             <div className="col-lg-6">
                                 <div>
                                   {this.SumUp() + "  " + "$AUD"}
@@ -465,7 +702,7 @@ render() {
 
                               <div>
                                 <FormGroup controlId="formControlsTextarea">
-                                  <FormControl componentClass="textarea"  value={this.state.textareaValue} onChange={this.handleChange} placeholder="填写备注信息：" />
+                                  <FormControl componentClass="textarea"  value={this.state.textareaValue} onChange={this.handleChangeComment} placeholder="填写备注信息：" />
                                 </FormGroup>
                               </div>
                         </div>
@@ -475,69 +712,75 @@ render() {
                 <div className="col-lg-3 cust-border nova-card">
 
                   <form>
-                    <FormControl
-                      type="text"
-                      value={this.state.value}
-                      placeholder="请输入顾客姓名"
-                      onChange={this.handleChange}
-                    />
-                  <br />
-                    <FormControl
-                      type="text"
-                      value={this.state.value}
-                      placeholder="请输入顾客电话"
-                      onChange={this.handleChange}
-                    />
-                  <br />
-
                     <FormGroup controlId="formControlsSelect">
-                      <ControlLabel>用餐人数</ControlLabel>
-                      <FormControl componentClass="select" placeholder="select">
-                        <option value="select">None</option>
-                        <option value="other">1</option>
-                        <option value="other">2</option>
-                        <option value="other">3</option>
-                        <option value="other">4</option>
-                        <option value="other">5</option>
-                        <option value="other">6</option>
-                        <option value="other">7</option>
-                        <option value="other">8</option>
-                      </FormControl>
-                    </FormGroup>
-
-                    <FormGroup controlId="formControlsTextarea">
-                      <ControlLabel>备注</ControlLabel>
-                      <FormControl componentClass="textarea" placeholder="请输入备注信息" />
-                    </FormGroup>
-
-                    <FormGroup controlId="formControlsSelect">
-                      <ControlLabel>预定时间</ControlLabel>
+                      <ControlLabel>当前时间</ControlLabel>
                       <ControlLabel>
                         <Clock format={'h:mm:ss A'} timezone={'Australia/Sydney'} ticking={true}/>
                         <Clock format={'  dddd, MMMM Mo, YYYY'} timezone={'Australia/Sydney'}/>
                       </ControlLabel>
                     </FormGroup>
+                    <ControlLabel>顾客姓名</ControlLabel>
+                    <FormControl
+                      type="text"
+                      value={this.state.customerNameValue}
+                      placeholder="请输入顾客姓名"
+                      onChange={this.handleChangeCustomerName}
+                    />
+                  <br />
+                    <ControlLabel>联系电话</ControlLabel>
+                    <FormControl
+                      type="text"
+                      value={this.state.customerPhoneNOValue}
+                      placeholder="请输入顾客电话"
+                      onChange={this.handleChangeCustomerPhoneNO}
+                    />
+                  <br />
+
+                    <FormGroup controlId="formControlsSelect">
+                      <ControlLabel>用餐人数</ControlLabel>
+                      <FormControl
+                        type="text"
+                        value={this.state.customerNumberValue}
+                        placeholder="请输入顾客人数"
+                        onChange={this.handleChangeCustomerNumber}
+                        />
+                    </FormGroup>
+
+                    <FormGroup controlId="formControlsTextarea">
+                      <ControlLabel>预定备注</ControlLabel>
+                      <FormControl
+                        value={this.state.customerCommentValue}
+                        componentClass="textarea"
+                        placeholder="请输入备注信息"
+                        onChange={this.handleChangeBookingComment}
+                        />
+                    </FormGroup>
+
+                    <FormGroup controlId="formControlsSelect">
+                      <ControlLabel>预定时间</ControlLabel>
+                      <center>
+                      <DatePicker
+                        selected={this.state.dateTime}
+                        onChange={this.handleChangeDate}
+                        showTimeSelect
+                        timeFormat="HH:mm"
+                        timeIntervals={10}
+                        dateFormat="LLL"
+                        timeCaption="time"
+                        fixedHeight={true}
+                        fixedWidth={true}
+                      />
+                      </center>
+                    </FormGroup>
+
                     <Button className="col-lg-3" bsStyle="warning" onClick={()=>{this.bookTable()}}>预定桌位</Button>
                     <div className="col-lg-1"></div>
                     <Button className="col-lg-3" bsStyle="danger" onClick={()=>{this.cancleBookTable()}}>取消预订</Button>
                     <div className="col-lg-1"></div>
                     <Link to={toHomePage}><Button className="col-lg-3" onClick={()=>{}}>返回控制台</Button></Link>
 
-
-
                   </form>
-                  <DatePicker
-                    selected={this.state.startDate}
-                    onChange={this.handleChangeDate}
-                    showTimeSelect
-                    timeFormat="HH:mm"
-                    timeIntervals={10}
-                    dateFormat="LLL"
-                    timeCaption="time"
-                    fixedHeight={true}
-                    fixedWidth
 
-                  />
 
                 </div>
 

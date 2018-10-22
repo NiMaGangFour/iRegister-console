@@ -367,3 +367,27 @@
   </div>
   : null
 }
+
+
+
+
+
+{
+  this.state.getBookingTableDishes.map((value, key1) => {
+    return (
+      <div key={key1}>
+        {
+          value.type !== "麻辣香锅" ?
+            <div className="row nova-margin">
+              <div className="col-lg-1" />
+              <div className="col-lg-6">{value.name}后添加</div>
+
+              <div className="col-lg-1 ">{value.num}</div>
+              <div className="col-lg-1">{value.price}</div>
+
+          </div>
+        : null
+        }
+    </div>)
+  })
+}
