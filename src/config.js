@@ -1,6 +1,6 @@
 export const API = {
     // baseUri: 'http://pte.novasoftware.com.au:3060/',
-    baseUri: 'http://localhost:3003/',
+    baseUri: 'http://localhost:3060/',
     // baseUri: 'http://iregiester.novasoftware.com.au:3060/',
     initPosts: 'api/restaurants',
     getallTables: 'api/getAllTables',
@@ -35,5 +35,6 @@ export const API = {
     updateDishInfo: 'updateDishInfo',
     UnavailableDish: 'api1/UnavailableDish',
     AvailableDish: 'api1/AvailableDish',
+    login: 'users/userlogin'
 
 }

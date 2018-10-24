@@ -278,10 +278,6 @@ export default class AdminMainPage extends Component {
                                             :
                                               <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
                                             }
-
-
-
-
                                           </td>
                                         </tr>
                                         :null}
@@ -1459,16 +1455,11 @@ export default class AdminMainPage extends Component {
                                         <td>
                                           {this.activeOrDisabled() === true ?
                                             <div>
-
-                                            <Button className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editorOpenDelete(dish)}}>取消编辑</Button>
-                                            <div className="col-lg-1"  />
-                                            <Button className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.updateDish(dish)}}>保存</Button>
-
+                                              <Button className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editorOpenDelete(dish)}}>取消编辑</Button>
+                                              <div className="col-lg-1"  />
+                                              <Button className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.updateDish(dish)}}>保存</Button>
                                             </div>
                                           :null}
-
-
-
                                         </td>
                                       </tr>
                                       :null}
@@ -1487,10 +1478,6 @@ export default class AdminMainPage extends Component {
                                             :
                                               <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
                                             }
-
-
-
-
                                           </td>
                                         </tr>
                                         :null}

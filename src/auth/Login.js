@@ -149,11 +149,9 @@ export default class Login extends Component {
                 //console.log(json.email)
 
                 if (this.state.status === "success") {
-                    localStorage.setItem('EASELIFE', JSON.stringify(json))
+                    localStorage.setItem('SHUWEIYUAN', JSON.stringify(json))
 
                     window.location = '/';
-
-
                 }
                 else {
                     this.setState({
@@ -163,14 +161,11 @@ export default class Login extends Component {
                     })
                     // document.getElementById('1').value = null
                     // document.getElementById('2').value = null
-
                 }
-
             }).catch(error => {
                 console.error(error)
             })
         }
-
     }
 
 
@@ -243,7 +238,6 @@ export default class Login extends Component {
                             </Dialog>
                         </div>
                         <br/>
-
                     </div>
                 </MuiThemeProvider>
             </div>
