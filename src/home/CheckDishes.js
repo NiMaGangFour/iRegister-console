@@ -723,16 +723,24 @@ export default class CheckDishesDishes extends Component {
                         :
                         null
                     }
-
+                  </div>
+                </div>)
+              })
+            }
+            {
+              this.state.tableModifiedDishes.map((value, key1) => {
+                return (<div key={key1}>
+                  <div className="dishesUnderLine">
                     {
                       value.type !== "麻辣香锅" && value.type !== "特色烤鱼" && value.deleted === 1 ?
-                        <div className="row nova-margin strikeThrough">
-                          <div className="col-lg-1" />
-                          <div className="col-lg-6 strikeThrough">{value.name}</div>
+                        <div className="row nova-margin">
+                          <div className="col-lg-1"/>
+                          <div className="col-lg-6 strikeThrough">{value.name}后添加</div>
                           <div className="col-lg-1 strikeThrough">{value.num}</div>
                           <div className="col-lg-1 strikeThrough">{value.price}</div>
-                       </div>
-                       :null
+                        </div>
+                        :
+                        null
                     }
                   </div>
                 </div>)
@@ -883,6 +891,7 @@ export default class CheckDishesDishes extends Component {
                                           </div>
                                         : null
                                     }
+
                                   </div>
                                 </div>)
                               })
