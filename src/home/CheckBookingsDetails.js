@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Tabs, Tab, ButtonToolbar, FormControl, FormGroup, ControlLabel, ListGroupItem, ListGroup} from 'react-bootstrap'
+import { Button, Tabs, Tab, ButtonToolbar, FormControl, FormGroup, ControlLabel, ListGroupItem, ListGroup, Table} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
 import { API } from '../config'
 import AuthOptions from '../auth/AuthOptions'
@@ -23,15 +23,19 @@ export default class CheckBookingsDetails extends Component {
         }
   }
 
-    componentWillMount() {
-
-    }
-   componentDidMount() {
+   componentWillMount() {
       this.getData()
    }
 
-    componentWillReceiveProps(nextProps) {
-    }
+   //随着桌号的变更 进行数据重读
+   componentWillReceiveProps(nextProps) {
+     console.log(nextProps)
+     console.log(nextProps.match.params.tableid)
+     if (nextProps.match.params.tableid) {
+       this.props.match.params.tableid = nextProps.match.params.tableid
+       this.getData();
+     }
+   }
 
     getData() {
       fetch(API.baseUri + API.getBookingTableDishes + "/" + this.props.match.params.tableid).then((response) => {
@@ -63,175 +67,6 @@ export default class CheckBookingsDetails extends Component {
       })
     }
 
-    setSDHPOrder = (POST) => {
-        // console.log(POST)
-        if (this.state.SDHPorder.length === 0) {
-            var newD = {
-                "name": POST.name,
-                "price": POST.price,
-                "DishID": POST.dishId,
-                "num": 1,
-                "type": POST.type
-            }
-            let tempSDHPOrder = this.state.SDHPorder
-                tempSDHPOrder.push(newD)
-            // console.log(tempOrder)
-            this.setState({SDHPOrder: tempSDHPOrder})
-            return;
-        }
-        else {
-            for (let i = 0; i < this.state.SDHPorder.length; i++) {
-                if (this.state.SDHPorder[i].name === POST.name) {
-                    let tempSDHPOrder = this.state.SDHPorder
-                    tempSDHPOrder[i].num = this.state.SDHPorder[i].num + 1
-
-                    this.setState({SDHPorder: tempSDHPOrder})
-                    // console.log(this.state.order)
-                    return;
-                }
-                else if (i === this.state.SDHPorder.length-1 && this.state.SDHPorder[i].name !== POST.name){
-                    var newD = {
-                        "name": POST.name,
-                        "price": POST.price,
-                        "DishID": POST.dishId,
-                        "num": 1,
-                        "type": POST.type
-                    }
-                    let tempSDHPOrder = this.state.SDHPorder
-                        tempSDHPOrder.push(newD)
-                    // console.log(tempOrder)
-                    this.setState({SDHPorder: tempSDHPOrder})
-                    // console.log(this.state.order)
-                    return;
-                }
-                }
-        }
-
-    }
-
-    setOrder = (POST) => {
-        // console.log(POST)
-        if (this.state.order.length === 0) {
-            var newD = {
-                "name": POST.name,
-                "price": POST.price,
-                "DishID": POST.dishId,
-                "num": 1,
-                "type": POST.type
-            }
-            let tempOrder = this.state.order
-                tempOrder.push(newD)
-            // console.log(tempOrder)
-            this.setState({order: tempOrder})
-            return;
-        }
-        else {
-            for (let i = 0; i < this.state.order.length; i++) {
-                if (this.state.order[i].name === POST.name) {
-                    let tempOrder = this.state.order
-                    tempOrder[i].num = this.state.order[i].num + 1
-
-                    this.setState({order: tempOrder})
-                    // console.log(this.state.order)
-                    return;
-                }
-                else if (i === this.state.order.length-1 && this.state.order[i].name !== POST.name){
-                    var newD = {
-                        "name": POST.name,
-                        "price": POST.price,
-                        "DishID": POST.dishId,
-                        "num": 1,
-                        "type": POST.type
-                    }
-                    let tempOrder = this.state.order
-                        tempOrder.push(newD)
-                    // console.log(tempOrder)
-                    this.setState({order: tempOrder})
-                    // console.log(this.state.order)
-                    return;
-                }
-                }
-        }
-    }
-
-
-    SumUp= ()=> {
-        var total = this.state.order.reduce((sum, price) =>{
-            return sum + price.num * price.price
-        }, 0)
-        var totalSDHP = this.state.SDHPorder.reduce((sum, price) =>{
-            return sum + price.num * price.price
-        }, 0)
-        return total + totalSDHP;
-    }
-
-    deleteSDHPDish = (nameDish)=> {
-        console.log(nameDish)
-        var temp_post = [];
-        for(let index in this.state.SDHPorder){
-            // console.log(this.state.myPosts[index].idPOST , idPost)
-            if(this.state.SDHPorder[index].name !== nameDish){
-                temp_post.push(this.state.SDHPorder[index])
-            }
-        }this.setState({
-            SDHPorder:temp_post
-        })
-    }
-
-    //上传预定信息
-    submitBooking = () => {
-      console.log("11111111111111111111")
-      var date = new Date();
-      var time = date.toLocaleTimeString();
-      // console.log(JSON.stringify(this.state.order))
-      console.log(this.state.order)
-      console.log(this.state.textareaValue)
-      var order = this.state.order
-      var SDHPorder = this.state.SDHPorder
-      var totalorder = order.concat(SDHPorder)
-      console.log(totalorder)
-
-      fetch(API.baseUri+API.Bookingneworder, {
-          method: "POST",
-          headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-                "items": totalorder,
-
-                "customerName": this.state.customerNameValue ,
-                "customerPhoneNo": this.state.customerPhoneNOValue,
-                "customerNumber": this.state.customerNumberValue,
-                "bookingComment": this.state.customerCommentValue,
-                "bookingDateTime": this.state.dateTime ,
-                "totalPrice": this.SumUp(),
-                "creatTime": time,
-                "comment":this.state.textareaValue,
-                "tableID": this.props.match.params.tableid,
-
-            })
-      } ).then(res =>{
-          if(res.status===200) {
-            // console.log(res.json())
-            return res.json();
-          }
-          else console.log(res)
-      }).then(json => {
-        console.log(json.success)
-        console.log(json)
-        if (json.success === true){
-          this.authOptions.current.getData();
-          this.setState({
-            order:[],
-            SDHPorder:[]
-          })
-          // window.location = '/home/CheckDishes/' + this.props.match.params.tableid
-          // window.location = '/'
-        }
-      })
-    }
-
     //取消预定
     cancleBookTable = () => {
       fetch(API.baseUri+API.CancleBookTable + "/" + this.props.match.params.tableid)
@@ -247,23 +82,122 @@ export default class CheckBookingsDetails extends Component {
       })
     }
 
-    //对应初始点菜页面的麻辣香锅数量
-    SDHPNumberCalculatorInitiat = () => {
-      var tempSDHPorder = []
-      var temp = this.state.SDHPorder
-      var reducer = (accumulator, currentValue) => accumulator + currentValue;
+    //继承第-步：改变桌子状态
+    inherit = () => {
 
+      fetch(API.baseUri+API.InheritBookingDishes + "/" + this.props.match.params.tableid)
+          .then((response) => {
+              if (response.status === 200) {
+                  return response.json()
+              } else console.log("Get data error ");
+          }).then((json) =>{
+          console.log(json)
+          this.submitOrder()
+      }).catch((error) => {
+          console.log('error on .catch', error);
+      })
+    }
+
+    //继承第二步： 上传菜品信息 后台执行 “/newoder”
+    submitOrder = () => {
+      var date = new Date();
+      var time = date.toLocaleTimeString();
+      var order = this.state.bookingTableDishes
+      // var SDHPorder = this.state.SDHPorder
+      // var Fishorder = this.state.Fishorder
+      var totalorder = order
+      console.log(totalorder)
+
+      fetch(API.baseUri+API.neworder, {
+          method: "POST",
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+                "items": totalorder,
+                "creatTime": time,
+                "totalPrice": this.state.bookingTableDetails[0].totalPrice,
+                "tableID": this.props.match.params.tableid,
+                "comment":this.state.bookingTableDetails[0].comment,
+            })
+      } ).then(res =>{
+          if(res.status===200) {
+            // console.log(res.json())
+            return res.json();
+          }
+          else console.log(res)
+      }).then(json => {
+         console.log(json.success)
+        // console.log(json)
+        if (json.success === true){
+          this.authOptions.current.getData();
+          this.setState({
+            bookingTableDishes:[],
+            bookingTableDetails:[]
+          })
+          window.location = '/home/CheckDishes/' + this.props.match.params.tableid
+          // window.location = '/'
+        }
+      })
+    }
+
+    //普通菜品是否存在
+    dishExist = () => {
+      var tempArray = []
+      var temp = this.state.bookingTableDishes
       for (let index in temp) {
-        if (temp[index].num > 0) {
-          tempSDHPorder.push(temp[index].num)
+        if (temp[index].type !== "麻辣香锅" && temp[index].type !== "特色烤鱼") {
+          tempArray.push(temp[index].DishCount)
         }
       }
-      if(tempSDHPorder.length !== 0)
-      {
-        console.log(tempSDHPorder.reduce(reducer));
-        var total = tempSDHPorder.reduce(reducer)
+      return tempArray.length
+    }
+
+    //麻辣香锅菜品是否存在
+    SDHPdishExist = () => {
+      var tempArray = []
+      var temp = this.state.bookingTableDishes
+      for (let index in temp) {
+        if (temp[index].type === "麻辣香锅") {
+          tempArray.push(temp[index].DishCount)
+        }
       }
-      return total;
+      return tempArray.length
+    }
+
+    //特色烤鱼菜品是否存在
+    FishdishExist = () => {
+      var tempArray = []
+      var temp = this.state.bookingTableDishes
+      for (let index in temp) {
+        if (temp[index].type === "特色烤鱼") {
+          tempArray.push(temp[index].DishCount)
+        }
+      }
+      return tempArray.length
+    }
+
+    //特色烤鱼菜品是否存在
+    CommentExist = () => {
+      var verifyExist = 0
+      console.log(this.state)
+      if (this.state.bookingTableDetails.length !== 0) {
+        if (this.state.bookingTableDetails[0].comment !== "") {
+          console.log(this.state.bookingTableDetails[0].comment)
+          verifyExist = 1
+          return verifyExist
+        }
+
+      }
+      else {
+        return verifyExist
+      }
+    }
+
+    getDateTime = () => {
+      var time = this.state.bookingTableDetails.bookingDateTime
+      var time2 = time.slice(time.lastIndexOf('T') + 0).replace("Z", "").replace("T", "").replace("+1000", "")
     }
 
 
@@ -271,7 +205,7 @@ render() {
   var toHomePage = {
    pathname: '/',
   }
-    {console.log(this.state.bookingTableDetails)}
+    {console.log(this.state.bookingTableDishes)}
     return (
       <div>
           <div className="col-sm-12 col-lg-2 padding-tables">
@@ -292,89 +226,151 @@ render() {
 
           </div>
 
-          <div className="col-sm-12 col-lg-10 pull-right cust-margin-top padding-tables">
+          <div className="col-lg-10 cust-border nova-card cust-margin-top">
+            <center><h3>当前桌号: {this.props.match.params.tableid}</h3></center><br />
 
-                <div className="col-lg-12 cust-border nova-card" >
-                  <center><h3>当前桌号: {this.props.match.params.tableid}</h3></center><br />
-                    {
-                      this.state.bookingTableDishes.map((value, key1) => {
-                        return (
-                          <div key={key1} className="dishesUnderLine">
-                            {
-                               value.type !== "麻辣香锅" ?
-                                    <div className="row nova-margin">
-                                    <div className="col-lg-1" />
-                                    <div className="col-lg-6">{value.name}</div>
-                                    <div className="col-lg-1 cust-p-color">{value.num}</div>
-                                    <div className="col-lg-1">{value.price}</div>
-                                  </div>
-                                : null
-                            }
-                        </div>)
-                      })
-                    }
-                </div>
+          {this.dishExist() !== 0 ?
+              <div className="col-lg-4 cust-border nova-card" >
+                <center><h3><b>普通菜品列表: </b></h3></center>
+                  {
+                    this.state.bookingTableDishes.map((value, key1) => {
+                      return (
+                        <div key={key1} className="dishesUnderLine">
+                          {
+                             value.type !== "麻辣香锅" && value.type !== "特色烤鱼" ?
+                                <div className="row nova-margin">
+                                  <div className="col-lg-1" />
+                                  <div className="col-lg-6">{value.name}</div>
+                                  <div className="col-lg-1">{value.num}</div>
+                                  <div className="col-lg-1">{value.price}</div>
+                                </div>
+                              : null
+                          }
+                      </div>)
+                    })
+                  }
+              </div>
+            :null}
+
+          {this.SDHPdishExist() !== 0 ?
+              <div className="col-lg-4 cust-border nova-card" >
+                <center><h3><b>麻辣香锅菜品列表: </b></h3></center>
+                  {
+                    this.state.bookingTableDishes.map((value, key1) => {
+                      return (
+                        <div key={key1} className="dishesUnderLine">
+                          {
+                             value.type === "麻辣香锅" ?
+                                <div className="row nova-margin">
+                                  <div className="col-lg-1" />
+                                  <div className="col-lg-6">{value.name}</div>
+                                  <div className="col-lg-1">{value.num}</div>
+                                  <div className="col-lg-1">{value.price}</div>
+                                </div>
+                              : null
+                          }
+                      </div>)
+                    })
+                  }
+              </div>
+            :null}
+
+          {this.FishdishExist() !== 0 ?
+              <div className="col-lg-4 cust-border nova-card" >
+                <center><h3><b>烤鱼菜品列表: </b></h3></center>
+                  {
+                    this.state.bookingTableDishes.map((value, key1) => {
+                      return (
+                        <div key={key1} className="dishesUnderLine">
+                          {
+                             value.type === "特色烤鱼" ?
+                                <div className="row nova-margin">
+                                  <div className="col-lg-1" />
+                                  <div className="col-lg-6">{value.name}</div>
+                                  <div className="col-lg-1">{value.num}</div>
+                                  <div className="col-lg-1">{value.price}</div>
+                                </div>
+                              : null
+                          }
+                      </div>)
+                    })
+                  }
+              </div>
+            :null}
+
                 <div className="col-lg-12 cust-border nova-card" >
                     {
                       this.state.bookingTableDetails.map((value, key1) => {
-                        return (
-                          <div key={key1} >
 
-                            <div className="row nova-margin">
+                        {console.log(value.bookingComment)}
+                        return (
+                          <div key={key1} className="row nova-margin" >
                               <div className="col-lg-1" />
-                              <div className="col-lg-1"><b>菜品总价:{value.totalPrice}</b></div>
-                            </div>
-                        </div>)
-                      })
-                    }
-                </div>
-                {console.log(this.state.bookingTableDetails.comment)}
-                {this.state.bookingTableDetails.comment !== undefined ?
-                <div className="col-lg-12 cust-border nova-card" >
-                    {
-                      this.state.bookingTableDetails.map((value, key1) => {
-                        return (
-                          <div key={key1} >
+                              <div className="col-lg-1"><b>菜品总价：</b></div>
+                              <div className="col-lg-2"><b>$AUD{value.totalPrice}</b></div>
+                                {this.CommentExist() === 1 ?
+                                <div>
+                                  <div className="col-lg-1" />
+                                  <div className="col-lg-1"><b>菜品备注：</b></div>
+                                  <div className="col-lg-5"><b>{value.comment}</b></div>
+                                </div>
+                                :null}
 
-                            <div className="row nova-margin">
-                              <div className="col-lg-1" />
-                              <div className="col-lg-1"><b>菜品备注:{value.comment}</b></div>
-                            </div>
                         </div>)
                       })
                     }
                 </div>
-                :null}
-                <div className="col-lg-7 cust-border nova-card" >
-                    {
-                      this.state.bookingTableDetails.map((value, key1) => {
-                        return (
-                          <div key={key1} >
-                            <ListGroup>
-                              <ListGroupItem>顾客姓名:<b>{value.customerName}</b></ListGroupItem>
-                              <ListGroupItem>联系电话:<b>{value.customerPhoneNO}</b></ListGroupItem>
-                            </ListGroup>
-                        </div>)
-                      })
-                    }
-                    {
-                      this.state.bookingTableDetails.map((value, key1) => {
-                        return (
-                          <div key={key1} >
-                            <ListGroup>
-                              <ListGroupItem>顾客数量:<b><h3>{value.customerNumber}</h3></b></ListGroupItem>
-                              <ListGroupItem>预定到店时间:<b><h3>{value.bookingDateTime}</h3></b></ListGroupItem>
-                              <ListGroupItem>预定备注:<b><h3>{value.bookingComment}</h3></b></ListGroupItem>
-                              <ListGroupItem>预定生成时间:<b><h3>{value.createTime}</h3></b></ListGroupItem>
+          </div>
 
-                            </ListGroup>
-                        </div>)
-                      })
-                    }
-                </div>
-                <div className="col-lg-5 cust-border nova-card" >
+          <div className="col-lg-10 cust-border nova-card cust-margin-top">
+            <div className="col-lg-7 cust-border nova-card" >
 
-                </div>
+
+                  {
+                    this.state.bookingTableDetails.map((value, key1) => {
+                      return (
+                        <div key={key1} >
+                          <Table striped bordered condensed hover>
+                          <tbody>
+                            <tr>
+                              <td>顾客信息:</td>
+                              <td>姓名：{value.customerName}</td>
+                              <td>电话：{value.customerPhoneNO}</td>
+                            </tr>
+                            <tr>
+                              <td>顾客数量:</td>
+                              <td colSpan="2">{value.customerNumber}位</td>
+                            </tr>
+                            <tr>
+                              <td colSpan="3"></td>
+                            </tr>
+                            <tr>
+                              <td>预定到店时间:</td>
+                              <td>{(value.bookingDateTime.slice(value.bookingDateTime.lastIndexOf('T') + 0)).slice(0, (value.bookingDateTime.slice(value.bookingDateTime.lastIndexOf('T') + 0)).indexOf('.')).replace("T", "")}</td>
+                              <td>{value.bookingDateTime.slice(0, value.bookingDateTime.indexOf('T'))}</td>
+                            </tr>
+                            <tr>
+                              <td>预定备注:</td>
+                              <td colSpan="2">{value.bookingComment}</td>
+                            </tr>
+                            <tr>
+                              <td>预定生成时间:</td>
+                              <td>{value.createTime.slice(value.createTime.lastIndexOf('T') + 0).replace("Z", "").replace("T", "").replace("+1100", "")}</td>
+                              <td>{value.createTime.slice(0, value.createTime.indexOf('T'))}</td>
+                            </tr>
+                          </tbody>
+                          </Table>
+                      </div>)
+                    })
+                  }
+
+            </div>
+            <div className="col-lg-5 cust-border nova-card" >
+              <div className="col-lg-1"></div>
+              <Button className="col-lg-3" bsStyle="danger" onClick={()=>{this.cancleBookTable()}}>取消预订</Button>
+              <div className="col-lg-1"></div>
+              <Button className="col-lg-3" bsStyle="success" onClick={()=>{this.inherit()}}>继承菜品</Button>
+            </div>
           </div>
 
       </div>

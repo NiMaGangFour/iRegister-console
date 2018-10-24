@@ -88,13 +88,8 @@ export default class AuthOptions extends Component {
                       var newToAvia = {
                         pathname: '/home/Dishes/'+ value.id,
                       };
-                      // console.log(value.currentOrderID)
                       var newToOrdered = {
                         pathname: '/home/CheckDishes/'+ value.id,
-
-                        // state: {
-                        //   currentOrderID: value.currentOrderID,
-                        // }
                       };
                       var newToBooked = {
                         pathname: '/home/CheckBookingsDetails/'+ value.id,

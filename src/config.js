@@ -30,6 +30,10 @@ export const API = {
     updateModifiedDeleted: 'api1/updateModifiedDeleted',
     Bookingneworder: 'Bookingneworder',
     getBookingTableDishes: 'api1/getBookingTableDishes',
-    getOrderBookingDetailsbyTableID: 'api1/getOrderBookingDetailsbyTableID'
+    getOrderBookingDetailsbyTableID: 'api1/getOrderBookingDetailsbyTableID',
+    InheritBookingDishes: 'api1/InheritBookingDishes',
+    updateDishInfo: 'updateDishInfo',
+    UnavailableDish: 'api1/UnavailableDish',
+    AvailableDish: 'api1/AvailableDish',
 
 }

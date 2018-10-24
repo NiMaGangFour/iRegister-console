@@ -65,7 +65,7 @@ export default class AllTodayFinishedOrders extends Component {
   getAllTodayOrdersId = () => {
     var currentTime = this.state.currentTime
     var dateToday = currentTime.slice(0, currentTime.indexOf('T'))
-    var time = currentTime.slice(currentTime.lastIndexOf('T') + 0).replace("T", "").replace("+1000", "");
+    var time = currentTime.slice(currentTime.lastIndexOf('T') + 0).replace("T", "").replace("+1000", "").replace("+1100", "");
     // console.log(currentTime)
     // console.log(dateToday)
     // console.log(time)
@@ -296,7 +296,7 @@ export default class AllTodayFinishedOrders extends Component {
 
                                 </td>
                                 <td>
-                                  {array[0].creatTime.slice(array[0].creatTime.lastIndexOf('T') + 0).replace("T", "").replace("+1000", "")}  {array[0].creatTime.slice(0, array[0].creatTime.indexOf('T'))}
+                                  {array[0].creatTime.slice(array[0].creatTime.lastIndexOf('T') + 0).replace("T", "").replace("+1000", "").replace("+1100", "")}  {array[0].creatTime.slice(0, array[0].creatTime.indexOf('T'))}
                                 </td>
 
                                 <td>
@@ -379,7 +379,7 @@ export default class AllTodayFinishedOrders extends Component {
 
                                 </td>
                                 <td>
-                                  {array[0].creatTime.slice(array[0].creatTime.lastIndexOf('T') + 0).replace("T", "").replace("+1000", "")}  {array[0].creatTime.slice(0, array[0].creatTime.indexOf('T'))}
+                                  {array[0].creatTime.slice(array[0].creatTime.lastIndexOf('T') + 0).replace("T", "").replace("+1000", "").replace("+1100", "")}  {array[0].creatTime.slice(0, array[0].creatTime.indexOf('T'))}
                                 </td>
 
                                 <td>
@@ -462,7 +462,7 @@ export default class AllTodayFinishedOrders extends Component {
 
                                 </td>
                                 <td>
-                                  {array[0].creatTime.slice(array[0].creatTime.lastIndexOf('T') + 0).replace("T", "").replace("+1000", "")}  {array[0].creatTime.slice(0, array[0].creatTime.indexOf('T'))}
+                                  {array[0].creatTime.slice(array[0].creatTime.lastIndexOf('T') + 0).replace("T", "").replace("+1000", "").replace("+1100", "")}  {array[0].creatTime.slice(0, array[0].creatTime.indexOf('T'))}
                                 </td>
 
                                 <td>

@@ -21,6 +21,7 @@ export default class CheckBookings extends Component {
           childValue:'',
           order: [],
           SDHPorder: [],
+          Fishorder: [],
           alldishes: [],
           tableNum: null,
           sumTotal: 0,
@@ -161,7 +162,10 @@ export default class CheckBookings extends Component {
         var totalSDHP = this.state.SDHPorder.reduce((sum, price) =>{
             return sum + price.num * price.price
         }, 0)
-        return total + totalSDHP;
+        var totalFish = this.state.Fishorder.reduce((sum, price) =>{
+            return sum + price.num * price.price
+        }, 0)
+        return total + totalSDHP + totalFish;
     }
 
     deleteDish = (nameDish)=> {
@@ -187,6 +191,19 @@ export default class CheckBookings extends Component {
             }
         }this.setState({
             SDHPorder:temp_post
+        })
+    }
+
+    deleteFishDish = (nameDish)=> {
+        console.log(nameDish)
+        var temp_post = [];
+        for(let index in this.state.Fishorder){
+            // console.log(this.state.myPosts[index].idPOST , idPost)
+            if(this.state.Fishorder[index].name !== nameDish){
+                temp_post.push(this.state.Fishorder[index])
+            }
+        }this.setState({
+            Fishorder:temp_post
         })
     }
 
@@ -228,25 +245,24 @@ export default class CheckBookings extends Component {
           }).then((json) =>{
           console.log(json)
           this.submitBooking()
-          // window.location = '/home/CheckBookings/' + this.props.match.params.tableid
+          window.location = '/home/CheckBookingsDetails/' + this.props.match.params.tableid
       }).catch((error) => {
           console.log('error on .catch', error);
       })
     }
 
-
     //上传预定信息
     submitBooking = () => {
-      console.log("11111111111111111111")
       var date = new Date();
       var time = date.toLocaleTimeString();
       // console.log(JSON.stringify(this.state.order))
-      console.log(this.state.order)
-      console.log(this.state.textareaValue)
+
       var order = this.state.order
       var SDHPorder = this.state.SDHPorder
-      var totalorder = order.concat(SDHPorder)
+      var Fishorder = this.state.Fishorder
+      var totalorder = order.concat(SDHPorder,Fishorder)
       console.log(totalorder)
+
 
       fetch(API.baseUri+API.Bookingneworder, {
           method: "POST",
@@ -283,28 +299,12 @@ export default class CheckBookings extends Component {
             order:[],
             SDHPorder:[]
           })
-          
-          window.location = '/home/CheckBookingsDetails/' + this.props.match.params.tableid
+
+          // window.location = '/home/CheckBookingsDetails/' + this.props.match.params.tableid
           // window.location = '/'
         }
       })
     }
-
-    //取消预定
-    cancleBookTable = () => {
-      fetch(API.baseUri+API.CancleBookTable + "/" + this.props.match.params.tableid)
-          .then((response) => {
-              if (response.status === 200) {
-                  return response.json()
-              } else console.log("Get data error ");
-          }).then((json) =>{
-          console.log(json)
-          window.location = '/'
-      }).catch((error) => {
-          console.log('error on .catch', error);
-      })
-    }
-
     //对应初始点菜页面的麻辣香锅数量
     SDHPNumberCalculatorInitiat = () => {
       var tempSDHPorder = []
@@ -333,6 +333,111 @@ export default class CheckBookings extends Component {
       }
       return verify
     }
+
+    setSDHPOrder = (POST) => {
+        // console.log(POST)
+        if (this.state.SDHPorder.length === 0) {
+            var newD = {
+                "name": POST.name,
+                "price": POST.price,
+                "DishID": POST.dishId,
+                "num": 1,
+                "type": POST.type
+            }
+            let tempSDHPOrder = this.state.SDHPorder
+                tempSDHPOrder.push(newD)
+            // console.log(tempOrder)
+            this.setState({SDHPOrder: tempSDHPOrder})
+            return;
+        }
+        else {
+            for (let i = 0; i < this.state.SDHPorder.length; i++) {
+                if (this.state.SDHPorder[i].name === POST.name) {
+                    let tempSDHPOrder = this.state.SDHPorder
+                    tempSDHPOrder[i].num = this.state.SDHPorder[i].num + 1
+
+                    this.setState({SDHPorder: tempSDHPOrder})
+                    // console.log(this.state.order)
+                    return;
+                }
+                else if (i === this.state.SDHPorder.length-1 && this.state.SDHPorder[i].name !== POST.name){
+                    var newD = {
+                        "name": POST.name,
+                        "price": POST.price,
+                        "DishID": POST.dishId,
+                        "num": 1,
+                        "type": POST.type
+                    }
+                    let tempSDHPOrder = this.state.SDHPorder
+                        tempSDHPOrder.push(newD)
+                    // console.log(tempOrder)
+                    this.setState({SDHPorder: tempSDHPOrder})
+                    // console.log(this.state.order)
+                    return;
+                }
+                }
+        }
+    }
+
+    setFishOrder = (POST) => {
+        // console.log(POST)
+        if (this.state.Fishorder.length === 0) {
+            var newD = {
+                "name": POST.name,
+                "price": POST.price,
+                "DishID": POST.dishId,
+                "num": 1,
+                "type": POST.type,
+                "subtype": POST.subtype,
+            }
+            let tempFishorder = this.state.Fishorder
+                tempFishorder.push(newD)
+            // console.log(tempOrder)
+            this.setState({Fishorder: tempFishorder})
+            return;
+        }
+        else {
+            for (let i = 0; i < this.state.Fishorder.length; i++) {
+                if (this.state.Fishorder[i].name === POST.name) {
+                    let tempFishorder = this.state.Fishorder
+                    tempFishorder[i].num = this.state.Fishorder[i].num + 1
+
+                    this.setState({Fishorder: tempFishorder})
+                    // console.log(this.state.order)
+                    return;
+                }
+                else if (i === this.state.Fishorder.length-1 && this.state.Fishorder[i].name !== POST.name){
+                    var newD = {
+                        "name": POST.name,
+                        "price": POST.price,
+                        "DishID": POST.dishId,
+                        "num": 1,
+                        "type": POST.type,
+                        "subtype": POST.subtype,
+                    }
+                    let tempFishorder = this.state.Fishorder
+                        tempFishorder.push(newD)
+                    // console.log(tempOrder)
+                    this.setState({Fishorder: tempFishorder})
+                    // console.log(this.state.order)
+                    return;
+                }
+                }
+        }
+    }
+
+    checkFishExist = () => {
+      var tempArray = []
+      var temp = this.state.Fishorder
+      for (let index in temp) {
+        if (temp[index].subtype === "烤鱼" ) {
+          tempArray.push(temp[index])
+        }
+      }
+      console.log(tempArray)
+      return tempArray.length
+    }
+
 
 
 
@@ -375,11 +480,8 @@ render() {
 
                                         {dish.type === "小吃" ?
                                           <div className="">
-                                          {this.props.location.hasOwnProperty("state")!== true ?
                                             <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
-                                            :
-                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
-                                          }
+
                                         </div>
                                         :null}
                                       </div>
@@ -553,11 +655,8 @@ render() {
                                       <div key={i}>
                                         {dish.type === "麻辣香锅" &&  dish.subtype === "荤菜"?
                                           <div className="">
-                                          {this.props.location.hasOwnProperty("state")!== true ?
                                             <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setSDHPOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
-                                            :
-                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
-                                          }
+
                                         </div>
                                         :null}
                                       </div>
@@ -571,11 +670,8 @@ render() {
                                       <div key={i}>
                                         {dish.type === "麻辣香锅" &&  dish.subtype === "素菜"?
                                           <div className="">
-                                          {this.props.location.hasOwnProperty("state")!== true ?
                                             <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setSDHPOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
-                                            :
-                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
-                                          }
+
                                         </div>
                                         :null}
                                       </div>
@@ -593,11 +689,9 @@ render() {
                                       <div key={i}>
                                         {dish.type === "特色烤鱼" &&  dish.subtype === "烤鱼" ?
                                           <div className="">
-                                          {this.props.location.hasOwnProperty("state")!== true ?
+
                                             <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setFishOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
-                                            :
-                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
-                                          }
+
                                         </div>
                                         :null}
                                       </div>
@@ -611,11 +705,9 @@ render() {
                                       <div key={i}>
                                         {dish.type === "特色烤鱼" &&  dish.subtype === "荤菜"?
                                           <div className="">
-                                          {this.props.location.hasOwnProperty("state")!== true ?
+
                                             <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setFishOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
-                                            :
-                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
-                                          }
+
                                         </div>
                                         :null}
                                       </div>
@@ -629,11 +721,9 @@ render() {
                                       <div key={i}>
                                         {dish.type === "特色烤鱼" &&  dish.subtype === "素菜"?
                                           <div className="">
-                                          {this.props.location.hasOwnProperty("state")!== true ?
+
                                             <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setFishOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
-                                            :
-                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
-                                          }
+
                                         </div>
                                         :null}
                                       </div>
@@ -644,6 +734,7 @@ render() {
                         </Tab>
                     </Tabs>
                 </div>
+
                 <div className="col-lg-3 pull-right cust-border nova-card shopping-cart">
                     预定菜品列表
                     <hr />
@@ -682,13 +773,60 @@ render() {
                                               <div className="col-lg-7">{value.name}</div>
                                               <div className="col-lg-1">x</div>
                                               <div className="col-lg-1">{value.num}</div>
-                                              <div className="col-lg-2"><Button className="" bsStyle="danger" onClick={()=>{this.deleteSDHPDish(value.name)}}>删除</Button></div>
+                                              <div className="col-lg-2"><Button bsSize="xsmall" bsStyle="danger" onClick={()=>{this.deleteSDHPDish(value.name)}}>删除</Button></div>
                                           </div>: null}
                                   </div>
 
                               </div>
                           )})}
                     </div>
+                    {this.state.Fishorder.length !== 0 ?
+                      <div className="FishBorder">
+                        <div>
+                          <h4><b>特色烤鱼菜品列表：</b></h4>
+                          {this.checkFishExist() === 0 ?
+                            <h4 className="cust-text1" >未选择烤鱼口味！</h4>
+                          :null}
+
+
+                          {this.state.Fishorder.map((value, key1) =>{
+                              return (
+                                  <div key={key1}>
+                                        {console.log(value.subtype)}
+                                        {console.log(value)}
+                                          {value.subtype === "烤鱼" ?
+                                              <div className="row cust-margin5">
+                                                  <div className="col-lg-7">{value.name}</div>
+                                                  <div className="col-lg-1"></div>
+                                                  <div className="col-lg-1">{value.num}</div>
+                                                  <div className="col-lg-2"><Button className="" bsSize="xsmall" bsStyle="danger" onClick={()=>{this.deleteFishDish(value.name)}}>删除</Button></div>
+                                              </div>
+                                              : null
+                                          }
+                                  </div>
+                              )})}
+                        </div>
+                        <div>
+                          {this.state.Fishorder.map((value, key1) =>{
+                              return (
+                                  <div key={key1}>
+                                        {console.log(value.subtype)}
+                                        {console.log(value)}
+                                          {value.subtype !== "烤鱼" ?
+                                              <div className="row cust-margin5">
+                                                  <div className="col-lg-7">{value.name}</div>
+                                                  <div className="col-lg-1"></div>
+                                                  <div className="col-lg-1">{value.num}</div>
+                                                  <div className="col-lg-2"><Button className="" bsSize="xsmall" bsStyle="danger" onClick={()=>{this.deleteFishDish(value.name)}}>删除</Button></div>
+                                              </div>
+                                              : null
+                                          }
+                                  </div>
+                              )})}
+                        </div>
+                      </div>
+                    :null
+                   }
                     <div>
                         <div className="row nova-margin">
 
@@ -772,11 +910,9 @@ render() {
                       />
                       </center>
                     </FormGroup>
-
+                    <div className="col-lg-1"></div>
                     <Button className="col-lg-3" bsStyle="warning" onClick={()=>{this.bookTable()}}>预定桌位</Button>
-                    <div className="col-lg-1"></div>
-                    <Button className="col-lg-3" bsStyle="danger" onClick={()=>{this.cancleBookTable()}}>取消预订</Button>
-                    <div className="col-lg-1"></div>
+                    <div className="col-lg-3"></div>
                     <Link to={toHomePage}><Button className="col-lg-3" onClick={()=>{}}>返回控制台</Button></Link>
 
                   </form>

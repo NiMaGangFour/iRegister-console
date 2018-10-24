@@ -335,14 +335,14 @@ a:hover{
   background-color: #4CAF50; /* Green */
   border: none;
   color: white;
-  padding: 2px 8px;
+  padding: 3px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
 
-  margin-right: 5px;
+  margin-right: 9px;
   margin-top: 10px;
-  width: 140px;
+  width: 146px;
   height: 70px;
 }
 

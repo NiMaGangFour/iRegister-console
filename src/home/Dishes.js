@@ -147,7 +147,6 @@ export default class Dishes extends Component {
                 }
                 }
         }
-
     }
 
     setOrder = (POST) => {
@@ -754,7 +753,7 @@ render() {
    pathname: '/home/CheckBookings/' + this.props.match.params.tableid,
   }
   console.log(this.state.SDHPorder)
-  console.log(this.state.tableModifiedDishes)
+  console.log(this.state.alldishes)
   // console.log(Object.keys(this.props.location).length)
   console.log(this.props.location.hasOwnProperty("state"));
     return (
@@ -785,182 +784,252 @@ render() {
                     <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
                         <Tab eventKey={1} title="小吃" className="nova-padding">
                             <ButtonToolbar>
-                              <div className="row">
                                 {this.state.alldishes.map((dish, i) =>{
                                     return (
                                       <div key={i}>
-
-                                        {dish.type === "小吃" ?
-                                          <div className="">
+                                        {dish.type === "小吃" && dish.available === 1 ?
+                                          <div>
                                           {this.props.location.hasOwnProperty("state")!== true ?
-                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
                                             :
-                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
                                           }
                                         </div>
                                         :null}
                                       </div>
                                     )
                                 })}
-                              </div>
                             </ButtonToolbar>
                         </Tab>
                         <Tab eventKey={2} title="凉菜" className="nova-padding">
-                          <ButtonToolbar>
-                              {this.state.alldishes.map((dish, i) =>{
-                                  return (
-                                    <div key={i}>
-                                      {dish.type === "凉菜" ?
-                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
-                                      :null}
-                                    </div>
-                                  )
-                              })}
-                          </ButtonToolbar>
+                            <ButtonToolbar>
+                                {this.state.alldishes.map((dish, i) =>{
+                                    return (
+                                      <div key={i}>
+                                        {dish.type === "凉菜" && dish.available === 1 ?
+                                          <div>
+                                          {this.props.location.hasOwnProperty("state")!== true ?
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                            :
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                          }
+                                        </div>
+                                        :null}
+                                      </div>
+                                    )
+                                })}
+                            </ButtonToolbar>
                         </Tab>
                         <Tab eventKey={3} title="汤类" className="nova-padding">
-                          <ButtonToolbar>
-                              {this.state.alldishes.map((dish, i) =>{
-                                  return (
-                                    <div key={i}>
-                                      {dish.type === "汤类" ?
-                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
-                                      :null}
-                                    </div>
-                                  )
-                              })}
-                          </ButtonToolbar>
+                            <ButtonToolbar>
+                                {this.state.alldishes.map((dish, i) =>{
+                                    return (
+                                      <div key={i}>
+                                        {dish.type === "汤类" && dish.available === 1 ?
+                                          <div>
+                                          {this.props.location.hasOwnProperty("state")!== true ?
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                            :
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                          }
+                                        </div>
+                                        :null}
+                                      </div>
+                                    )
+                                })}
+                            </ButtonToolbar>
                         </Tab>
                         <Tab eventKey={6} title="特色炒菜" className="nova-padding">
-                          <ButtonToolbar>
-                              {this.state.alldishes.map((dish, i) =>{
-                                  return (
-                                    <div key={i}>
-                                      {dish.type === "特色炒菜" ?
-                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
-                                      :null}
-                                    </div>
-                                  )
-                              })}
-                          </ButtonToolbar>
+                            <ButtonToolbar>
+                                {this.state.alldishes.map((dish, i) =>{
+                                    return (
+                                      <div key={i}>
+                                        {dish.type === "特色炒菜" && dish.available === 1 ?
+                                          <div>
+                                          {this.props.location.hasOwnProperty("state")!== true ?
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                            :
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                          }
+                                        </div>
+                                        :null}
+                                      </div>
+                                    )
+                                })}
+                            </ButtonToolbar>
                         </Tab>
                         <Tab eventKey={7} title="海鲜" className="nova-padding">
-                          <ButtonToolbar>
-                              {this.state.alldishes.map((dish, i) =>{
-                                  return (
-                                    <div key={i}>
-                                      {dish.type === "海鲜" ?
-                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
-                                      :null}
-                                    </div>
-                                  )
-                              })}
-                          </ButtonToolbar>
+                            <ButtonToolbar>
+                                {this.state.alldishes.map((dish, i) =>{
+                                    return (
+                                      <div key={i}>
+                                        {dish.type === "海鲜" && dish.available === 1 ?
+                                          <div>
+                                          {this.props.location.hasOwnProperty("state")!== true ?
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                            :
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                          }
+                                        </div>
+                                        :null}
+                                      </div>
+                                    )
+                                })}
+                            </ButtonToolbar>
                         </Tab>
                         <Tab eventKey={8} title="鸡" className="nova-padding">
-                          <ButtonToolbar>
-                              {this.state.alldishes.map((dish, i) =>{
-                                  return (
-                                    <div key={i}>
-                                      {dish.type === "特色炒菜" ?
-                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
-                                      :null}
-                                    </div>
-                                  )
-                              })}
-                          </ButtonToolbar>
+                            <ButtonToolbar>
+                                {this.state.alldishes.map((dish, i) =>{
+                                    return (
+                                      <div key={i}>
+                                        {dish.type === "鸡" && dish.available === 1 ?
+                                          <div>
+                                          {this.props.location.hasOwnProperty("state")!== true ?
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                            :
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                          }
+                                        </div>
+                                        :null}
+                                      </div>
+                                    )
+                                })}
+                            </ButtonToolbar>
                         </Tab>
                         <Tab eventKey={9} title="鸭" className="nova-padding">
-                          <ButtonToolbar>
-                              {this.state.alldishes.map((dish, i) =>{
-                                  return (
-                                    <div key={i}>
-                                      {dish.type === "鸡" ?
-                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
-                                      :null}
-                                    </div>
-                                  )
-                              })}
-                          </ButtonToolbar>
+                            <ButtonToolbar>
+                                {this.state.alldishes.map((dish, i) =>{
+                                    return (
+                                      <div key={i}>
+                                        {dish.type === "鸭" && dish.available === 1 ?
+                                          <div>
+                                          {this.props.location.hasOwnProperty("state")!== true ?
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                            :
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                          }
+                                        </div>
+                                        :null}
+                                      </div>
+                                    )
+                                })}
+                            </ButtonToolbar>
                         </Tab>
                         <Tab eventKey={10} title="牛" className="nova-padding">
-                          <ButtonToolbar>
-                              {this.state.alldishes.map((dish, i) =>{
-                                  return (
-                                    <div key={i}>
-                                      {dish.type === "牛" ?
-                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
-                                      :null}
-                                    </div>
-                                  )
-                              })}
-                          </ButtonToolbar>
+                            <ButtonToolbar>
+                                {this.state.alldishes.map((dish, i) =>{
+                                    return (
+                                      <div key={i}>
+                                        {dish.type === "牛" && dish.available === 1 ?
+                                          <div>
+                                          {this.props.location.hasOwnProperty("state")!== true ?
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                            :
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                          }
+                                        </div>
+                                        :null}
+                                      </div>
+                                    )
+                                })}
+                            </ButtonToolbar>
                         </Tab>
                         <Tab eventKey={11} title="羊" className="nova-padding">
-                          <ButtonToolbar>
-                              {this.state.alldishes.map((dish, i) =>{
-                                  return (
-                                    <div key={i}>
-                                      {dish.type === "羊" ?
-                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
-                                      :null}
-                                    </div>
-                                  )
-                              })}
-                          </ButtonToolbar>
+                            <ButtonToolbar>
+                                {this.state.alldishes.map((dish, i) =>{
+                                    return (
+                                      <div key={i}>
+                                        {dish.type === "羊" && dish.available === 1 ?
+                                          <div>
+                                          {this.props.location.hasOwnProperty("state")!== true ?
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                            :
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                          }
+                                        </div>
+                                        :null}
+                                      </div>
+                                    )
+                                })}
+                            </ButtonToolbar>
                         </Tab>
                         <Tab eventKey={12} title="猪" className="nova-padding">
-                          <ButtonToolbar>
-                              {this.state.alldishes.map((dish, i) =>{
-                                  return (
-                                    <div key={i}>
-                                      {dish.type === "猪" ?
-                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
-                                      :null}
-                                    </div>
-                                  )
-                              })}
-                          </ButtonToolbar>
+                            <ButtonToolbar>
+                                {this.state.alldishes.map((dish, i) =>{
+                                    return (
+                                      <div key={i}>
+                                        {dish.type === "猪" && dish.available === 1 ?
+                                          <div>
+                                          {this.props.location.hasOwnProperty("state")!== true ?
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                            :
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                          }
+                                        </div>
+                                        :null}
+                                      </div>
+                                    )
+                                })}
+                            </ButtonToolbar>
                         </Tab>
                         <Tab eventKey={13} title="面/米饭" className="nova-padding">
-                          <ButtonToolbar>
-                              {this.state.alldishes.map((dish, i) =>{
-                                  return (
-                                    <div key={i}>
-                                      {dish.type === "面/米饭" ?
-                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
-                                      :null}
-                                    </div>
-                                  )
-                              })}
-                          </ButtonToolbar>
+                            <ButtonToolbar>
+                                {this.state.alldishes.map((dish, i) =>{
+                                    return (
+                                      <div key={i}>
+                                        {dish.type === "面/米饭" && dish.available === 1 ?
+                                          <div>
+                                          {this.props.location.hasOwnProperty("state")!== true ?
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                            :
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                          }
+                                        </div>
+                                        :null}
+                                      </div>
+                                    )
+                                })}
+                            </ButtonToolbar>
                         </Tab>
                         <Tab eventKey={14} title="甜点" className="nova-padding">
-                          <ButtonToolbar>
-                              {this.state.alldishes.map((dish, i) =>{
-                                  return (
-                                    <div key={i}>
-                                      {dish.type === "甜点" ?
-                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
-                                      :null}
-                                    </div>
-                                  )
-                              })}
-                          </ButtonToolbar>
+                            <ButtonToolbar>
+                                {this.state.alldishes.map((dish, i) =>{
+                                    return (
+                                      <div key={i}>
+                                        {dish.type === "甜点" && dish.available === 1 ?
+                                          <div>
+                                          {this.props.location.hasOwnProperty("state")!== true ?
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                            :
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                          }
+                                        </div>
+                                        :null}
+                                      </div>
+                                    )
+                                })}
+                            </ButtonToolbar>
                         </Tab>
-                        <Tab eventKey={14} title="卤味" className="nova-padding">
-                          <ButtonToolbar>
-                              {this.state.alldishes.map((dish, i) =>{
-                                  return (
-                                    <div key={i}>
-                                      {dish.type === "卤味" ?
-                                        <Button className=" cust-margin" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}>{dish.name}</Button>
-                                      :null}
-                                    </div>
-                                  )
-                              })}
-                          </ButtonToolbar>
+                        <Tab eventKey={15} title="卤味" className="nova-padding">
+                            <ButtonToolbar>
+                                {this.state.alldishes.map((dish, i) =>{
+                                    return (
+                                      <div key={i}>
+                                        {dish.type === "卤味" && dish.available === 1 ?
+                                          <div>
+                                          {this.props.location.hasOwnProperty("state")!== true ?
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                            :
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
+                                          }
+                                        </div>
+                                        :null}
+                                      </div>
+                                    )
+                                })}
+                            </ButtonToolbar>
                         </Tab>
+
                         <Tab eventKey={4} title="麻辣香锅" className="nova-padding">
                             <ButtonToolbar>
                               <div className="row">
@@ -968,12 +1037,12 @@ render() {
                                 {this.state.alldishes.map((dish, i) =>{
                                     return (
                                       <div key={i}>
-                                        {dish.type === "麻辣香锅" &&  dish.subtype === "荤菜"?
+                                        {dish.type === "麻辣香锅" &&  dish.subtype === "荤菜" && dish.available === 1?
                                           <div className="">
                                           {this.props.location.hasOwnProperty("state")!== true ?
-                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setSDHPOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setSDHPOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
                                             :
-                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
                                           }
                                         </div>
                                         :null}
@@ -986,12 +1055,12 @@ render() {
                                 {this.state.alldishes.map((dish, i) =>{
                                     return (
                                       <div key={i}>
-                                        {dish.type === "麻辣香锅" &&  dish.subtype === "素菜"?
+                                        {dish.type === "麻辣香锅" &&  dish.subtype === "素菜" && dish.available === 1?
                                           <div className="">
                                           {this.props.location.hasOwnProperty("state")!== true ?
-                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setSDHPOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setSDHPOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
                                             :
-                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
                                           }
                                         </div>
                                         :null}
@@ -1008,12 +1077,12 @@ render() {
                                 {this.state.alldishes.map((dish, i) =>{
                                     return (
                                       <div key={i}>
-                                        {dish.type === "特色烤鱼" &&  dish.subtype === "烤鱼" ?
+                                        {dish.type === "特色烤鱼" &&  dish.subtype === "烤鱼" && dish.available === 1 ?
                                           <div className="">
                                           {this.props.location.hasOwnProperty("state")!== true ?
-                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setFishOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setFishOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
                                             :
-                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
                                           }
                                         </div>
                                         :null}
@@ -1026,12 +1095,12 @@ render() {
                                 {this.state.alldishes.map((dish, i) =>{
                                     return (
                                       <div key={i}>
-                                        {dish.type === "特色烤鱼" &&  dish.subtype === "荤菜"?
+                                        {dish.type === "特色烤鱼" &&  dish.subtype === "荤菜" && dish.available === 1 ?
                                           <div className="">
                                           {this.props.location.hasOwnProperty("state")!== true ?
-                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setFishOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setFishOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
                                             :
-                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
                                           }
                                         </div>
                                         :null}
@@ -1044,12 +1113,12 @@ render() {
                                 {this.state.alldishes.map((dish, i) =>{
                                     return (
                                       <div key={i}>
-                                        {dish.type === "特色烤鱼" &&  dish.subtype === "素菜"?
+                                        {dish.type === "特色烤鱼" &&  dish.subtype === "素菜" && dish.available === 1 ?
                                           <div className="">
                                           {this.props.location.hasOwnProperty("state")!== true ?
-                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setFishOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setFishOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
                                             :
-                                            <div className="col-lg-2"><Button className="button-menus" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button></div>
+                                            <Button className="button-menus col-lg-2" bsSize="large" bsStyle="success" id = {dish.id} key={i} onClick={()=>{this.setModifiedOrder(dish)}}><Textfit mode="multi">{dish.name}</Textfit>$ {dish.price}</Button>
                                           }
                                         </div>
                                         :null}
@@ -1487,12 +1556,12 @@ render() {
                           {this.props.location.hasOwnProperty("state") === true ?
                             <div>
                               <div className="col-lg-4"/>
-                              <div className="col-lg-5">
+                              <div className="col-lg-5 padding">
                                 <Button  bsStyle="success" disabled={this.activeOrDisabledModified()} onClick={()=>{this.updateModifiedDiesh()}}>确认加菜</Button>
                               </div>
                           </div>
                             :
-                            <div className="row cust-margin8">
+                            <div className="row cust-margin8 padding">
                               <div className="col-lg-5 ">
                                 <Link to={toBookingPage}><Button className="" bsStyle="warning" >预定桌位</Button></Link>
                               </div>

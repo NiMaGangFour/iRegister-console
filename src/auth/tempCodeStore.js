@@ -372,22 +372,25 @@
 
 
 
-{
-  this.state.getBookingTableDishes.map((value, key1) => {
-    return (
-      <div key={key1}>
-        {
-          value.type !== "麻辣香锅" ?
-            <div className="row nova-margin">
-              <div className="col-lg-1" />
-              <div className="col-lg-6">{value.name}后添加</div>
+{dish.hasOwnProperty("editorOpen") && dish.editorOpen === true ?
+  <tr>
+    <td>
+      <FormControl
+        value={this.state.customerCommentValue}
+        componentClass="textarea"
+        placeholder="请输入备注信息"
+        onChange={this.handleChangeBookingComment}
+        />
+    </td>
+    <td>{dish.name}</td>
+    <td>{dish.price}</td>
+    <td>{dish.type}</td>
+    <td>{dish.subtype}</td>
+    <td>
+      <Button className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
+      <div className="col-lg-1"  />
+      <Button className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="info" onClick={() => {}}>冻结</Button>
 
-              <div className="col-lg-1 ">{value.num}</div>
-              <div className="col-lg-1">{value.price}</div>
-
-          </div>
-        : null
-        }
-    </div>)
-  })
-}
+    </td>
+  </tr>
+:null}
