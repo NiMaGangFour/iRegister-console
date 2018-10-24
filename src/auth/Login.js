@@ -129,7 +129,7 @@ export default class Login extends Component {
                 body: JSON.stringify({
 
                     // this.state.UserID,
-                    "email": this.state.email,
+                    "name": this.state.email,
                     "password": this.state.password,
 
                 })
