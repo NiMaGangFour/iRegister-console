@@ -18,6 +18,7 @@ import AdminMainPage from './home/AdminMainPage'
 import AllCurrentOrders from './home/AllCurrentOrders'
 import AllTodayFinishedOrders from './home/AllTodayFinishedOrders'
 import CheckBookingsDetails from './home/CheckBookingsDetails'
+import Login from './auth/Login'
 
 
 
@@ -42,6 +43,7 @@ const Router = () =>{
                 <Route exact path='/home/AllCurrentOrders/' component={AllCurrentOrders}/>
                 <Route exact path='/home/AllTodayFinishedOrders/' component={AllTodayFinishedOrders}/>
                 <Route exact path='/home/CheckBookingsDetails/:tableid' component={CheckBookingsDetails}/>
+                <Route exact path='/login' component={Login}/>
             </Switch>
         </div>
     )
