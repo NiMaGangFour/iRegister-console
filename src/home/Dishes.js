@@ -483,60 +483,105 @@ export default class Dishes extends Component {
     }
 
     submitOrder = () => {
-      var a = JSON.parse(localStorage.getItem("SHUWEIYUAN"));
-      if(a && a.id !== null && a.id !== undefined){
-          var date = new Date();
-          var time = date.toLocaleTimeString();
-          // console.log(JSON.stringify(this.state.order))
-          console.log(this.state.order)
-          console.log(this.state.textareaValue)
-          var order = this.state.order
-          var SDHPorder = this.state.SDHPorder
-          var Fishorder = this.state.Fishorder
-          var totalorder = order.concat(SDHPorder,Fishorder)
-          console.log(totalorder)
+      var date = new Date();
+      var time = date.toLocaleTimeString();
+      // console.log(JSON.stringify(this.state.order))
+      console.log(this.state.order)
+      console.log(this.state.textareaValue)
+      var order = this.state.order
+      var SDHPorder = this.state.SDHPorder
+      var Fishorder = this.state.Fishorder
+      var totalorder = order.concat(SDHPorder,Fishorder)
+      console.log(totalorder)
+      fetch(API.baseUri+API.neworder, {
+          method: "POST",
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          // 'Authorization': 'Bearer ' + this.getToken()
+        },
+        body: JSON.stringify({
+                "items": totalorder,
+                "creatTime": time,
+                "totalPrice": this.SumUp(),
+                "tableID": this.props.match.params.tableid,
+                "comment":this.state.textareaValue,
+            })
+      } ).then(res =>{
+          if(res.status===200) {
+            // console.log(res.json())
+            return res.json();
+          }
 
-          fetch(API.baseUri+API.neworder, {
-              method: "POST",
-              headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + this.getToken()
-            },
-            body: JSON.stringify({
-                    "items": totalorder,
-                    "creatTime": time,
-                    "totalPrice": this.SumUp(),
-                    "tableID": this.props.match.params.tableid,
-                    "comment":this.state.textareaValue,
-                })
-          } ).then(res =>{
-              if(res.status===200) {
-                // console.log(res.json())
-                return res.json();
-              }
-              else if(res.status===400){
-                   window.location='/login'
-               }
-
-              else console.log(res)
-          }).then(json => {
-            console.log(json.success)
-            console.log(json)
-            if (json.success === true){
-              this.authOptions.current.getData();
-              this.setState({
-                order:[],
-                SDHPorder:[]
-              })
-              window.location = '/home/CheckDishes/' + this.props.match.params.tableid
-              // window.location = '/'
-            }
+          else console.log(res)
+      }).then(json => {
+        console.log(json.success)
+        console.log(json)
+        if (json.success === true){
+          this.authOptions.current.getData();
+          this.setState({
+            order:[],
+            SDHPorder:[]
           })
+          window.location = '/home/CheckDishes/' + this.props.match.params.tableid
+          // window.location = '/'
         }
-        else {
-          window.location='/login'
-        }
+      })
+
+      // var a = JSON.parse(localStorage.getItem("SHUWEIYUAN"));
+      // if(a && a.id !== null && a.id !== undefined){
+      //     var date = new Date();
+      //     var time = date.toLocaleTimeString();
+      //     // console.log(JSON.stringify(this.state.order))
+      //     console.log(this.state.order)
+      //     console.log(this.state.textareaValue)
+      //     var order = this.state.order
+      //     var SDHPorder = this.state.SDHPorder
+      //     var Fishorder = this.state.Fishorder
+      //     var totalorder = order.concat(SDHPorder,Fishorder)
+      //     console.log(totalorder)
+      //
+      //     fetch(API.baseUri+API.neworder, {
+      //         method: "POST",
+      //         headers: {
+      //         'Accept': 'application/json',
+      //         'Content-Type': 'application/json',
+      //         'Authorization': 'Bearer ' + this.getToken()
+      //       },
+      //       body: JSON.stringify({
+      //               "items": totalorder,
+      //               "creatTime": time,
+      //               "totalPrice": this.SumUp(),
+      //               "tableID": this.props.match.params.tableid,
+      //               "comment":this.state.textareaValue,
+      //           })
+      //     } ).then(res =>{
+      //         if(res.status===200) {
+      //           // console.log(res.json())
+      //           return res.json();
+      //         }
+      //         else if(res.status===400){
+      //              window.location='/login'
+      //          }
+      //
+      //         else console.log(res)
+      //     }).then(json => {
+      //       console.log(json.success)
+      //       console.log(json)
+      //       if (json.success === true){
+      //         this.authOptions.current.getData();
+      //         this.setState({
+      //           order:[],
+      //           SDHPorder:[]
+      //         })
+      //         window.location = '/home/CheckDishes/' + this.props.match.params.tableid
+      //         // window.location = '/'
+      //       }
+      //     })
+      //   }
+      //   else {
+      //     window.location='/login'
+      //   }
     }
 
     parentChild = (value) => {

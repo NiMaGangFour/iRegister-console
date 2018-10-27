@@ -30,39 +30,39 @@ export default class AuthOptions extends Component {
     // }
 
      getData =()=> {
-       // fetch(API.baseUri+API.getallTables)
-       //     .then((response) => {
-       //         if (response.status === 200) {
-       //             return response.json()
-       //         } else console.log("Get data error ");
-       //     }).then((json) =>{
-       //     // console.log(json)
-       //     this.setState({tables: json})
-       // }).catch((error) => {
-       //     console.log('error on .catch', error);
-       // });
-       var a = JSON.parse(localStorage.getItem("SHUWEIYUAN"));
-       if(a && a.id !== null && a.id !== undefined){
-
-               this.setState({
-                   userId: a.id,
-                   username: a.name,
-               })
-               fetch(API.baseUri+API.getallTables)
-                   .then((response) => {
-                       if (response.status === 200) {
-                           return response.json()
-                       } else console.log("Get data error ");
-                   }).then((json) =>{
-                   // console.log(json)
-                   this.setState({tables: json})
-               }).catch((error) => {
-                   console.log('error on .catch', error);
-               });
-       }
-       else{
-           window.location='/login'
-       }
+       fetch(API.baseUri+API.getallTables)
+           .then((response) => {
+               if (response.status === 200) {
+                   return response.json()
+               } else console.log("Get data error ");
+           }).then((json) =>{
+           // console.log(json)
+           this.setState({tables: json})
+       }).catch((error) => {
+           console.log('error on .catch', error);
+       });
+       // var a = JSON.parse(localStorage.getItem("SHUWEIYUAN"));
+       // if(a && a.id !== null && a.id !== undefined){
+       //
+       //         this.setState({
+       //             userId: a.id,
+       //             username: a.name,
+       //         })
+       //         fetch(API.baseUri+API.getallTables)
+       //             .then((response) => {
+       //                 if (response.status === 200) {
+       //                     return response.json()
+       //                 } else console.log("Get data error ");
+       //             }).then((json) =>{
+       //             // console.log(json)
+       //             this.setState({tables: json})
+       //         }).catch((error) => {
+       //             console.log('error on .catch', error);
+       //         });
+       // }
+       // else{
+       //     window.location='/login'
+       // }
 
     }
 

@@ -35,6 +35,8 @@ export const API = {
     updateDishInfo: 'updateDishInfo',
     UnavailableDish: 'api1/UnavailableDish',
     AvailableDish: 'api1/AvailableDish',
+    addNewDishInfo: 'addNewDishInfo',
+    deleteDishInfo: 'api1/deleteDishInfo',
     login: 'users/userlogin'
 
 }

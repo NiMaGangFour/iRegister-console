@@ -17,6 +17,10 @@ export default class AdminMainPage extends Component {
             dishPriceValue: "",
             dishTypeValue: "",
             dishSubtypeValue: "",
+            NewdishNameValue: "",
+            NewdishPriceValue: "",
+            NewdishTypeValue: "",
+            NewdishSubtypeValue: "",
             editorOpenAllowed: true
         }
       }
@@ -38,7 +42,12 @@ export default class AdminMainPage extends Component {
             console.log(json)
             this.setState({
               alldishes: json,
-              editorOpenAllowed: true
+              editorOpenAllowed: true,
+
+              NewdishNameValue: "",
+              NewdishPriceValue: "",
+              NewdishTypeValue: "",
+              NewdishSubtypeValue: "",
             })
         }).catch((error) => {
             console.log('error on .catch', error);
@@ -91,7 +100,7 @@ export default class AdminMainPage extends Component {
     })
   }
     //对应取消编辑按钮 将特定 dish 中的 editorOpeng 的 key， value pair 删除
-    editorOpenDelete = (dish) => {
+  editorOpenDelete = (dish) => {
     delete dish.editorOpen
     var templArrary = []
     //放入array以便于使用 代替功能
@@ -104,6 +113,7 @@ export default class AdminMainPage extends Component {
       editorOpenAllowed: true
     })
   }
+
   //对应保存按钮   更新唯一指定 菜品
   updateDish = (dish) => {
     fetch(API.baseUri+API.updateDishInfo, {
@@ -164,6 +174,22 @@ export default class AdminMainPage extends Component {
     });
   }
 
+  //删除 唯一 对应 菜品信息
+  deleteDish = (dish) => {
+    console.log("删除 唯一 对应 菜品信息")
+    fetch(API.baseUri+API.deleteDishInfo + "/" + dish.dishId)
+        .then((response) => {
+            if (response.status === 200) {
+                return response.json()
+            } else console.log("Get data error ");
+        }).then((json) =>{
+        console.log(json)
+        this.getData()
+    }).catch((error) => {
+        console.log('error on .catch', error);
+    })
+  }
+
   //监控菜品名字 改动
   handleChangedishNameValue = (event) => {
     this.setState({dishNameValue: event.target.value});
@@ -180,9 +206,52 @@ export default class AdminMainPage extends Component {
   handleChangedishSubtypeValue = (event) => {
     this.setState({dishSubtypeValue: event.target.value});
   }
+
+  //对应添加菜品按钮   新增菜品信息
+  addNewDishInfo = () => {
+    fetch(API.baseUri+API.addNewDishInfo, {
+        method: "POST",
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+              "NewdishNameValue": this.state.NewdishNameValue,
+              "NewdishPriceValue": this.state.NewdishPriceValue,
+              "NewdishTypeValue": this.state.NewdishTypeValue,
+              "NewdishSubtypeValue": this.state.NewdishSubtypeValue,
+          })
+    } ).then(res =>{
+        if(res.status===200) {
+          // console.log(res.json())
+          return res.json();
+        }
+        else console.log(res)
+    }).then(json => {
+      if (json.success === true){
+
+        this.getData()
+      }
+    })
+  }
+  //监控新增菜品名字 改动
+  handleChangeNewdishNameValue = (event) => {
+    this.setState({NewdishNameValue: event.target.value});
+  }
+  //监控新增菜品价格 改动
+  handleChangeNewdishPriceValue = (event) => {
+    this.setState({NewdishPriceValue: event.target.value});
+  }
+  //监控新增菜品类别 改动
+  handleChangeNewdishTypeValue = (event) => {
+    this.setState({NewdishTypeValue: event.target.value});
+  }
+  //监控新增菜品细分类别 改动
+  handleChangeNewdishSubtypeValue = (event) => {
+    this.setState({NewdishSubtypeValue: event.target.value});
+  }
   //控制按钮的 Disable 属性
   activeOrDisabled = () => {
-    console.log(this.state.editorOpenAllowed)
     var buttonDisable = false;
     if (this.state.editorOpenAllowed === false){
       buttonDisable = true;
@@ -278,6 +347,8 @@ export default class AdminMainPage extends Component {
                                             :
                                               <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
                                             }
+                                            <div className="col-lg-5"  />
+                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
                                           </td>
                                         </tr>
                                         :null}
@@ -1387,10 +1458,8 @@ export default class AdminMainPage extends Component {
                                             :
                                               <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
                                             }
-
-
-
-
+                                            <div className="col-lg-5"  />
+                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
                                           </td>
                                         </tr>
                                         :null}
@@ -1478,17 +1547,75 @@ export default class AdminMainPage extends Component {
                                             :
                                               <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
                                             }
+                                            <div className="col-lg-5"  />
+                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
                                           </td>
                                         </tr>
                                         :null}
                                   </tbody>
                                 )
                             })}
-
                         </Table>
                     </Tab>
                   </Tabs>
 
+              </div>
+              <div className="col-lg-12 cust-border nova-card" >
+                <Table striped bordered condensed hover>
+                  <thead>
+                    <tr>
+                      <th className="th-width-DishID">菜品编号</th>
+                      <th className="th-width-DishName">菜品名称</th>
+                      <th className="th-width-DishPrice">菜品单价</th>
+                      <th className="th-width-DishType">菜品类别</th>
+                      <th className="th-width-DishType">菜品细分类别</th>
+                      <th className="th-width-DishType">功能按钮</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        自动生成
+                      </td>
+                      <td>
+                        <FormControl
+                          type="text"
+                          value={this.state.NewdishNameValue}
+                          placeholder="菜品名称"
+                          onChange={this.handleChangeNewdishNameValue}
+                        />
+                      </td>
+                      <td>
+                        <FormControl
+                          type="text"
+                          value={this.state.NewdishPriceValue}
+                          placeholder="菜品价格"
+                          onChange={this.handleChangeNewdishPriceValue}
+                        />
+                      </td>
+                      <td>
+                        <FormControl
+                          type="text"
+                          value={this.state.NewdishTypeValue}
+                          placeholder="菜品类别"
+                          onChange={this.handleChangeNewdishTypeValue}
+                        />
+                      </td>
+                      <td>
+                        <FormControl
+                          type="text"
+                          value={this.state.NewdishSubtypeValue}
+                          placeholder="菜品细分类别"
+                          onChange={this.handleChangeNewdishSubtypeValue}
+                        />
+                      </td>
+
+                      <td>
+                        <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-3"  bsStyle="info" onClick={() => {this.addNewDishInfo()}}>添加菜品</Button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </Table>
               </div>
           </div>
         </div>
