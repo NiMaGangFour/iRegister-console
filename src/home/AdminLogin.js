@@ -62,18 +62,13 @@ export default class AdminLogin extends Component {
     render() {
 
         return (
-          <div className="row">
-            <div className="col-sm-12 col-lg-12 nova-card cust-border cust-margin13 ">
-            <div className="col-lg-4 cust-border">
-            </div>
-            <div className="col-lg-8 cust-border">
-
-              <div className="cust-adminLogin">
+          <div>
+          <div className="col-lg-4"/>
+            <div className="col-lg-4 nova-card cust-border center-adminLogin">
                 <form>
                   <FormGroup
                      controlId="formBasicText"
-                     validationState={this.getValidationState()}
-                   >
+                     validationState={this.getValidationState()}>
                    <ControlLabel>管理员账号：</ControlLabel>
                    <FormControl
                      type="text"
@@ -85,8 +80,7 @@ export default class AdminLogin extends Component {
                 </form>
                 <form>
                    <FormGroup
-                      validationState={this.getValidationState()}
-                    >
+                      validationState={this.getValidationState()}>
                     <ControlLabel>密码：</ControlLabel>
                     <FormControl
                       type={this.state.passwordFieldType}
@@ -96,7 +90,7 @@ export default class AdminLogin extends Component {
                     />
                     <input type="checkbox" onClick={() => {this.verifyPasswordFieldType()}}/> 显示密码
                     </FormGroup>
-                    
+
                   </form>
               <div  className="nova-padding">
                 <Button bsSize="large" bsStyle="warning" onClick={()=>{this.toTerminalPage()}}>返回控制台</Button>
@@ -104,9 +98,6 @@ export default class AdminLogin extends Component {
                 <Button  bsSize="large" bsStyle="success" onClick={()=>{this.toAdminPage()}}>&nbsp; &nbsp;登陆&nbsp; &nbsp;</Button>
               </div>
               <p>仅指定IP地址可以登录</p>
-            </div>
-
-</div>
           </div>
         </div>
         )

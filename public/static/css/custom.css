@@ -231,8 +231,8 @@ a:hover{
     border-style: ridge;
     border-radius: 6px;
     padding: 20px;
-
 }
+
 .cust-margin{
     margin-right: 10px;
     margin-top: 10px;
@@ -311,12 +311,15 @@ a:hover{
     margin-top: 5px;
 
 }
-.cust-border2{
+.cust-border-top{
   /* border-style: solid none none none; */
   border-top: solid 1px gray;
 }
 .cust-border3{
   border-style:   dotted dashed solid double;
+}
+.cust-border4 {
+  border-bottom: solid 1px #d6d2d1;
 }
 .cust-p-color{
   color: #FF0000;
@@ -332,14 +335,14 @@ a:hover{
   background-color: #4CAF50; /* Green */
   border: none;
   color: white;
-  padding: 2px 8px;
+  padding: 3px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
 
-  margin-right: 5px;
+  margin-right: 9px;
   margin-top: 10px;
-  width: 140px;
+  width: 146px;
   height: 70px;
 }
 
@@ -420,6 +423,11 @@ a:hover{
     text-align: center;
     width: 30%;
 }
+.center-adminLogin{
+  margin-top: 50px;
+  border: 3px solid green;
+  text-align: center;
+}
 
 .modal {
     display: block;
@@ -434,6 +442,11 @@ a:hover{
 }
 .sdhpBorder {
   border-style: solid;
+  border-width: 1px;
+  border-color: gray;
+}
+.FishBorder {
+  border-style: dashed;
   border-width: 1px;
   border-color: gray;
 }
@@ -510,9 +523,41 @@ a:hover{
   padding: 10px;
 }
 
+.padding-cancel{
+  padding: 0px;
+}
+.button-delete {
+  height: 45px;
+  margin-top: 6px;
+}
+.font-number {
+  font-size: 35px;
+  margin-top: 2px;
+}
+
 .strikeThrough{
   text-decoration: line-through;
    text-decoration-style: double;
   -webkit-text-decoration-color: red; /* Safari */
   text-decoration-color: red;
+}
+
+.react-datepicker {
+  font-size: 1.3rem !important;
+}
+
+.react-datepicker__current-month {
+  font-size: 1.5rem !important;
+}
+
+.react-datepicker__header {
+  padding-top: 6px !important;
+}
+
+.react-datepicker__navigation {
+  top: 13px !important;
+}
+
+.react-datepicker__day-name, .react-datepicker__day {
+  margin: 0.5rem !important;
 }

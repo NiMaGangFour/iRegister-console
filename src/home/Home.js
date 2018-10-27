@@ -35,6 +35,14 @@ export default class Home extends Component {
         });
     }
 
+    getToken = () => {
+        // Retrieves the user token from localStorage
+        var user = localStorage.getItem('SHUWEIYUAN');
+        var uu = JSON.parse(user);
+        console.log(uu);
+        return uu.Token
+    }
+
     handleClickAvailableTable = (tableid) => {
       // this.props.parentChild(tableid);
     }
