@@ -813,22 +813,8 @@ export default class CheckDishesDishes extends Component {
         orderInitNormal.push(orderInit[index])
       }
     }
-    //首次 麻辣香锅菜品
-    var orderInitSDHP = []
-     for (let index in orderInit) {
-      if (orderInit[index].type === "麻辣香锅"  && orderInit[index].deleted === 0 )
-      {
-        orderInitSDHP.push(orderInit[index])
-      }
-    }
-    //首次 烤鱼菜品
-    var orderInitFish = []
-     for (let index in orderInit) {
-      if (orderInit[index].type === "特色烤鱼"  && orderInit[index].deleted === 0 )
-      {
-        orderInitFish.push(orderInit[index])
-      }
-    }
+
+
     //后续 普通菜品
     var orderModifiedNormal = []
      for (let index in orderModified) {
@@ -837,90 +823,116 @@ export default class CheckDishesDishes extends Component {
         orderModifiedNormal.push(orderModified[index])
       }
     }
-    //后续 麻辣香锅菜品
-    var orderModifiedSDHP = []
-     for (let index in orderModified) {
-      if (orderModified[index].type === "麻辣香锅"  && orderModified[index].deleted === 0 )
-      {
-        orderModifiedSDHP.push(orderModified[index])
-      }
-    }
-    //后续 烤鱼菜品
-    var orderModifiedFish = []
-     for (let index in orderModified) {
-      if (orderModified[index].type === "特色烤鱼"  && orderModified[index].deleted === 0 )
-      {
-        orderModifiedFish.push(orderModified[index])
-      }
-    }
+
+
     //总 普通菜品
     var totalNormal = orderInitNormal.concat(orderModifiedNormal)
-    //总 麻辣香锅菜品
-    var totalSDHP = orderInitSDHP.concat(orderModifiedSDHP)
-    //总 特色烤鱼菜品
-    var totalFish = orderInitFish.concat(orderModifiedFish)
-    console.log(totalNormal)
-    console.log(totalSDHP)
-    console.log(totalFish)
 
-    fetch(API.baseUri+API.KprinterN , {
+
+
+
+
+    fetch(API.baseUri+API.KprinterN, {
         method: "POST",
         headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        // 'Authorization': 'Bearer ' + this.getToken()
       },
       body: JSON.stringify({
         "tableID": this.props.match.params.tableid,
         "orderNormal": totalNormal,
-
           })
     } ).then(res =>{
         if(res.status===200) {
           return res.json();
         }
-        else {
-          console.log("普通菜品对单打印成功")
+        else console.log(res)
+    }).then(json => {
+      console.log(json)
+      if (json.print === 'SUCCESS'){
+        //首次 麻辣香锅菜品
+        var orderInitSDHP = []
+         for (let index in orderInit) {
+          if (orderInit[index].type === "麻辣香锅"  && orderInit[index].deleted === 0 )
+          {
+            orderInitSDHP.push(orderInit[index])
+          }
         }
-    }).then(() =>{
-      fetch(API.baseUri+API.KprinterS , {
-          method: "POST",
-          headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          "tableID": this.props.match.params.tableid,
-          "orderSDHP": totalSDHP,
-            })
-      } ).then(res =>{
-          if(res.status===200) {
-            return res.json();
+        //后续 麻辣香锅菜品
+        var orderModifiedSDHP = []
+         for (let index in orderModified) {
+          if (orderModified[index].type === "麻辣香锅"  && orderModified[index].deleted === 0 )
+          {
+            orderModifiedSDHP.push(orderModified[index])
           }
-          else {
-            console.log("麻辣香锅菜品对单打印成功")
-          }
-      })
-    }).then(() =>{
-      fetch(API.baseUri+API.KprinterF , {
-          method: "POST",
-          headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          "tableID": this.props.match.params.tableid,
-          "orderFish": totalFish,
+        }
+        //总 麻辣香锅菜品
+        var totalSDHP = orderInitSDHP.concat(orderModifiedSDHP)
+        fetch(API.baseUri+API.KprinterS , {
+            method: "POST",
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            // 'Authorization': 'Bearer ' + this.getToken()
+          },
+          body: JSON.stringify({
+            "tableID": this.props.match.params.tableid,
+            "orderSDHP": totalSDHP,
+              })
+        } ).then(res =>{
+            if(res.status===200) {
+              return res.json();
+            }
+            else console.log(res)
+        }).then(json => {
+          console.log(json)
+          if (json.print === 'SUCCESS'){
+            //首次 烤鱼菜品
+            var orderInitFish = []
+             for (let index in orderInit) {
+              if (orderInit[index].type === "特色烤鱼"  && orderInit[index].deleted === 0 )
+              {
+                orderInitFish.push(orderInit[index])
+              }
+            }
+            //后续 烤鱼菜品
+            var orderModifiedFish = []
+             for (let index in orderModified) {
+              if (orderModified[index].type === "特色烤鱼"  && orderModified[index].deleted === 0 )
+              {
+                orderModifiedFish.push(orderModified[index])
+              }
+            }
+            //总 特色烤鱼菜品
+            var totalFish = orderInitFish.concat(orderModifiedFish)
+            fetch(API.baseUri+API.KprinterF , {
+                method: "POST",
+                headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                // 'Authorization': 'Bearer ' + this.getToken()
+              },
+              body: JSON.stringify({
+                "tableID": this.props.match.params.tableid,
+                "orderFish": totalFish,
+                  })
+            } ).then(res =>{
+                if(res.status===200) {
+                  return res.json();
+                }
+                else console.log(res)
+            }).then(json => {
+              console.log(json)
+              if (json.print === 'SUCCESS'){
 
+              }
             })
-      } ).then(res =>{
-          if(res.status===200) {
-            return res.json();
           }
-          else {
-            console.log("特色烤鱼菜品对单打印成功")
-          }
-      })
+        })
+      }
     })
+
   }
 
 
