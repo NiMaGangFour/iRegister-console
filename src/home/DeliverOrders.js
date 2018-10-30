@@ -134,35 +134,35 @@ export default class DeliverOrders extends Component {
     console.log(this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[1])
     console.log(this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[0])
 
-    // fetch(API.baseUri+API.printReceipt, {
-    //     method: "POST",
-    //     headers: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify({
-    //     "tableID": this.props.match.params.tableid,
-    //
-    //     "orderNormal": orderInitNormal,
-    //     "orderSDHP": orderInitSDHP,
-    //     "orderFish": orderInitFish,
-    //
-    //     "dishPrice": this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[1],
-    //     "totalPrice": this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[0],
-    //     "DFEE": this.state.deliveryDeliveryFee,
-    //
-    //       })
-    // } ).then(res =>{
-    //     if(res.status===200) {
-    //       return res.json();
-    //     }
-    //     else {
-    //       console.log(res)
-    //       this.setState({
-    //         discount:0
-    //       })
-    //     }
-    // })
+    fetch(API.baseUri+API.printReceipt, {
+        method: "POST",
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "tableID": this.props.match.params.tableid,
+
+        "orderNormal": orderInitNormal,
+        "orderSDHP": orderInitSDHP,
+        "orderFish": orderInitFish,
+
+        "dishPrice": this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[1],
+        "totalPrice": this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[0],
+        "DFEE": this.state.deliveryDeliveryFee,
+
+          })
+    } ).then(res =>{
+        if(res.status===200) {
+          return res.json();
+        }
+        else {
+          console.log(res)
+          this.setState({
+            discount:0
+          })
+        }
+    })
   }
 
   //厨房 对单打印
