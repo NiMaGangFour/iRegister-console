@@ -250,72 +250,70 @@ export default class AllCurrentOrders extends Component {
                     </thead>
                     {this.state.AllTodayUnfinishedOrdersWithOriginDishes.map((array, i) =>{
                         return (
-                          <tbody key={i}>
-                            {console.log(array[0])}
+                             <tbody key={i}>
+                               {array.length !== 0 && array[0].status !== "4" ?
+                                 <tr>
+                                   <td>
+                                     {array[0].orderID}
+                                     {console.log(array[0].orderID)}
+                                   </td>
+                                   <td>
+                                     {array.map((order, i) =>{
+                                         return (
+                                           <div key={i}>
+                                             {console.log(order)}
+                                             {order.deleted === 0 ?
+                                               <div>{order.name} 数量: ({order.DishCount})</div>
+                                               :
+                                               <div className="strikeThrough">{order.name} 数量: ({order.DishCount})</div>
+                                             }
 
-                            {array[0].status !== "4" ?
-                              <tr>
-                                <td>
-                                  {array[0].orderID}
-                                  {console.log(array[0].orderID)}
-                                </td>
-                                <td>
-                                  {array.map((order, i) =>{
-                                      return (
-                                        <div key={i}>
-                                          {console.log(order)}
-                                          {order.deleted === 0 ?
-                                            <div>{order.name} 数量: ({order.DishCount})</div>
-                                            :
-                                            <div className="strikeThrough">{order.name} 数量: ({order.DishCount})</div>
-                                          }
+                                           </div>
+                                         )
+                                     })}
 
-                                        </div>
-                                      )
-                                  })}
+                                     {this.getModifiedWithOrderID(array[0].orderID).map((modifiedOrder, i) =>{
+                                         return (
+                                           <div key={i}>
 
-                                  {this.getModifiedWithOrderID(array[0].orderID).map((modifiedOrder, i) =>{
-                                      return (
-                                        <div key={i}>
+                                             {modifiedOrder.map((order, i) =>{
+                                                 return (
+                                                   <div key={i}>
+                                                     {order.deleted === 0 ?
+                                                       <div>{order.name} 数量 ({order.num})</div>
+                                                       :
+                                                       <div className="strikeThrough">{order.name} 数量: ({order.DishCount})</div>
+                                                     }
 
-                                          {modifiedOrder.map((order, i) =>{
-                                              return (
-                                                <div key={i}>
-                                                  {order.deleted === 0 ?
-                                                    <div>{order.name} 数量 ({order.num})</div>
-                                                    :
-                                                    <div className="strikeThrough">{order.name} 数量: ({order.DishCount})</div>
-                                                  }
+                                                   </div>
+                                                 )
+                                             })}
+                                           </div>
+                                         )
+                                     })}
 
-                                                </div>
-                                              )
-                                          })}
-                                        </div>
-                                      )
-                                  })}
+                                   </td>
+                                   <td>
+                                     {array[0].creatTime.slice(array[0].creatTime.lastIndexOf('T') + 0).replace("T", "").replace("+1000", "").replace("+1100", "")}  {array[0].creatTime.slice(0, array[0].creatTime.indexOf('T'))}
+                                   </td>
 
-                                </td>
-                                <td>
-                                  {array[0].creatTime.slice(array[0].creatTime.lastIndexOf('T') + 0).replace("T", "").replace("+1000", "").replace("+1100", "")}  {array[0].creatTime.slice(0, array[0].creatTime.indexOf('T'))}
-                                </td>
+                                   <td>
+                                     {this.sumOriginWithOrderID(array[0].orderID)} + {this.sumModifiedWithOrderID(array[0].orderID)} = {this.totalPrice(array[0].orderID)}
+                                   </td>
 
-                                <td>
-                                  {this.sumOriginWithOrderID(array[0].orderID)} + {this.sumModifiedWithOrderID(array[0].orderID)} = {this.totalPrice(array[0].orderID)}
-                                </td>
-
-                                <td>
-                                  {array[0].OrderType === 1 ?
-                                    <div>
-                                      堂吃
-                                    </div>
-                                    :
-                                    <div>
-                                      外卖
-                                    </div>}
-                                </td>
-                              </tr>
-                            :null}
-                          </tbody>
+                                   <td>
+                                     {array[0].OrderType === 1 ?
+                                       <div>
+                                         堂吃
+                                       </div>
+                                       :
+                                       <div>
+                                         外卖
+                                       </div>}
+                                   </td>
+                                 </tr>
+                               :null}
+                             </tbody>
                         )
                     })}
                     </Table>
@@ -335,8 +333,7 @@ export default class AllCurrentOrders extends Component {
                     {this.state.AllTodayUnfinishedOrdersWithOriginDishes.map((array, i) =>{
                         return (
                           <tbody key={i}>
-                            {console.log(array[0])}
-                            {array[0].status !== "4" && array[0].OrderType === 1 ?
+                            {array.length !== 0  && array[0].status !== "4" && array[0].OrderType === 1 ?
                               <tr>
                                 <td>
                                   {array[0].orderID}
@@ -417,9 +414,11 @@ export default class AllCurrentOrders extends Component {
                     </thead>
                     {this.state.AllTodayUnfinishedOrdersWithOriginDishes.map((array, i) =>{
                         return (
+                          <div>
+                          {array.length !== 0 ?
                           <tbody key={i}>
                             {console.log(array[0])}
-                            {array[0].status !== "4" && array[0].OrderType === 2 ?
+                            {array.length !== 0  &&  array[0].status !== "4" && array[0].OrderType === 2 ?
                               <tr>
                                 <td>
                                   {array[0].orderID}
@@ -482,6 +481,8 @@ export default class AllCurrentOrders extends Component {
                               </tr>
                             :null}
                           </tbody>
+                          :null}
+                          </div>
                         )
                     })}
                     </Table>

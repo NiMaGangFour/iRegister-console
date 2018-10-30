@@ -37,6 +37,7 @@ export const API = {
     AvailableDish: 'api1/AvailableDish',
     addNewDishInfo: 'addNewDishInfo',
     deleteDishInfo: 'api1/deleteDishInfo',
-    login: 'users/userlogin'
+    deleteImage: 'api1/deleteImage',
+    login: 'users/userlogin',
 
 }

@@ -157,6 +157,7 @@ export default class CheckBookings extends Component {
 
     SumUp= ()=> {
         var total = this.state.order.reduce((sum, price) =>{
+          console.log(price.price)
             return sum + price.num * price.price
         }, 0)
         var totalSDHP = this.state.SDHPorder.reduce((sum, price) =>{
@@ -165,7 +166,8 @@ export default class CheckBookings extends Component {
         var totalFish = this.state.Fishorder.reduce((sum, price) =>{
             return sum + price.num * price.price
         }, 0)
-        return total + totalSDHP + totalFish;
+        // return total + totalSDHP + totalFish;
+        return Math.round((total + totalSDHP + totalFish) * 100) / 100
     }
 
     deleteDish = (nameDish)=> {

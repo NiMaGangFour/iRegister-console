@@ -335,6 +335,7 @@ export default class Dishes extends Component {
 
     }
 
+
     SumUp= ()=> {
         var total = this.state.order.reduce((sum, price) =>{
             return sum + price.num * price.price
@@ -345,8 +346,10 @@ export default class Dishes extends Component {
         var totalFish = this.state.Fishorder.reduce((sum, price) =>{
             return sum + price.num * price.price
         }, 0)
-        return total + totalSDHP + totalFish;
+
+        return Math.round((total + totalSDHP + totalFish) * 100) / 100
     }
+
     SumUpModified = ()=> {
       console.log(this.props.location.state.tableDishes)
       var tempArray = []
@@ -360,7 +363,7 @@ export default class Dishes extends Component {
         var total = tempArray.reduce((sum, price) =>{
             return sum + price.DishCount * price.price
         }, 0)
-        return total;
+        return Math.round(total * 100) / 100
     }
 
     SumUpLastTimeModified = ()=> {
@@ -375,18 +378,19 @@ export default class Dishes extends Component {
         var total = tempLastTimeModifiedPositive.reduce((sum, price) =>{
             return sum + price.num * price.price
         }, 0)
-        return total;
+        return Math.round(total * 100) / 100
     }
+
     SumUpCurrentModified = ()=> {
         var total = this.state.tableModifiedDishes.reduce((sum, price) =>{
             return sum + price.DishCount * price.price
         }, 0)
-        return total;
+        return Math.round(total * 100) / 100
     }
 
     SumUpEntirePrice = ()=> {
         var total = this.SumUpModified() + this.SumUpLastTimeModified() + this.SumUpCurrentModified();
-        return total;
+        return Math.round(total * 100) / 100
     }
 
     deleteDish = (nameDish)=> {
@@ -521,67 +525,13 @@ export default class Dishes extends Component {
           this.authOptions.current.getData();
           this.setState({
             order:[],
-            SDHPorder:[]
+            SDHPorder:[],
+            Fishorder:[],
           })
           window.location = '/home/CheckDishes/' + this.props.match.params.tableid
           // window.location = '/'
         }
       })
-
-      // var a = JSON.parse(localStorage.getItem("SHUWEIYUAN"));
-      // if(a && a.id !== null && a.id !== undefined){
-      //     var date = new Date();
-      //     var time = date.toLocaleTimeString();
-      //     // console.log(JSON.stringify(this.state.order))
-      //     console.log(this.state.order)
-      //     console.log(this.state.textareaValue)
-      //     var order = this.state.order
-      //     var SDHPorder = this.state.SDHPorder
-      //     var Fishorder = this.state.Fishorder
-      //     var totalorder = order.concat(SDHPorder,Fishorder)
-      //     console.log(totalorder)
-      //
-      //     fetch(API.baseUri+API.neworder, {
-      //         method: "POST",
-      //         headers: {
-      //         'Accept': 'application/json',
-      //         'Content-Type': 'application/json',
-      //         'Authorization': 'Bearer ' + this.getToken()
-      //       },
-      //       body: JSON.stringify({
-      //               "items": totalorder,
-      //               "creatTime": time,
-      //               "totalPrice": this.SumUp(),
-      //               "tableID": this.props.match.params.tableid,
-      //               "comment":this.state.textareaValue,
-      //           })
-      //     } ).then(res =>{
-      //         if(res.status===200) {
-      //           // console.log(res.json())
-      //           return res.json();
-      //         }
-      //         else if(res.status===400){
-      //              window.location='/login'
-      //          }
-      //
-      //         else console.log(res)
-      //     }).then(json => {
-      //       console.log(json.success)
-      //       console.log(json)
-      //       if (json.success === true){
-      //         this.authOptions.current.getData();
-      //         this.setState({
-      //           order:[],
-      //           SDHPorder:[]
-      //         })
-      //         window.location = '/home/CheckDishes/' + this.props.match.params.tableid
-      //         // window.location = '/'
-      //       }
-      //     })
-      //   }
-      //   else {
-      //     window.location='/login'
-      //   }
     }
 
     parentChild = (value) => {

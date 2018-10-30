@@ -297,7 +297,7 @@ render() {
                   }
               </div>
             :null}
-
+            {console.log(this.state.bookingTableDetails)}
                 <div className="col-lg-12 cust-border nova-card" >
                     {
                       this.state.bookingTableDetails.map((value, key1) => {
@@ -305,7 +305,7 @@ render() {
                         {console.log(value.bookingComment)}
                         return (
                           <div key={key1} className="row nova-margin" >
-                              <div className="col-lg-1" />
+                              <div className="col-lg-5" />
                               <div className="col-lg-1"><b>菜品总价：</b></div>
                               <div className="col-lg-2"><b>$AUD{value.totalPrice}</b></div>
                                 {this.CommentExist() === 1 ?
@@ -323,9 +323,8 @@ render() {
           </div>
 
           <div className="col-lg-10 cust-border nova-card cust-margin-top">
+            <div className="col-lg-2 "/ >
             <div className="col-lg-7 cust-border nova-card" >
-
-
                   {
                     this.state.bookingTableDetails.map((value, key1) => {
                       return (
@@ -360,19 +359,19 @@ render() {
                             </tr>
                           </tbody>
                           </Table>
+
+                          <div>
+                            <div className="col-lg-3"></div>
+                            <Button className="col-lg-3" bsSize="large" bsStyle="danger" onClick={()=>{this.cancleBookTable()}}>取消预订</Button>
+                            <div className="col-lg-1"></div>
+                            <Button className="col-lg-3" bsSize="large" bsStyle="success" onClick={()=>{this.inherit()}}>继承菜品</Button>
+                          </div>
                       </div>)
                     })
                   }
 
             </div>
-            <div className="col-lg-5 cust-border nova-card" >
-              <div className="col-lg-1"></div>
-              <Button className="col-lg-3" bsStyle="danger" onClick={()=>{this.cancleBookTable()}}>取消预订</Button>
-              <div className="col-lg-1"></div>
-              <Button className="col-lg-3" bsStyle="success" onClick={()=>{this.inherit()}}>继承菜品</Button>
-            </div>
           </div>
-
       </div>
     )
 }

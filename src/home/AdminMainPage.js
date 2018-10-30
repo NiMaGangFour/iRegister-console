@@ -2,10 +2,11 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import {API} from '../config'
 import Clock from 'react-live-clock'
-import { Button, Tabs, Tab, ButtonGroup, FormGroup, FormControl, ControlLabel, HelpBlock, ButtonToolbar, Table } from 'react-bootstrap'
+import { Button, Tabs, Tab, ButtonGroup, FormGroup, FormControl, ControlLabel, HelpBlock, ButtonToolbar, Table, Modal, Thumbnail,Grid ,Col, Row, Alert } from 'react-bootstrap'
 import Personal from '../personal/Personal'
 import AuthOptions from '../auth/AuthOptions'
 import { Textfit } from 'react-textfit'
+import ImageUploader from 'react-images-upload'
 
 export default class AdminMainPage extends Component {
     constructor(props) {
@@ -21,7 +22,13 @@ export default class AdminMainPage extends Component {
             NewdishPriceValue: "",
             NewdishTypeValue: "",
             NewdishSubtypeValue: "",
-            editorOpenAllowed: true
+            editorOpenAllowed: true,
+            show: false,
+            show2: false,
+            showAlert: false,
+            targetDish:[],
+            pictures: []
+
         }
       }
     componentWillMount() {
@@ -206,7 +213,6 @@ export default class AdminMainPage extends Component {
   handleChangedishSubtypeValue = (event) => {
     this.setState({dishSubtypeValue: event.target.value});
   }
-
   //对应添加菜品按钮   新增菜品信息
   addNewDishInfo = () => {
     fetch(API.baseUri+API.addNewDishInfo, {
@@ -257,6 +263,80 @@ export default class AdminMainPage extends Component {
       buttonDisable = true;
     }
     return buttonDisable
+  }
+
+  //对应 查看图片 按钮
+  checkImg = (dish) => {
+    this.setState({
+      targetDish: dish,
+      show: true,
+     })
+  }
+  //对应 暂无图片 按钮  添加图片
+  addImg = (dish) => {
+    this.setState({
+      targetDish: dish,
+      show2: true,
+     })
+  }
+
+  //对应 删除图片 按钮
+  deleteImage = () => {
+    fetch(API.baseUri+API.deleteImage + "/" + this.state.targetDish.dishId)
+        .then((response) => {
+            if (response.status === 200) {
+                return response.json()
+            } else console.log("Get data error ");
+        }).then((json) =>{
+        this.setState({
+          show:false,
+          showAlert:false
+        })
+
+        }).then(() =>{
+
+        this.getData()
+        }).catch((error) => {
+          console.log('error on .catch', error);
+    })
+  }
+
+ //对应 Modal 关闭功能
+  handleHide = () => {
+    this.setState({ show: false });
+  }
+
+ //对应 添加图片的Modal 关闭功能
+  handleHide2 = () => {
+    this.setState({ show2: false });
+  }
+
+  //关闭Alert
+  handleDismiss = () => {
+  this.setState({ showAlert: false });
+  }
+
+  //打卡Alert
+  handleShow = () => {
+    this.setState({ showAlert: true });
+  }
+
+  //判断 菜品图片是否存在
+  verifyImage = (dish) => {
+    var result = 0
+    if (dish.abbreviation !== null) {
+      result = 1
+    }
+    return result
+  }
+
+
+
+  //拖拽上传功能
+  onDrop = (picture) => {
+    this.setState({
+        pictures: this.state.pictures.concat(picture),
+    })
   }
 
   toTerminalPage = () => {
@@ -495,9 +575,6 @@ export default class AdminMainPage extends Component {
                                             <Button className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.updateDish(dish)}}>保存</Button>
                                             </div>
                                           :null}
-
-
-
                                         </td>
                                       </tr>
                                       :null}
@@ -1437,9 +1514,6 @@ export default class AdminMainPage extends Component {
 
                                             </div>
                                           :null}
-
-
-
                                         </td>
                                       </tr>
                                       :null}
@@ -1458,7 +1532,7 @@ export default class AdminMainPage extends Component {
                                             :
                                               <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
                                             }
-                                            <div className="col-lg-5"  />
+                                            <div className="col-lg-1"  />
                                             <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
                                           </td>
                                         </tr>
@@ -1541,14 +1615,25 @@ export default class AdminMainPage extends Component {
                                           <td>{dish.subtype}</td>
                                           <td>
                                             <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
-                                            <div className="col-lg-1"  />
+                                            <div className="col-lg-1"/>
                                             {dish.available === 1 ?
                                               <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
                                             :
                                               <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
                                             }
-                                            <div className="col-lg-5"  />
-                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
+                                            <div className="col-lg-1"/>
+                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {}}>删除</Button>
+                                            {this.verifyImage(dish) === 1 ?
+                                              <div>
+                                                <div className="col-lg-1"/>
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="info" onClick={() => {this.checkImg(dish)}}>图片预览</Button>
+                                              </div>
+                                              :
+                                              <div>
+                                                <div className="col-lg-1"/>
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.addImg(dish)}}>暂无图片</Button>
+                                              </div>
+                                            }
                                           </td>
                                         </tr>
                                         :null}
@@ -1618,6 +1703,91 @@ export default class AdminMainPage extends Component {
                 </Table>
               </div>
           </div>
+          <Modal
+            show={this.state.show}
+            onHide={this.handleHide}
+            container={this}
+            aria-labelledby="contained-modal-title"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title id="">
+                <center>图片预览</center>
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Grid>
+                <Row>
+                  <Col md={1}/>
+                  <Col md={4}>
+                    <Thumbnail src={"http://api.shuweiyuan.com.au/img/" + this.state.targetDish.abbreviation + ".jpg"} alt="242x200">
+                      <center><h3>{this.state.targetDish.name}</h3></center>
+
+                        <center><Button bsStyle="primary" onClick={() => {this.handleShow()}}>删除图片</Button></center>
+
+                       {this.state.showAlert === true ?
+                        <div>
+                          <hr/>
+                          <Alert bsStyle="danger" onDismiss={this.handleDismiss}>
+                            <center><h3><b>需要您的再次确认</b></h3></center>
+                              <div className="col-lg-2"/>
+                              <Button bsStyle="danger" onClick={() => {this.deleteImage()}}>确认删除</Button>
+                              <div className="col-lg-1"/>
+                              <Button onClick={this.handleDismiss}>返回</Button>
+
+                          </Alert>
+                        </div>
+                      :null}
+                    </Thumbnail>
+                  </Col>
+                </Row>
+              </Grid>
+
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={this.handleHide}>关闭</Button>
+            </Modal.Footer>
+          </Modal>
+
+
+          <Modal
+            show={this.state.show2}
+            onHide={this.handleHide2}
+            container={this}
+            aria-labelledby="contained-modal-title"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title id="">
+                <center>图片预览</center>
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Grid>
+                <Row>
+                  <Col md={1}/>
+                  <Col md={4}>
+                    <ImageUploader
+                      withIcon={true}
+                      buttonText='Choose images'
+                      onChange={() => this.onDrop()}
+                      imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                      maxFileSize={5242880}
+                  />
+                    <Thumbnail src={"http://api.shuweiyuan.com.au/img/" + this.state.targetDish.abbreviation + ".jpg"} alt="242x200">
+                      <center><h3>{this.state.targetDish.name}</h3></center>
+
+
+                        <center><Button bsStyle="primary" onClick={() => {this.handleShow()}}>111111111111</Button></center>
+                    </Thumbnail>
+                  </Col>
+                </Row>
+              </Grid>
+
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={this.handleHide2}>关闭</Button>
+            </Modal.Footer>
+          </Modal>
+
         </div>
         )
     }
