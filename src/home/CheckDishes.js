@@ -372,8 +372,9 @@ export default class CheckDishesDishes extends Component {
         if (res.status === 200) {
           // console.log(res.json())
           return res.json();
-        } else
-          console.log(res)
+        } else {
+          this.print()
+        }
       }).then(json => {
         console.log(json)
         if (json.success === true) {
@@ -399,8 +400,9 @@ export default class CheckDishesDishes extends Component {
         if (res.status === 200) {
           // console.log(res.json())
           return res.json();
-        } else
-          console.log(res)
+        } else {
+          this.print()
+        }
       }).then(json => {
         console.log(json)
         if (json.success === true) {
@@ -755,6 +757,16 @@ export default class CheckDishesDishes extends Component {
     console.log(totalNormal)
     console.log(totalSDHP)
     console.log(totalFish)
+    var FINAL = 0
+    var DISCOUNT = 0
+    if (this.discountedPrice() !== 0) {
+      DISCOUNT = parseFloat(this.SumUpEntirePrice()) - parseFloat(this.discountedPrice())
+      FINAL = this.discountedPrice()
+    } else {
+      DISCOUNT = parseFloat(this.SumUpEntirePrice()) - parseFloat(this.sumAfterRedeem())
+      FINAL = this.sumAfterRedeem()
+    }
+
     fetch(API.baseUri+API.printOut, {
         method: "POST",
         headers: {
@@ -762,17 +774,27 @@ export default class CheckDishesDishes extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-              "orderNormal": totalNormal,
-              "orderSDHP": totalSDHP,
-              "orderFish": totalFish,
-              "totalPrice": this.SumUp(),
-              "tableID": this.props.match.params.tableid,
+        "tableID": this.props.match.params.tableid,
+
+        "orderNormal": totalNormal,
+        "orderSDHP": totalSDHP,
+        "orderFish": totalFish,
+
+        "totalPrice": this.SumUpEntirePrice(),
+        "discountedPrice": FINAL,
+        "discount": DISCOUNT,
+
           })
     } ).then(res =>{
         if(res.status===200) {
           return res.json();
         }
-        else console.log(res)
+        else {
+          console.log(res)
+          this.setState({
+            discount:0
+          })
+        }
     })
   }
 
