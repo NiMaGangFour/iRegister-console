@@ -85,14 +85,15 @@ export default class DeliverOrders extends Component {
       }
     }
       var total = tempArray.reduce((sum, order) =>{
-          return sum + order.DishCount * order.price
+          return ((sum + order.DishCount * order.price) * 100) / 100
       }, 0)
-      var result = parseInt(total) + parseInt(deliveryFee);
+      var sum = Math.round(total  * 100) / 100
 
-      return [result, total];
+      var result = parseFloat(sum) + parseFloat(deliveryFee);
+      console.log(sum)
+      console.log(deliveryFee)
+      return [result, sum];
   }
-
-
 
   render() {
     var toHomePage = {
@@ -123,16 +124,18 @@ export default class DeliverOrders extends Component {
               </div>
 
               <div className="nova-card cust-border col-lg-10 cust-margin11">
-                <div className="">
+                <div className="col-lg-10">
+                  <div className="col-lg-3"/>
                   <div className="col-lg-6">菜品名称</div>
                   <div className="col-lg-1">数量</div>
                   <div className="col-lg-1">单价</div>
                 </div>
 
-                <div>
+                <div >
                   {this.state.deliveryDishes.map((value, i) =>{
                     return (
-                      <div key={i}>
+                      <div className="col-lg-10" key={i}>
+                        <div className="col-lg-3"/>
                         <div className="col-lg-6">{value.name}</div>
                         <div className="col-lg-1">{value.DishCount}</div>
                         <div className="col-lg-1">{value.price}</div>
@@ -141,11 +144,20 @@ export default class DeliverOrders extends Component {
                   })
                 }
                 </div>
+                    <hr />
+                <div className=" col-lg-9">
+
+                  <div className="col-lg-5"/>
+                  <div className="col-lg-3">菜品总价:{this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[1]}  $AUD </div>
+                  <div className="col-lg-3">外卖费:{this.state.deliveryDeliveryFee}   $AUD</div>
+
+
+                </div>
                 <div className=" col-lg-9">
                   <hr />
-                  菜品总价:{this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[1]}  $AUD <br />
-                  外卖费:{this.state.deliveryDeliveryFee}   $AUD<br/>
-                  <b>订单总价:{this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[0]}  $AUD</b>
+                  <div className="col-lg-6"/>
+                  <div className="col-lg-4"><b><h2>订单总价:{this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[0]}  $AUD</h2></b></div>
+
                 </div>
               </div>
 
@@ -153,16 +165,19 @@ export default class DeliverOrders extends Component {
                 {console.log(this.state.customerComment)}
                 {this.state.customerComment !== "" ?
                   <div className="nova-card" >
-                    <h4>备注：{this.state.customerComment}</h4>
+                    <center><h4>备注：{this.state.customerComment}</h4></center>
                 </div>
                 :
-                <h4>备注：无</h4>
+                <center><h4>备注：无</h4></center>
                 }
               </div>
               <div className="nova-card cust-border col-lg-10 cust-margin11">
-                <div><h4>顾客姓名：{this.state.customerName}</h4></div>
-                <div><h4>顾客电话：{this.state.customerPhoneNO}</h4></div>
-                <div><h4>送餐地址：{this.state.customerAddress}</h4></div>
+                <div className="col-lg-4"/>
+                <div className="col-lg-6">
+                  <div><h4>顾客姓名：{this.state.customerName}</h4></div>
+                  <div><h4>顾客电话：{this.state.customerPhoneNO}</h4></div>
+                  <div><h4>送餐地址：{this.state.customerAddress}</h4></div>
+                </div>
               </div>
 
               <div className="nova-card cust-border col-lg-10">
