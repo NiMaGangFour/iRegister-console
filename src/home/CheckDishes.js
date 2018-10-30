@@ -353,8 +353,6 @@ export default class CheckDishesDishes extends Component {
     console.log(this.props.match.params.tableid)
     console.log(this.sumAfterRedeem())
     console.log("Phone" + this.state.memberPhoneNum)
-
-
     if(this.discountedPrice() !==0){
       fetch(API.baseUri + API.checkOut, {
         method: "POST",
@@ -373,11 +371,12 @@ export default class CheckDishesDishes extends Component {
           // console.log(res.json())
           return res.json();
         } else {
-          this.print()
+          console.log(res)
         }
       }).then(json => {
         console.log(json)
         if (json.success === true) {
+          this.print()
           this.authOptions.current.getData();
           this.setState({tableDishes: [], tableModifiedDishes: []})
           // window.location = '/'
@@ -401,11 +400,12 @@ export default class CheckDishesDishes extends Component {
           // console.log(res.json())
           return res.json();
         } else {
-          this.print()
+          console.log(res)
         }
       }).then(json => {
         console.log(json)
         if (json.success === true) {
+          this.print()
           this.authOptions.current.getData();
           this.setState({tableDishes: [], tableModifiedDishes: [] ,discount:""})
           window.location = '/'
