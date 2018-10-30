@@ -780,9 +780,9 @@ export default class CheckDishesDishes extends Component {
         "orderSDHP": totalSDHP,
         "orderFish": totalFish,
 
-        "totalPrice": this.SumUpEntirePrice(),
-        "discountedPrice": FINAL,
-        "discount": DISCOUNT,
+        "DineInTotalPrice": this.SumUpEntirePrice(),
+        "DineInDiscountedPrice": FINAL,
+        "DineInDiscount": DISCOUNT,
 
           })
     } ).then(res =>{

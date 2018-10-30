@@ -147,9 +147,9 @@ export default class DeliverOrders extends Component {
         "orderSDHP": orderInitSDHP,
         "orderFish": orderInitFish,
 
-        "dishPrice": this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[1],
-        "totalPrice": this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[0],
-        "DFEE": this.state.deliveryDeliveryFee,
+        "DeliveryDishPrice": this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[1],
+        "DeliveryTotalPrice": this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[0],
+        "DeliveryFee": this.state.deliveryDeliveryFee,
 
           })
     } ).then(res =>{
