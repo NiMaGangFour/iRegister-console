@@ -102,30 +102,34 @@ export default class DeliverOrders extends Component {
     // console.log(JSON.stringify(this.state.order))
 
     var orderInit = this.state.deliveryDishes
+    console.log(orderInit)
     // 普通菜品
     var orderInitNormal = []
      for (let index in orderInit) {
-      if (orderInit[index].type !== "麻辣香锅" && orderInit[index].type !== "特色烤鱼" && orderInit[index].deleted === 0 )
+      if (orderInit[index].type !== "麻辣香锅" && orderInit[index].type !== "特色烤鱼")
       {
         orderInitNormal.push(orderInit[index])
       }
     }
+    console.log(orderInitNormal)
     // 麻辣香锅菜品
     var orderInitSDHP = []
      for (let index in orderInit) {
-      if (orderInit[index].type === "麻辣香锅"  && orderInit[index].deleted === 0 )
+      if (orderInit[index].type === "麻辣香锅" )
       {
         orderInitSDHP.push(orderInit[index])
       }
     }
+    console.log(orderInitSDHP)
     // 烤鱼菜品
     var orderInitFish = []
      for (let index in orderInit) {
-      if (orderInit[index].type === "特色烤鱼"  && orderInit[index].deleted === 0 )
+      if (orderInit[index].type === "特色烤鱼" )
       {
         orderInitFish.push(orderInit[index])
       }
     }
+    console.log(orderInitFish)
 
     fetch(API.baseUri+API.printReceipt, {
         method: "POST",
@@ -167,7 +171,7 @@ export default class DeliverOrders extends Component {
     // 普通菜品
     var orderInitNormal = []
      for (let index in orderInit) {
-      if (orderInit[index].type !== "麻辣香锅" && orderInit[index].type !== "特色烤鱼" && orderInit[index].deleted === 0 )
+      if (orderInit[index].type !== "麻辣香锅" && orderInit[index].type !== "特色烤鱼" )
       {
         orderInitNormal.push(orderInit[index])
       }
@@ -175,7 +179,7 @@ export default class DeliverOrders extends Component {
     // // 麻辣香锅菜品
     // var orderInitSDHP = []
     //  for (let index in orderInit) {
-    //   if (orderInit[index].type === "麻辣香锅"  && orderInit[index].deleted === 0 )
+    //   if (orderInit[index].type === "麻辣香锅" )
     //   {
     //     orderInitSDHP.push(orderInit[index])
     //   }
@@ -183,7 +187,7 @@ export default class DeliverOrders extends Component {
     // // 烤鱼菜品
     // var orderInitFish = []
     //  for (let index in orderInit) {
-    //   if (orderInit[index].type === "特色烤鱼"  && orderInit[index].deleted === 0 )
+    //   if (orderInit[index].type === "特色烤鱼" )
     //   {
     //     orderInitFish.push(orderInit[index])
     //   }
@@ -211,7 +215,7 @@ export default class DeliverOrders extends Component {
         // 麻辣香锅菜品
         var orderInitSDHP = []
          for (let index in orderInit) {
-          if (orderInit[index].type === "麻辣香锅"  && orderInit[index].deleted === 0 )
+          if (orderInit[index].type === "麻辣香锅" )
           {
             orderInitSDHP.push(orderInit[index])
           }
@@ -238,7 +242,7 @@ export default class DeliverOrders extends Component {
             //首次 烤鱼菜品
             var orderInitFish = []
              for (let index in orderInit) {
-              if (orderInit[index].type === "特色烤鱼"  && orderInit[index].deleted === 0 )
+              if (orderInit[index].type === "特色烤鱼" )
               {
                 orderInitFish.push(orderInit[index])
               }
