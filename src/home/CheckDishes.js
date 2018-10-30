@@ -881,45 +881,45 @@ export default class CheckDishesDishes extends Component {
         else {
           console.log("普通菜品对单打印成功")
         }
-    })
+    }).then(() =>{
+      fetch(API.baseUri+API.KprinterS , {
+          method: "POST",
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "tableID": this.props.match.params.tableid,
+          "orderSDHP": totalSDHP,
+            })
+      } ).then(res =>{
+          if(res.status===200) {
+            return res.json();
+          }
+          else {
+            console.log("麻辣香锅菜品对单打印成功")
+          }
+      })
+    }).then(() =>{
+      fetch(API.baseUri+API.KprinterF , {
+          method: "POST",
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "tableID": this.props.match.params.tableid,
+          "orderFish": totalFish,
 
-    fetch(API.baseUri+API.KprinterS , {
-        method: "POST",
-        headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        "tableID": this.props.match.params.tableid,
-        "orderSDHP": totalSDHP,
-          })
-    } ).then(res =>{
-        if(res.status===200) {
-          return res.json();
-        }
-        else {
-          console.log("麻辣香锅菜品对单打印成功")
-        }
-    })
-
-    fetch(API.baseUri+API.KprinterF , {
-        method: "POST",
-        headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        "tableID": this.props.match.params.tableid,
-        "orderFish": totalFish,
-        
-          })
-    } ).then(res =>{
-        if(res.status===200) {
-          return res.json();
-        }
-        else {
-          console.log("特色烤鱼菜品对单打印成功")
-        }
+            })
+      } ).then(res =>{
+          if(res.status===200) {
+            return res.json();
+          }
+          else {
+            console.log("特色烤鱼菜品对单打印成功")
+          }
+      })
     })
   }
 
