@@ -50,9 +50,16 @@ export default class Personal extends Component {
        })
    }
 
+   refresh = () => {
+     this.getData()
+   }
+
     render() {
       return (
           <div className="profile  cust-margin3 nova-padding nova-card cust-border">
+            <div className="col-lg-9"/>
+            <div className="col-lg-3"><Button  bsStyle="default" onClick={() => {this.refresh()}} ><i className="fas fa-sync"></i></Button></div>
+            <br/>
             <div className="div-centre"><h3>今日外卖订单</h3></div>
             <hr />
               <Tabs bsStyle="pills" defaultActiveKey={1} id="noanim-tab-example">
@@ -67,7 +74,7 @@ export default class Personal extends Component {
                               <div className="cust-margin8" key={i}>
                               {value.creatTime.slice(0, value.creatTime.indexOf('T')) === this.state.dateToday && value.status !== "4" ?
                                 <Link to={ToDeliver} >
-                                  <ListGroupItem onClick={() => {}}>
+                                  <ListGroupItem >
                                     <center>单号{value.id} {value.creatTime.slice(value.creatTime.lastIndexOf('T') + 0).replace("T", "").replace("+0000", "").replace("+1100", "").replace("+1000", "").replace("Z", "")}</center>
                                     <center>
                                     {value.paymentStatus === "2" ?
