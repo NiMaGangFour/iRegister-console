@@ -157,7 +157,6 @@ export default class CheckBookings extends Component {
 
     SumUp= ()=> {
         var total = this.state.order.reduce((sum, price) =>{
-          console.log(price.price)
             return sum + price.num * price.price
         }, 0)
         var totalSDHP = this.state.SDHPorder.reduce((sum, price) =>{
@@ -299,9 +298,9 @@ export default class CheckBookings extends Component {
           this.authOptions.current.getData();
           this.setState({
             order:[],
-            SDHPorder:[]
+            SDHPorder:[],
+            Fishorder:[],
           })
-
           // window.location = '/home/CheckBookingsDetails/' + this.props.match.params.tableid
           // window.location = '/'
         }

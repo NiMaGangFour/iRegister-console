@@ -263,9 +263,9 @@ export default class AllCurrentOrders extends Component {
                                            <div key={i}>
                                              {console.log(order)}
                                              {order.deleted === 0 ?
-                                               <div>{order.name} 数量: ({order.DishCount})</div>
+                                               <div>{order.name} 数量: [{order.DishCount}]</div>
                                                :
-                                               <div className="strikeThrough">{order.name} 数量: ({order.DishCount})</div>
+                                               <div className="strikeThrough">{order.name} 数量: [{order.DishCount}]</div>
                                              }
 
                                            </div>
@@ -280,9 +280,9 @@ export default class AllCurrentOrders extends Component {
                                                  return (
                                                    <div key={i}>
                                                      {order.deleted === 0 ?
-                                                       <div>{order.name} 数量 ({order.num})</div>
+                                                       <div>{order.name} 数量 [{order.num}]</div>
                                                        :
-                                                       <div className="strikeThrough">{order.name} 数量: ({order.DishCount})</div>
+                                                       <div className="strikeThrough">{order.name} 数量: [{order.DishCount}]</div>
                                                      }
 
                                                    </div>
@@ -345,9 +345,9 @@ export default class AllCurrentOrders extends Component {
                                         <div key={i}>
                                           {console.log(order)}
                                           {order.deleted === 0 ?
-                                            <div>{order.name} 数量: ({order.DishCount})</div>
+                                            <div>{order.name} 数量: [{order.DishCount}]</div>
                                             :
-                                            <div className="strikeThrough">{order.name} 数量: ({order.DishCount})</div>
+                                            <div className="strikeThrough">{order.name} 数量: [{order.DishCount}]</div>
                                           }
 
                                         </div>
@@ -362,9 +362,9 @@ export default class AllCurrentOrders extends Component {
                                               return (
                                                 <div key={i}>
                                                   {order.deleted === 0 ?
-                                                    <div>{order.name} 数量 ({order.num})</div>
+                                                    <div>{order.name} 数量 [{order.num}]</div>
                                                     :
-                                                    <div className="strikeThrough">{order.name} 数量: ({order.DishCount})</div>
+                                                    <div className="strikeThrough">{order.name} 数量: [{order.DishCount}]</div>
                                                   }
 
                                                 </div>
@@ -414,8 +414,6 @@ export default class AllCurrentOrders extends Component {
                     </thead>
                     {this.state.AllTodayUnfinishedOrdersWithOriginDishes.map((array, i) =>{
                         return (
-                          <div>
-                          {array.length !== 0 ?
                           <tbody key={i}>
                             {console.log(array[0])}
                             {array.length !== 0  &&  array[0].status !== "4" && array[0].OrderType === 2 ?
@@ -430,9 +428,9 @@ export default class AllCurrentOrders extends Component {
                                         <div key={i}>
                                           {console.log(order)}
                                           {order.deleted === 0 ?
-                                            <div>{order.name} 数量: ({order.DishCount})</div>
+                                            <div>{order.name} 数量: [{order.DishCount}]</div>
                                             :
-                                            <div className="strikeThrough">{order.name} 数量: ({order.DishCount})</div>
+                                            <div className="strikeThrough">{order.name} 数量: [{order.DishCount}]</div>
                                           }
 
                                         </div>
@@ -442,16 +440,14 @@ export default class AllCurrentOrders extends Component {
                                   {this.getModifiedWithOrderID(array[0].orderID).map((modifiedOrder, i) =>{
                                       return (
                                         <div key={i}>
-
                                           {modifiedOrder.map((order, i) =>{
                                               return (
                                                 <div key={i}>
                                                   {order.deleted === 0 ?
-                                                    <div>{order.name} 数量 ({order.num})</div>
+                                                    <div>{order.name} 数量 [{order.num}]</div>
                                                     :
-                                                    <div className="strikeThrough">{order.name} 数量: ({order.DishCount})</div>
+                                                    <div className="strikeThrough">{order.name} 数量: [{order.DishCount}]</div>
                                                   }
-
                                                 </div>
                                               )
                                           })}
@@ -481,8 +477,6 @@ export default class AllCurrentOrders extends Component {
                               </tr>
                             :null}
                           </tbody>
-                          :null}
-                          </div>
                         )
                     })}
                     </Table>

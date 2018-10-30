@@ -39,5 +39,6 @@ export const API = {
     deleteDishInfo: 'api1/deleteDishInfo',
     deleteImage: 'api1/deleteImage',
     login: 'users/userlogin',
+    printOut: 'printOut',
 
 }

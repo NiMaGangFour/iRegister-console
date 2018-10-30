@@ -755,39 +755,25 @@ export default class CheckDishesDishes extends Component {
     console.log(totalNormal)
     console.log(totalSDHP)
     console.log(totalFish)
-    // fetch(API.baseUri+API.Bookingneworder, {
-    //     method: "POST",
-    //     headers: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify({
-    //           "items": totalorder,
-    //
-    //           "totalPrice": this.SumUp(),
-    //           "tableID": this.props.match.params.tableid,
-    //
-    //       })
-    // } ).then(res =>{
-    //     if(res.status===200) {
-    //       // console.log(res.json())
-    //       return res.json();
-    //     }
-    //     else console.log(res)
-    // }).then(json => {
-    //   console.log(json.success)
-    //   console.log(json)
-    //   if (json.success === true){
-    //     this.authOptions.current.getData();
-    //     this.setState({
-    //       order:[],
-    //       SDHPorder:[],
-    //       Fishorder:[],
-    //     })
-    //     // window.location = '/home/CheckBookingsDetails/' + this.props.match.params.tableid
-    //     // window.location = '/'
-    //   }
-    // })
+    fetch(API.baseUri+API.printOut, {
+        method: "POST",
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+              "orderNormal": totalNormal,
+              "orderSDHP": totalSDHP,
+              "orderFish": totalFish,
+              "totalPrice": this.SumUp(),
+              "tableID": this.props.match.params.tableid,
+          })
+    } ).then(res =>{
+        if(res.status===200) {
+          return res.json();
+        }
+        else console.log(res)
+    })
   }
 
 
