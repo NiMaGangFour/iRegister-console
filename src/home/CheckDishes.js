@@ -597,7 +597,7 @@ export default class CheckDishesDishes extends Component {
     return sum
   }
   memberPointsCalculatorAfterCheckout = () => {
-    var sum = this.state.memberPoints - this.state.redeemablePoints + this.sumAfterRedeem()
+    var sum = this.state.memberPoints - this.state.redeemablePoints + parseInt((this.sumAfterRedeem()),10)
     return sum
   }
   //0416983772
@@ -692,7 +692,7 @@ export default class CheckDishesDishes extends Component {
     return tempArray.length
   }
 
-  //发送菜单给后台
+  //小票打印
   print = () => {
     var date = new Date();
     var time = date.toLocaleTimeString();
@@ -767,7 +767,7 @@ export default class CheckDishesDishes extends Component {
       FINAL = this.sumAfterRedeem()
     }
 
-    fetch(API.baseUri+API.printOut, {
+    fetch(API.baseUri+API.printReceipt, {
         method: "POST",
         headers: {
         'Accept': 'application/json',
@@ -794,6 +794,131 @@ export default class CheckDishesDishes extends Component {
           this.setState({
             discount:0
           })
+        }
+    })
+  }
+
+  //厨房 对单打印
+  printKitchen = () => {
+    var date = new Date();
+    var time = date.toLocaleTimeString();
+    // console.log(JSON.stringify(this.state.order))
+    var orderInit = this.state.tableDishes
+    var orderModified = this.state.tableModifiedDishes
+    //首次 普通菜品
+    var orderInitNormal = []
+     for (let index in orderInit) {
+      if (orderInit[index].type !== "麻辣香锅" && orderInit[index].type !== "特色烤鱼" && orderInit[index].deleted === 0 )
+      {
+        orderInitNormal.push(orderInit[index])
+      }
+    }
+    //首次 麻辣香锅菜品
+    var orderInitSDHP = []
+     for (let index in orderInit) {
+      if (orderInit[index].type === "麻辣香锅"  && orderInit[index].deleted === 0 )
+      {
+        orderInitSDHP.push(orderInit[index])
+      }
+    }
+    //首次 烤鱼菜品
+    var orderInitFish = []
+     for (let index in orderInit) {
+      if (orderInit[index].type === "特色烤鱼"  && orderInit[index].deleted === 0 )
+      {
+        orderInitFish.push(orderInit[index])
+      }
+    }
+    //后续 普通菜品
+    var orderModifiedNormal = []
+     for (let index in orderModified) {
+      if (orderModified[index].type !== "麻辣香锅" && orderModified[index].type !== "特色烤鱼" && orderModified[index].deleted === 0 )
+      {
+        orderModifiedNormal.push(orderModified[index])
+      }
+    }
+    //后续 麻辣香锅菜品
+    var orderModifiedSDHP = []
+     for (let index in orderModified) {
+      if (orderModified[index].type === "麻辣香锅"  && orderModified[index].deleted === 0 )
+      {
+        orderModifiedSDHP.push(orderModified[index])
+      }
+    }
+    //后续 烤鱼菜品
+    var orderModifiedFish = []
+     for (let index in orderModified) {
+      if (orderModified[index].type === "特色烤鱼"  && orderModified[index].deleted === 0 )
+      {
+        orderModifiedFish.push(orderModified[index])
+      }
+    }
+    //总 普通菜品
+    var totalNormal = orderInitNormal.concat(orderModifiedNormal)
+    //总 麻辣香锅菜品
+    var totalSDHP = orderInitSDHP.concat(orderModifiedSDHP)
+    //总 特色烤鱼菜品
+    var totalFish = orderInitFish.concat(orderModifiedFish)
+    console.log(totalNormal)
+    console.log(totalSDHP)
+    console.log(totalFish)
+
+    fetch(API.baseUri+API.KprinterN , {
+        method: "POST",
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "tableID": this.props.match.params.tableid,
+        "orderNormal": totalNormal,
+
+          })
+    } ).then(res =>{
+        if(res.status===200) {
+          return res.json();
+        }
+        else {
+          console.log("普通菜品对单打印成功")
+        }
+    })
+
+    fetch(API.baseUri+API.KprinterS , {
+        method: "POST",
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "tableID": this.props.match.params.tableid,
+        "orderSDHP": totalSDHP,
+          })
+    } ).then(res =>{
+        if(res.status===200) {
+          return res.json();
+        }
+        else {
+          console.log("麻辣香锅菜品对单打印成功")
+        }
+    })
+
+    fetch(API.baseUri+API.KprinterF , {
+        method: "POST",
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "tableID": this.props.match.params.tableid,
+        "orderFish": totalFish,
+        
+          })
+    } ).then(res =>{
+        if(res.status===200) {
+          return res.json();
+        }
+        else {
+          console.log("特色烤鱼菜品对单打印成功")
         }
     })
   }
@@ -1181,7 +1306,7 @@ export default class CheckDishesDishes extends Component {
               <Button className=" button3" bsStyle="success" onClick={() => {
                   this.handleShow()
                 }}>结账&打印</Button>
-              <Button className="button3" bsStyle="warning" onClick={() => {this.print()}}>厨房打印</Button>
+              <Button className="button3" bsStyle="warning" onClick={() => {this.printKitchen()}}>厨房打印</Button>
 
             </div>
           </div>
