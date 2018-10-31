@@ -165,7 +165,8 @@ export default class CheckBookings extends Component {
         var totalFish = this.state.Fishorder.reduce((sum, price) =>{
             return sum + price.num * price.price
         }, 0)
-        return total + totalSDHP + totalFish;
+        // return total + totalSDHP + totalFish;
+        return Math.round((total + totalSDHP + totalFish) * 100) / 100
     }
 
     deleteDish = (nameDish)=> {
@@ -297,9 +298,9 @@ export default class CheckBookings extends Component {
           this.authOptions.current.getData();
           this.setState({
             order:[],
-            SDHPorder:[]
+            SDHPorder:[],
+            Fishorder:[],
           })
-
           // window.location = '/home/CheckBookingsDetails/' + this.props.match.params.tableid
           // window.location = '/'
         }

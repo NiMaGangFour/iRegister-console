@@ -394,3 +394,8 @@
     </td>
   </tr>
 :null}
+
+
+
+
+this.deleteDish(dish)

@@ -335,6 +335,7 @@ export default class Dishes extends Component {
 
     }
 
+
     SumUp= ()=> {
         var total = this.state.order.reduce((sum, price) =>{
             return sum + price.num * price.price
@@ -345,8 +346,10 @@ export default class Dishes extends Component {
         var totalFish = this.state.Fishorder.reduce((sum, price) =>{
             return sum + price.num * price.price
         }, 0)
-        return total + totalSDHP + totalFish;
+
+        return Math.round((total + totalSDHP + totalFish) * 100) / 100
     }
+
     SumUpModified = ()=> {
       console.log(this.props.location.state.tableDishes)
       var tempArray = []
@@ -360,7 +363,7 @@ export default class Dishes extends Component {
         var total = tempArray.reduce((sum, price) =>{
             return sum + price.DishCount * price.price
         }, 0)
-        return total;
+        return Math.round(total * 100) / 100
     }
 
     SumUpLastTimeModified = ()=> {
@@ -375,18 +378,19 @@ export default class Dishes extends Component {
         var total = tempLastTimeModifiedPositive.reduce((sum, price) =>{
             return sum + price.num * price.price
         }, 0)
-        return total;
+        return Math.round(total * 100) / 100
     }
+
     SumUpCurrentModified = ()=> {
         var total = this.state.tableModifiedDishes.reduce((sum, price) =>{
             return sum + price.DishCount * price.price
         }, 0)
-        return total;
+        return Math.round(total * 100) / 100
     }
 
     SumUpEntirePrice = ()=> {
         var total = this.SumUpModified() + this.SumUpLastTimeModified() + this.SumUpCurrentModified();
-        return total;
+        return Math.round(total * 100) / 100
     }
 
     deleteDish = (nameDish)=> {
@@ -474,69 +478,68 @@ export default class Dishes extends Component {
           console.log('error on .catch', error);
       });
     }
+
     getToken = () => {
         // Retrieves the user token from localStorage
         var user = localStorage.getItem('SHUWEIYUAN');
         var uu = JSON.parse(user);
-        console.log(uu);
-        return uu.Token
-    }
-
-    submitOrder = () => {
-      var a = JSON.parse(localStorage.getItem("SHUWEIYUAN"));
-      if(a && a.id !== null && a.id !== undefined){
-          var date = new Date();
-          var time = date.toLocaleTimeString();
-          // console.log(JSON.stringify(this.state.order))
-          console.log(this.state.order)
-          console.log(this.state.textareaValue)
-          var order = this.state.order
-          var SDHPorder = this.state.SDHPorder
-          var Fishorder = this.state.Fishorder
-          var totalorder = order.concat(SDHPorder,Fishorder)
-          console.log(totalorder)
-
-          fetch(API.baseUri+API.neworder, {
-              method: "POST",
-              headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + this.getToken()
-            },
-            body: JSON.stringify({
-                    "items": totalorder,
-                    "creatTime": time,
-                    "totalPrice": this.SumUp(),
-                    "tableID": this.props.match.params.tableid,
-                    "comment":this.state.textareaValue,
-                })
-          } ).then(res =>{
-              if(res.status===200) {
-                // console.log(res.json())
-                return res.json();
-              }
-              else if(res.status===400){
-                   window.location='/login'
-               }
-
-              else console.log(res)
-          }).then(json => {
-            console.log(json.success)
-            console.log(json)
-            if (json.success === true){
-              this.authOptions.current.getData();
-              this.setState({
-                order:[],
-                SDHPorder:[]
-              })
-              window.location = '/home/CheckDishes/' + this.props.match.params.tableid
-              // window.location = '/'
-            }
-          })
+        console.log(JSON.parse(user));
+        if (JSON.parse(user) === null) {
+          window.location = '/'
         }
         else {
-          window.location='/login'
+          return uu.Token
         }
+    }
+
+    //提交订单
+    submitOrder = () => {
+      var date = new Date();
+      var time = date.toLocaleTimeString();
+      // console.log(JSON.stringify(this.state.order))
+      console.log(this.state.order)
+      console.log(this.state.textareaValue)
+      var order = this.state.order
+      var SDHPorder = this.state.SDHPorder
+      var Fishorder = this.state.Fishorder
+      var totalorder = order.concat(SDHPorder,Fishorder)
+      console.log(totalorder)
+      fetch(API.baseUri+API.neworder, {
+          method: "POST",
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + this.getToken()
+        },
+        body: JSON.stringify({
+                "items": totalorder,
+                "creatTime": time,
+                "totalPrice": this.SumUp(),
+                "tableID": this.props.match.params.tableid,
+                "comment":this.state.textareaValue,
+            })
+      } ).then(res =>{
+          if(res.status===200) {
+            // console.log(res.json())
+            return res.json();
+          }
+          else if (res.status===401) {
+            window.location = '/'
+          }
+          else console.log(res)
+      }).then(json => {
+        console.log(json.success)
+        console.log(json)
+        if (json.success === true){
+          this.authOptions.current.getData();
+          this.setState({
+            order:[],
+            SDHPorder:[],
+            Fishorder:[],
+          })
+          window.location = '/home/CheckDishes/' + this.props.match.params.tableid
+        }
+      })
     }
 
     parentChild = (value) => {
@@ -661,7 +664,6 @@ export default class Dishes extends Component {
         console.log(tempSDHPorder.reduce(reducer));
         var total = tempSDHPorder.reduce(reducer)
       }
-      console.log(total)
       return total;
     }
 
@@ -750,7 +752,6 @@ export default class Dishes extends Component {
     }
 
     activeOrDisabledModified = () => {
-
       //console.log(this.NumberCalculatorLater()) //普通的菜
       console.log(this.SDHPNumberCalculatorLater()) //香锅
       console.log(this.checkFishExistLater()) // 整条鱼
@@ -764,6 +765,85 @@ export default class Dishes extends Component {
       }
       return verify
     }
+
+    // //登陆判断
+    // handleSubmit=()=> {
+    //     console.log(this.state.email);
+    //     console.log(this.state.password);
+    //
+    //     if (!this.state.email){
+    //         this.setState({
+    //             //status: 'failed',
+    //             Emailerror: 'Username is required'
+    //         })
+    //     }
+    //     // else if (!this.handleEmail(this.state.email)){
+    //     //     this.setState({
+    //     //         //status: 'failed',
+    //     //         Emailerror: 'It is not an Email'
+    //     //     })
+    //     // }
+    //     else if(!this.state.password){
+    //         this.setState({
+    //             Emailerror: '',
+    //             PWerror: 'Password is required'
+    //         })
+    //     }
+    //     else {
+    //         this.setState({
+    //             status: 'normal',
+    //             PWerror: '',
+    //             mode1: true
+    //         })
+    //         var url = API.baseUri + API.login;
+    //         fetch(url, {
+    //             //credentials: 'include',
+    //             method: "POST",
+    //             headers: {
+    //                 //     'Content-Type':'multipart/form-data',
+    //                 //     'Content-Type':'application/x-www-form-urlencoded',
+    //                 //     'Content-Disposition': 'form-data',
+    //                 'Accept': 'application/json',
+    //                 'Content-Type': 'application/json',
+    //                 'Authorization': 'Bearer ' + this.getToken()
+    //
+    //             },
+    //             credentials: "same-origin",
+    //             body: JSON.stringify({
+    //                 // this.state.UserID,
+    //                 "name": this.state.email,
+    //                 "password": this.state.password,
+    //             })
+    //         }).then(res => {
+    //                 if (res.status === 200) {
+    //                     this.setState({status: 'success'})
+    //                     return res.json()
+    //                 } else {
+    //                     this.setState({
+    //                         status: 'failed',
+    //                         mode1: false})
+    //                     window.location = '/'
+    //                 }
+    //             }
+    //         ).then(json => {
+    //             //console.log(json.email)
+    //             if (this.state.status === "success") {
+    //
+    //                 this.submitOrder()
+    //             }
+    //             else {
+    //                 this.setState({
+    //                     open: true,
+    //                     email: '',
+    //                     password: '',
+    //                 })
+    //
+    //             }
+    //         }).catch(error => {
+    //             console.error(error)
+    //         })
+    //     }
+    // }
 
 render() {
 

@@ -218,9 +218,9 @@ export default class AllTodayFinishedOrders extends Component {
       total = tempArrayExist.reduce((sum, price) =>{
       return sum + price.DishCount * price.price
       }, 0)
-      return total;
+      return Math.round(total * 100) / 100
     } else {
-      return total;
+      return Math.round(total * 100) / 100
     }
   }
 
@@ -233,262 +233,258 @@ export default class AllTodayFinishedOrders extends Component {
       console.log(this.state.AllTodayUnfinishedOrdersWithOriginDishes)
       console.log(this.state.AllTodayUnfinishedOrdersWithModifiedDishes)
 
-        return (
-          <div className="col-lg-12 nova-card cust-border">
-            <center><h3><b><Clock format={'dddd, MMMM Mo, YYYY'} timezone={'Australia/Sydney'}/></b></h3></center>
-              <Tabs bsStyle="pills" defaultActiveKey={1} id="uncontrolled-tab-example">
-                <Tab eventKey={1} title="今日完成订单总览">
-                  <Table striped bordered condensed hover>
-                    <thead>
-                      <tr>
-                        <th className="th-width-DishID">订单编号</th>
-                        <th className="th-width-DishID">菜品总览</th>
-                        <th className="th-width-DishName">生成时间</th>
-                        <th className="th-width-DishPrice">订单总价</th>
-                        <th className="th-width-DishType">订单类别</th>
-                      </tr>
-                    </thead>
-                    {this.state.AllTodayUnfinishedOrdersWithOriginDishes.map((array, i) =>{
-                        return (
-                          <tbody key={i}>
-                            {console.log(array[0])}
+      return (
+        <div className="col-lg-12 nova-card cust-border">
+          <center><h3><b><Clock format={'dddd, MMMM Mo, YYYY'} timezone={'Australia/Sydney'}/></b></h3></center>
+            <Tabs bsStyle="pills" defaultActiveKey={1} id="uncontrolled-tab-example">
+              <Tab eventKey={1} title="已完成订单总览">
+                <Table striped bordered condensed hover>
+                  <thead>
+                    <tr>
+                      <th className="th-width-DishID">订单编号</th>
+                      <th className="th-width-DishID">菜品总览</th>
+                      <th className="th-width-DishName">生成时间</th>
+                      <th className="th-width-DishPrice">订单总价</th>
+                      <th className="th-width-DishType">订单类别</th>
 
-                            {array[0].status === "4" ?
-                              <tr>
-                                <td>
-                                  {array[0].orderID}
-                                  {console.log(array[0].orderID)}
-                                </td>
-                                <td>
-                                  {array.map((order, i) =>{
-                                      return (
-                                        <div key={i}>
-                                          {console.log(order)}
-                                          {order.deleted === 0 ?
-                                            <div>{order.name} 数量: ({order.DishCount})</div>
-                                            :
-                                            <div className="strikeThrough">{order.name} 数量: ({order.DishCount})</div>
-                                          }
+                    </tr>
+                  </thead>
+                  {this.state.AllTodayUnfinishedOrdersWithOriginDishes.map((array, i) =>{
+                      return (
+                           <tbody key={i}>
+                             {array.length !== 0 && array[0].status === "4" ?
+                               <tr>
+                                 <td>
+                                   {array[0].orderID}
+                                   {console.log(array[0].orderID)}
+                                 </td>
+                                 <td>
+                                   {array.map((order, i) =>{
+                                       return (
+                                         <div key={i}>
+                                           {console.log(order)}
+                                           {order.deleted === 0 ?
+                                             <div>{order.name} 数量: [{order.DishCount}]</div>
+                                             :
+                                             <div className="strikeThrough">{order.name} 数量: [{order.DishCount}]</div>
+                                           }
 
-                                        </div>
-                                      )
-                                  })}
+                                         </div>
+                                       )
+                                   })}
 
-                                  {this.getModifiedWithOrderID(array[0].orderID).map((modifiedOrder, i) =>{
-                                      return (
-                                        <div key={i}>
+                                   {this.getModifiedWithOrderID(array[0].orderID).map((modifiedOrder, i) =>{
+                                       return (
+                                         <div key={i}>
 
-                                          {modifiedOrder.map((order, i) =>{
-                                              return (
-                                                <div key={i}>
-                                                  {order.deleted === 0 ?
-                                                    <div>{order.name} 数量 ({order.num})</div>
-                                                    :
-                                                    <div className="strikeThrough">{order.name} 数量: ({order.DishCount})</div>
-                                                  }
+                                           {modifiedOrder.map((order, i) =>{
+                                               return (
+                                                 <div key={i}>
+                                                   {order.deleted === 0 ?
+                                                     <div>{order.name} 数量 [{order.num}]</div>
+                                                     :
+                                                     <div className="strikeThrough">{order.name} 数量: [{order.DishCount}]</div>
+                                                   }
 
-                                                </div>
-                                              )
-                                          })}
-                                        </div>
-                                      )
-                                  })}
+                                                 </div>
+                                               )
+                                           })}
+                                         </div>
+                                       )
+                                   })}
 
-                                </td>
-                                <td>
-                                  {array[0].creatTime.slice(array[0].creatTime.lastIndexOf('T') + 0).replace("T", "").replace("+1000", "").replace("+1100", "")}  {array[0].creatTime.slice(0, array[0].creatTime.indexOf('T'))}
-                                </td>
+                                 </td>
+                                 <td>
+                                   {array[0].creatTime.slice(array[0].creatTime.lastIndexOf('T') + 0).replace("T", "").replace("+1000", "").replace("+1100", "")}  {array[0].creatTime.slice(0, array[0].creatTime.indexOf('T'))}
+                                 </td>
 
-                                <td>
-                                  {this.sumOriginWithOrderID(array[0].orderID)} + {this.sumModifiedWithOrderID(array[0].orderID)} = {this.totalPrice(array[0].orderID)}
-                                </td>
+                                 <td>
+                                   {this.sumOriginWithOrderID(array[0].orderID)} + {this.sumModifiedWithOrderID(array[0].orderID)} = {this.totalPrice(array[0].orderID)}
+                                 </td>
 
-                                <td>
-                                  {array[0].OrderType === 1 ?
-                                    <div>
-                                      堂吃
-                                    </div>
-                                    :
-                                    <div>
-                                      外卖
-                                    </div>}
-                                </td>
-                              </tr>
-                            :null}
-                          </tbody>
-                        )
-                    })}
-                    </Table>
-                </Tab>
-                <Tab eventKey={2} title="今日完成堂吃订单">
-                  <Table striped bordered condensed hover>
-                    <thead>
-                      <tr>
-                        <th className="th-width-DishID">订单编号</th>
-                        <th className="th-width-DishID">菜品总览</th>
-                        <th className="th-width-DishName">生成时间</th>
-                        <th className="th-width-DishPrice">订单总价</th>
-                        <th className="th-width-DishType">订单类别</th>
+                                 <td>
+                                   {array[0].OrderType === 1 ?
+                                     <div>
+                                       堂吃
+                                     </div>
+                                     :
+                                     <div>
+                                       外卖
+                                     </div>}
+                                 </td>
+                               </tr>
+                             :null}
+                           </tbody>
+                      )
+                  })}
+                  </Table>
+              </Tab>
+              <Tab eventKey={2} title="已完成堂吃订单">
+                <Table striped bordered condensed hover>
+                  <thead>
+                    <tr>
+                      <th className="th-width-DishID">订单编号</th>
+                      <th className="th-width-DishID">菜品总览</th>
+                      <th className="th-width-DishName">生成时间</th>
+                      <th className="th-width-DishPrice">订单总价</th>
+                      <th className="th-width-DishType">订单类别</th>
 
-                      </tr>
-                    </thead>
-                    {this.state.AllTodayUnfinishedOrdersWithOriginDishes.map((array, i) =>{
-                        return (
-                          <tbody key={i}>
-                            {console.log(array[0])}
-                            {array[0].status === "4" && array[0].OrderType === 1 ?
-                              <tr>
-                                <td>
-                                  {array[0].orderID}
-                                  {console.log(array[0].orderID)}
-                                </td>
-                                <td>
-                                  {array.map((order, i) =>{
-                                      return (
-                                        <div key={i}>
-                                          {console.log(order)}
-                                          {order.deleted === 0 ?
-                                            <div>{order.name} 数量: ({order.DishCount})</div>
-                                            :
-                                            <div className="strikeThrough">{order.name} 数量: ({order.DishCount})</div>
-                                          }
+                    </tr>
+                  </thead>
+                  {this.state.AllTodayUnfinishedOrdersWithOriginDishes.map((array, i) =>{
+                      return (
+                        <tbody key={i}>
+                          {array.length !== 0  && array[0].status === "4" && array[0].OrderType === 1 ?
+                            <tr>
+                              <td>
+                                {array[0].orderID}
+                                {console.log(array[0].orderID)}
+                              </td>
+                              <td>
+                                {array.map((order, i) =>{
+                                    return (
+                                      <div key={i}>
+                                        {console.log(order)}
+                                        {order.deleted === 0 ?
+                                          <div>{order.name} 数量: [{order.DishCount}]</div>
+                                          :
+                                          <div className="strikeThrough">{order.name} 数量: [{order.DishCount}]</div>
+                                        }
 
-                                        </div>
-                                      )
-                                  })}
+                                      </div>
+                                    )
+                                })}
 
-                                  {this.getModifiedWithOrderID(array[0].orderID).map((modifiedOrder, i) =>{
-                                      return (
-                                        <div key={i}>
+                                {this.getModifiedWithOrderID(array[0].orderID).map((modifiedOrder, i) =>{
+                                    return (
+                                      <div key={i}>
 
-                                          {modifiedOrder.map((order, i) =>{
-                                              return (
-                                                <div key={i}>
-                                                  {order.deleted === 0 ?
-                                                    <div>{order.name} 数量 ({order.num})</div>
-                                                    :
-                                                    <div className="strikeThrough">{order.name} 数量: ({order.DishCount})</div>
-                                                  }
+                                        {modifiedOrder.map((order, i) =>{
+                                            return (
+                                              <div key={i}>
+                                                {order.deleted === 0 ?
+                                                  <div>{order.name} 数量 [{order.num}]</div>
+                                                  :
+                                                  <div className="strikeThrough">{order.name} 数量: [{order.DishCount}]</div>
+                                                }
 
-                                                </div>
-                                              )
-                                          })}
-                                        </div>
-                                      )
-                                  })}
+                                              </div>
+                                            )
+                                        })}
+                                      </div>
+                                    )
+                                })}
 
-                                </td>
-                                <td>
-                                  {array[0].creatTime.slice(array[0].creatTime.lastIndexOf('T') + 0).replace("T", "").replace("+1000", "").replace("+1100", "")}  {array[0].creatTime.slice(0, array[0].creatTime.indexOf('T'))}
-                                </td>
+                              </td>
+                              <td>
+                                {array[0].creatTime.slice(array[0].creatTime.lastIndexOf('T') + 0).replace("T", "").replace("+1000", "").replace("+1100", "")}  {array[0].creatTime.slice(0, array[0].creatTime.indexOf('T'))}
+                              </td>
 
-                                <td>
-                                  {this.sumOriginWithOrderID(array[0].orderID)} + {this.sumModifiedWithOrderID(array[0].orderID)} = {this.totalPrice(array[0].orderID)}
-                                </td>
+                              <td>
+                                {this.sumOriginWithOrderID(array[0].orderID)} + {this.sumModifiedWithOrderID(array[0].orderID)} = {this.totalPrice(array[0].orderID)}
+                              </td>
 
-                                <td>
-                                  {array[0].OrderType === 1 ?
-                                    <div>
-                                      堂吃
-                                    </div>
-                                    :
-                                    <div>
-                                      外卖
-                                    </div>}
-                                </td>
-                              </tr>
-                            :null}
-                          </tbody>
-                        )
-                    })}
-                    </Table>
-                </Tab>
-                <Tab eventKey={3} title="今日完成外卖订单">
-                  <Table striped bordered condensed hover>
-                    <thead>
-                      <tr>
-                        <th className="th-width-DishID">订单编号</th>
-                        <th className="th-width-DishID">菜品总览</th>
-                        <th className="th-width-DishName">生成时间</th>
-                        <th className="th-width-DishPrice">订单总价</th>
-                        <th className="th-width-DishType">订单类别</th>
+                              <td>
+                                {array[0].OrderType === 1 ?
+                                  <div>
+                                    堂吃
+                                  </div>
+                                  :
+                                  <div>
+                                    外卖
+                                  </div>}
+                              </td>
+                            </tr>
+                          :null}
+                        </tbody>
+                      )
+                  })}
+                  </Table>
+              </Tab>
+              <Tab eventKey={3} title="已完成外卖订单" >
+                <Table striped bordered condensed hover>
+                  <thead>
+                    <tr>
+                      <th className="th-width-DishID">订单编号</th>
+                      <th className="th-width-DishID">菜品总览</th>
+                      <th className="th-width-DishName">生成时间</th>
+                      <th className="th-width-DishPrice">订单总价</th>
+                      <th className="th-width-DishType">订单类别</th>
 
-                      </tr>
-                    </thead>
-                    {this.state.AllTodayUnfinishedOrdersWithOriginDishes.map((array, i) =>{
-                        return (
-                          <tbody key={i}>
-                            {console.log(array[0])}
-                            {array[0].status === "4" && array[0].OrderType === 2 ?
-                              <tr>
-                                <td>
-                                  {array[0].orderID}
-                                  {console.log(array[0].orderID)}
-                                </td>
-                                <td>
-                                  {array.map((order, i) =>{
-                                      return (
-                                        <div key={i}>
-                                          {console.log(order)}
-                                          {order.deleted === 0 ?
-                                            <div>{order.name} 数量: ({order.DishCount})</div>
-                                            :
-                                            <div className="strikeThrough">{order.name} 数量: ({order.DishCount})</div>
-                                          }
+                    </tr>
+                  </thead>
+                  {this.state.AllTodayUnfinishedOrdersWithOriginDishes.map((array, i) =>{
+                      return (
+                        <tbody key={i}>
+                          {console.log(array[0])}
+                          {array.length !== 0  &&  array[0].status === "4" && array[0].OrderType === 2 ?
+                            <tr>
+                              <td>
+                                {array[0].orderID}
+                                {console.log(array[0].orderID)}
+                              </td>
+                              <td>
+                                {array.map((order, i) =>{
+                                    return (
+                                      <div key={i}>
+                                        {console.log(order)}
+                                        {order.deleted === 0 ?
+                                          <div>{order.name} 数量: [{order.DishCount}]</div>
+                                          :
+                                          <div className="strikeThrough">{order.name} 数量: [{order.DishCount}]</div>
+                                        }
 
-                                        </div>
-                                      )
-                                  })}
+                                      </div>
+                                    )
+                                })}
 
-                                  {this.getModifiedWithOrderID(array[0].orderID).map((modifiedOrder, i) =>{
-                                      return (
-                                        <div key={i}>
+                                {this.getModifiedWithOrderID(array[0].orderID).map((modifiedOrder, i) =>{
+                                    return (
+                                      <div key={i}>
+                                        {modifiedOrder.map((order, i) =>{
+                                            return (
+                                              <div key={i}>
+                                                {order.deleted === 0 ?
+                                                  <div>{order.name} 数量 [{order.num}]</div>
+                                                  :
+                                                  <div className="strikeThrough">{order.name} 数量: [{order.DishCount}]</div>
+                                                }
+                                              </div>
+                                            )
+                                        })}
+                                      </div>
+                                    )
+                                })}
 
-                                          {modifiedOrder.map((order, i) =>{
-                                              return (
-                                                <div key={i}>
-                                                  {order.deleted === 0 ?
-                                                    <div>{order.name} 数量 ({order.num})</div>
-                                                    :
-                                                    <div className="strikeThrough">{order.name} 数量: ({order.DishCount})</div>
-                                                  }
+                              </td>
+                              <td>
+                                {array[0].creatTime.slice(array[0].creatTime.lastIndexOf('T') + 0).replace("T", "").replace("+1000", "").replace("+1100", "")}  {array[0].creatTime.slice(0, array[0].creatTime.indexOf('T'))}
+                              </td>
 
-                                                </div>
-                                              )
-                                          })}
-                                        </div>
-                                      )
-                                  })}
+                              <td>
+                                {this.sumOriginWithOrderID(array[0].orderID)} + {this.sumModifiedWithOrderID(array[0].orderID)} = {this.totalPrice(array[0].orderID)}
+                              </td>
 
-                                </td>
-                                <td>
-                                  {array[0].creatTime.slice(array[0].creatTime.lastIndexOf('T') + 0).replace("T", "").replace("+1000", "").replace("+1100", "")}  {array[0].creatTime.slice(0, array[0].creatTime.indexOf('T'))}
-                                </td>
+                              <td>
+                                {array[0].OrderType === 1 ?
+                                  <div>
+                                    堂吃
+                                  </div>
+                                  :
+                                  <div>
+                                    外卖
+                                  </div>}
+                              </td>
+                            </tr>
+                          :null}
+                        </tbody>
+                      )
+                  })}
+                  </Table>
+              </Tab>
+            </Tabs>
 
-                                <td>
-                                  {this.sumOriginWithOrderID(array[0].orderID)} + {this.sumModifiedWithOrderID(array[0].orderID)} = {this.totalPrice(array[0].orderID)}
-                                </td>
-
-                                <td>
-                                  {array[0].OrderType === 1 ?
-                                    <div>
-                                      堂吃
-                                    </div>
-                                    :
-                                    <div>
-                                      外卖
-                                    </div>}
-                                </td>
-                              </tr>
-                            :null}
-                          </tbody>
-                        )
-                    })}
-                    </Table>
-                </Tab>
-              </Tabs>
-
-          </div>
-        )
+        </div>
+      )
     }
 }

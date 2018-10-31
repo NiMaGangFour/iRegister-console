@@ -85,11 +85,199 @@ export default class DeliverOrders extends Component {
       }
     }
       var total = tempArray.reduce((sum, order) =>{
-          return sum + order.DishCount * order.price
+          return ((sum + order.DishCount * order.price) * 100) / 100
       }, 0)
-      var result = parseInt(total) + parseInt(deliveryFee);
+      var sum = Math.round(total  * 100) / 100
 
-      return [result, total];
+      var result = parseFloat(sum) + parseFloat(deliveryFee);
+      console.log(sum)
+      console.log(deliveryFee)
+      return [result, sum];
+  }
+
+  //打包& 小票打印
+  print = () => {
+    var date = new Date();
+    var time = date.toLocaleTimeString();
+    // console.log(JSON.stringify(this.state.order))
+
+    var orderInit = this.state.deliveryDishes
+    console.log(orderInit)
+    // 普通菜品
+    var orderInitNormal = []
+     for (let index in orderInit) {
+      if (orderInit[index].type !== "麻辣香锅" && orderInit[index].type !== "特色烤鱼")
+      {
+        orderInitNormal.push(orderInit[index])
+      }
+    }
+    console.log(orderInitNormal)
+    // 麻辣香锅菜品
+    var orderInitSDHP = []
+     for (let index in orderInit) {
+      if (orderInit[index].type === "麻辣香锅" )
+      {
+        orderInitSDHP.push(orderInit[index])
+      }
+    }
+    console.log(orderInitSDHP)
+    // 烤鱼菜品
+    var orderInitFish = []
+     for (let index in orderInit) {
+      if (orderInit[index].type === "特色烤鱼" )
+      {
+        orderInitFish.push(orderInit[index])
+      }
+    }
+    console.log(orderInitFish)
+
+    console.log(this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[1])
+    console.log(this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[0])
+
+    fetch(API.baseUri+API.printReceipt, {
+        method: "POST",
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "tableID": this.props.match.params.tableid,
+
+        "orderNormal": orderInitNormal,
+        "orderSDHP": orderInitSDHP,
+        "orderFish": orderInitFish,
+
+        "DeliveryDishPrice": this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[1],
+        "DeliveryTotalPrice": this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[0],
+        "DeliveryFee": this.state.deliveryDeliveryFee,
+
+          })
+    } ).then(res =>{
+        if(res.status===200) {
+          return res.json();
+        }
+        else {
+          console.log(res)
+          this.setState({
+            discount:0
+          })
+        }
+    })
+  }
+
+  //厨房 对单打印
+  printKitchen = () => {
+    var date = new Date();
+    var time = date.toLocaleTimeString();
+    // console.log(JSON.stringify(this.state.order))
+    var orderInit = this.state.deliveryDishes
+    // 普通菜品
+    var orderInitNormal = []
+     for (let index in orderInit) {
+      if (orderInit[index].type !== "麻辣香锅" && orderInit[index].type !== "特色烤鱼" )
+      {
+        orderInitNormal.push(orderInit[index])
+      }
+    }
+    // // 麻辣香锅菜品
+    // var orderInitSDHP = []
+    //  for (let index in orderInit) {
+    //   if (orderInit[index].type === "麻辣香锅" )
+    //   {
+    //     orderInitSDHP.push(orderInit[index])
+    //   }
+    // }
+    // // 烤鱼菜品
+    // var orderInitFish = []
+    //  for (let index in orderInit) {
+    //   if (orderInit[index].type === "特色烤鱼" )
+    //   {
+    //     orderInitFish.push(orderInit[index])
+    //   }
+    // }
+
+    fetch(API.baseUri+API.KprinterN, {
+        method: "POST",
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        // 'Authorization': 'Bearer ' + this.getToken()
+      },
+      body: JSON.stringify({
+        "tableID": this.props.match.params.tableid,
+        "orderNormal": orderInitNormal,
+          })
+    } ).then(res =>{
+        if(res.status===200) {
+          return res.json();
+        }
+        else console.log(res)
+    }).then(json => {
+      console.log(json)
+      if (json.print === 'SUCCESS'){
+        // 麻辣香锅菜品
+        var orderInitSDHP = []
+         for (let index in orderInit) {
+          if (orderInit[index].type === "麻辣香锅" )
+          {
+            orderInitSDHP.push(orderInit[index])
+          }
+        }
+        fetch(API.baseUri+API.KprinterS , {
+            method: "POST",
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            // 'Authorization': 'Bearer ' + this.getToken()
+          },
+          body: JSON.stringify({
+            "tableID": this.props.match.params.tableid,
+            "orderSDHP": orderInitSDHP,
+              })
+        } ).then(res =>{
+            if(res.status===200) {
+              return res.json();
+            }
+            else console.log(res)
+        }).then(json => {
+          console.log(json)
+          if (json.print === 'SUCCESS'){
+            //首次 烤鱼菜品
+            var orderInitFish = []
+             for (let index in orderInit) {
+              if (orderInit[index].type === "特色烤鱼" )
+              {
+                orderInitFish.push(orderInit[index])
+              }
+            }
+
+            fetch(API.baseUri+API.KprinterF , {
+                method: "POST",
+                headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                // 'Authorization': 'Bearer ' + this.getToken()
+              },
+              body: JSON.stringify({
+                "tableID": this.props.match.params.tableid,
+                "orderFish": orderInitFish,
+                  })
+            } ).then(res =>{
+                if(res.status===200) {
+                  return res.json();
+                }
+                else console.log(res)
+            }).then(json => {
+              console.log(json)
+              if (json.print === 'SUCCESS'){
+
+              }
+            })
+          }
+        })
+      }
+    })
+
   }
 
 
@@ -123,16 +311,18 @@ export default class DeliverOrders extends Component {
               </div>
 
               <div className="nova-card cust-border col-lg-10 cust-margin11">
-                <div className="">
+                <div className="col-lg-10">
+                  <div className="col-lg-3"/>
                   <div className="col-lg-6">菜品名称</div>
                   <div className="col-lg-1">数量</div>
                   <div className="col-lg-1">单价</div>
                 </div>
 
-                <div>
+                <div >
                   {this.state.deliveryDishes.map((value, i) =>{
                     return (
-                      <div key={i}>
+                      <div className="col-lg-10" key={i}>
+                        <div className="col-lg-3"/>
                         <div className="col-lg-6">{value.name}</div>
                         <div className="col-lg-1">{value.DishCount}</div>
                         <div className="col-lg-1">{value.price}</div>
@@ -141,11 +331,20 @@ export default class DeliverOrders extends Component {
                   })
                 }
                 </div>
+                    <hr />
+                <div className=" col-lg-9">
+
+                  <div className="col-lg-5"/>
+                  <div className="col-lg-3">菜品总价:{this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[1]}  $AUD </div>
+                  <div className="col-lg-3">外卖费:{this.state.deliveryDeliveryFee}   $AUD</div>
+
+
+                </div>
                 <div className=" col-lg-9">
                   <hr />
-                  菜品总价:{this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[1]}  $AUD <br />
-                  外卖费:{this.state.deliveryDeliveryFee}   $AUD<br/>
-                  <b>订单总价:{this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[0]}  $AUD</b>
+                  <div className="col-lg-6"/>
+                  <div className="col-lg-4"><b><h2>订单总价:{this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[0]}  $AUD</h2></b></div>
+
                 </div>
               </div>
 
@@ -153,24 +352,27 @@ export default class DeliverOrders extends Component {
                 {console.log(this.state.customerComment)}
                 {this.state.customerComment !== "" ?
                   <div className="nova-card" >
-                    <h4>备注：{this.state.customerComment}</h4>
+                    <center><h4>备注：{this.state.customerComment}</h4></center>
                 </div>
                 :
-                <h4>备注：无</h4>
+                <center><h4>备注：无</h4></center>
                 }
               </div>
               <div className="nova-card cust-border col-lg-10 cust-margin11">
-                <div><h4>顾客姓名：{this.state.customerName}</h4></div>
-                <div><h4>顾客电话：{this.state.customerPhoneNO}</h4></div>
-                <div><h4>送餐地址：{this.state.customerAddress}</h4></div>
+                <div className="col-lg-4"/>
+                <div className="col-lg-6">
+                  <div><h4>顾客姓名：{this.state.customerName}</h4></div>
+                  <div><h4>顾客电话：{this.state.customerPhoneNO}</h4></div>
+                  <div><h4>送餐地址：{this.state.customerAddress}</h4></div>
+                </div>
               </div>
 
               <div className="nova-card cust-border col-lg-10">
                 {this.state.deliveryDeliveryStatus !== "4" ?
                 <div>
-                  <Button className="col-lg-2 " bsSize="large" bsStyle="danger" onClick={() => {}}>厨房打印</Button>
+                  <Button className="col-lg-2 " bsSize="large" bsStyle="danger" onClick={() => {this.printKitchen()}}>厨房打印</Button>
                   <div className="col-lg-1"/>
-                  <Button className="col-lg-2 " bsSize="large" bsStyle="success" onClick={()=>{}}>打包&打印小票</Button>
+                  <Button className="col-lg-2 " bsSize="large" bsStyle="success" onClick={()=>{this.print()}}>打包&打印小票</Button>
                   <div className="col-lg-1"/>
                   <Button className="col-lg-2 " bsSize="large" bsStyle="success" onClick={()=>{this.completeConfirm(this.props.match.params.orderid)}}>确认完成订单</Button>
                   <div className="col-lg-1"/>

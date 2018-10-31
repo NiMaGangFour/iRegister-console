@@ -56,7 +56,12 @@ export default class AdminLogin extends Component {
   }
 
   toAdminPage = () => {
-    window.location = '/home/AdminMainPage/'
+    const adminAccount = "admin"
+    const adminPassWord = "admin"
+    if(this.state.valueAccount === adminAccount && this.state.valuePassword === adminPassWord) {
+      console.log("Admin登陆成功")
+      window.location = '/home/AdminMainPage/'
+    }
   }
 
     render() {

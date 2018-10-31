@@ -30,39 +30,39 @@ export default class AuthOptions extends Component {
     // }
 
      getData =()=> {
-       // fetch(API.baseUri+API.getallTables)
-       //     .then((response) => {
-       //         if (response.status === 200) {
-       //             return response.json()
-       //         } else console.log("Get data error ");
-       //     }).then((json) =>{
-       //     // console.log(json)
-       //     this.setState({tables: json})
-       // }).catch((error) => {
-       //     console.log('error on .catch', error);
-       // });
-       var a = JSON.parse(localStorage.getItem("SHUWEIYUAN"));
-       if(a && a.id !== null && a.id !== undefined){
-
-               this.setState({
-                   userId: a.id,
-                   username: a.name,
-               })
-               fetch(API.baseUri+API.getallTables)
-                   .then((response) => {
-                       if (response.status === 200) {
-                           return response.json()
-                       } else console.log("Get data error ");
-                   }).then((json) =>{
-                   // console.log(json)
-                   this.setState({tables: json})
-               }).catch((error) => {
-                   console.log('error on .catch', error);
-               });
-       }
-       else{
-           window.location='/login'
-       }
+       fetch(API.baseUri+API.getallTables)
+           .then((response) => {
+               if (response.status === 200) {
+                   return response.json()
+               } else console.log("Get data error ");
+           }).then((json) =>{
+           // console.log(json)
+           this.setState({tables: json})
+       }).catch((error) => {
+           console.log('error on .catch', error);
+       });
+       // var a = JSON.parse(localStorage.getItem("SHUWEIYUAN"));
+       // if(a && a.id !== null && a.id !== undefined){
+       //
+       //         this.setState({
+       //             userId: a.id,
+       //             username: a.name,
+       //         })
+       //         fetch(API.baseUri+API.getallTables)
+       //             .then((response) => {
+       //                 if (response.status === 200) {
+       //                     return response.json()
+       //                 } else console.log("Get data error ");
+       //             }).then((json) =>{
+       //             // console.log(json)
+       //             this.setState({tables: json})
+       //         }).catch((error) => {
+       //             console.log('error on .catch', error);
+       //         });
+       // }
+       // else{
+       //     window.location='/login'
+       // }
 
     }
 
@@ -108,6 +108,33 @@ export default class AuthOptions extends Component {
       return tempTables.length;
     }
 
+    getToken = () => {
+        // Retrieves the user token from localStorage
+        var user = localStorage.getItem('SHUWEIYUAN');
+        var uu = JSON.parse(user);
+        console.log(JSON.parse(user));
+        if (JSON.parse(user) === null) {
+          window.location = '/'
+        }
+        else {
+          return uu.Token
+        }
+    }
+
+    loginVerify = () => {
+      var login = false
+      var user = localStorage.getItem('SHUWEIYUAN');
+      var uu = JSON.parse(user);
+
+      if (JSON.parse(user) === null) {
+        window.location = '/'
+      }
+      else {
+        login = true
+        return login
+      }
+    }
+
 
     render() {
         return (
@@ -118,15 +145,22 @@ export default class AuthOptions extends Component {
 
 
                     {this.state.tables.map((value, key1) =>{
-                      var newToAvia = {
-                        pathname: '/home/Dishes/'+ value.id,
-                      };
-                      var newToOrdered = {
-                        pathname: '/home/CheckDishes/'+ value.id,
-                      };
-                      var newToBooked = {
-                        pathname: '/home/CheckBookingsDetails/'+ value.id,
-                      };
+                      var newToAvia
+                      var newToOrdered
+                      var newToBooked
+                      if(this.loginVerify() === true) {
+                        newToAvia = {
+                          pathname: '/home/Dishes/'+ value.id,
+                        }
+
+                        newToOrdered = {
+                          pathname: '/home/CheckDishes/'+ value.id,
+                        }
+
+                        newToBooked = {
+                          pathname: '/home/CheckBookingsDetails/'+ value.id,
+                        }
+                      }
                         return (
                             <div key={key1}>
                                 <div className="">
