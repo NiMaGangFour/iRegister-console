@@ -134,7 +134,7 @@ export default class DeliverOrders extends Component {
     console.log(this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[1])
     console.log(this.SumUpDeliveryOrder(this.state.deliveryDeliveryFee)[0])
 
-    fetch(localhost:3000/printReceipt, {
+    fetch('localhost:3000/printReceipt', {
         method: "POST",
         headers: {
         'Accept': 'application/json',
@@ -196,7 +196,7 @@ export default class DeliverOrders extends Component {
     //   }
     // }
 
-    fetch(localhost:3000/KprinterN, {
+    fetch('localhost:3000/KprinterN', {
         method: "POST",
         headers: {
         'Accept': 'application/json',
@@ -223,7 +223,7 @@ export default class DeliverOrders extends Component {
             orderInitSDHP.push(orderInit[index])
           }
         }
-        fetch(localhost:3000/KprinterS , {
+        fetch('localhost:3000/KprinterS' , {
             method: "POST",
             headers: {
             'Accept': 'application/json',
@@ -251,7 +251,7 @@ export default class DeliverOrders extends Component {
               }
             }
 
-            fetch(localhost:3000/KprinterF , {
+            fetch('localhost:3000/KprinterF' , {
                 method: "POST",
                 headers: {
                 'Accept': 'application/json',
