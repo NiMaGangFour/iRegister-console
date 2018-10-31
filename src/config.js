@@ -2,7 +2,7 @@ export const API = {
     // baseUri: 'http://pte.novasoftware.com.au:3060/',
     // baseUri: 'http://localhost:3060/',
     // baseUri: 'http://iregiester.novasoftware.com.au:3060/',
-    baseUri: 'http://api.shuweiyuan.com.au/',
+    baseUri: 'http://api.shuweiyuan.com.a u/',
     initPosts: 'api/restaurants',
     getallTables: 'api/getAllTables',
     getAllDishes: 'api/getAllDishes',
