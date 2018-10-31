@@ -12,22 +12,18 @@ import {API} from "../config";
 
 const muiTheme = getMuiTheme({
     palette: {
-
         primary1Color: cyan300,
     },
     appBar: {
         height: 50,
-
     },
 })
-
 
 export default class Login extends Component {
     constructor (props) {
         super(props)
         this.state = {
             // postid:'',
-
             email: '',
             password: '',
             status: 'normal',
@@ -37,20 +33,36 @@ export default class Login extends Component {
             open: false
         }
     }
-    handleEmail = (email) => {
 
-        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    componentWillMount() {
+        this.getToken()
+    }
 
-        if ( re.test(email) ) {
-            // this is a valid email address
-            return true
+    getToken = () => {
+        // Retrieves the user token from localStorage
+        var user = localStorage.getItem('SHUWEIYUAN');
+        var uu = JSON.parse(user);
+        console.log(JSON.parse(user));
+        if (JSON.parse(user) === null) {
+          window.location = '/'
         }
         else {
-            // invalid email.
-            return false
+          window.location = '/Home'
         }
-
     }
+
+    handleEmail = (email) => {
+      let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+      if ( re.test(email) ) {
+          // this is a valid email address
+          return true
+      }
+      else {
+          // invalid email.
+          return false
+      }
+  }
 
     handleOpen = () => {
         this.setState({open: true});
@@ -85,7 +97,7 @@ export default class Login extends Component {
 
 
 
-    //Submit the new Comment
+    //Submit 点击  登陆
     handleSubmit=()=> {
         console.log(this.state.email);
         console.log(this.state.password);
@@ -127,11 +139,9 @@ export default class Login extends Component {
                 },
                 credentials: "same-origin",
                 body: JSON.stringify({
-
                     // this.state.UserID,
                     "name": this.state.email,
                     "password": this.state.password,
-
                 })
             }).then(res => {
                     if (res.status === 200) {
@@ -141,17 +151,13 @@ export default class Login extends Component {
                         this.setState({
                             status: 'failed',
                             mode1: false})
-
                     }
-
                 }
             ).then(json => {
                 //console.log(json.email)
-
                 if (this.state.status === "success") {
                     localStorage.setItem('SHUWEIYUAN', JSON.stringify(json))
-
-                    window.location = '/';
+                    window.location = '/Home';
                 }
                 else {
                     this.setState({
@@ -159,8 +165,6 @@ export default class Login extends Component {
                         email: '',
                         password: '',
                     })
-                    // document.getElementById('1').value = null
-                    // document.getElementById('2').value = null
                 }
             }).catch(error => {
                 console.error(error)
@@ -219,7 +223,7 @@ export default class Login extends Component {
                         <div className="row">
                             <div className="col-md-5"/>
                             <div className="col-md-2">
-                                <RaisedButton label="Submit" primary={true} onClick={() => this.handleSubmit()}/>
+                                <RaisedButton label="登陆" primary={true} onClick={() => this.handleSubmit()}/>
                             </div>
                             <div className="col-md-3">
                                 {this.state.mode1 ? <CircularProgress/> :<div/> }

@@ -76,7 +76,7 @@ export default class CheckBookingsDetails extends Component {
               } else console.log("Get data error ");
           }).then((json) =>{
           console.log(json)
-          window.location = '/'
+          window.location = '/home'
       }).catch((error) => {
           console.log('error on .catch', error);
       })
@@ -203,7 +203,7 @@ export default class CheckBookingsDetails extends Component {
 
 render() {
   var toHomePage = {
-   pathname: '/',
+   pathname: '/home',
   }
     {console.log(this.state.bookingTableDishes)}
     return (
@@ -361,10 +361,12 @@ render() {
                           </Table>
 
                           <div>
-                            <div className="col-lg-3"></div>
+
                             <Button className="col-lg-3" bsSize="large" bsStyle="danger" onClick={()=>{this.cancleBookTable()}}>取消预订</Button>
                             <div className="col-lg-1"></div>
                             <Button className="col-lg-3" bsSize="large" bsStyle="success" onClick={()=>{this.inherit()}}>继承菜品</Button>
+                            <div className="col-lg-1"></div>
+                            <Link to={toHomePage}><Button className="col-lg-3" bsSize="large" bsStyle="default" onClick={()=>{}}>返回控制台</Button></Link>
                           </div>
                       </div>)
                     })

@@ -53,6 +53,20 @@ export default class CheckDishesDishes extends Component {
       console.log(this.props.match.params.orderid)
     }
   }
+
+  getToken = () => {
+      // Retrieves the user token from localStorage
+      var user = localStorage.getItem('SHUWEIYUAN');
+      var uu = JSON.parse(user);
+      console.log(JSON.parse(user));
+      if (JSON.parse(user) === null) {
+        window.location = '/'
+      }
+      else {
+        return uu.Token
+      }
+  }
+
   //获取对应桌号的 点菜信息
   getData = () => {
     console.log(this.props)
@@ -358,7 +372,8 @@ export default class CheckDishesDishes extends Component {
         method: "POST",
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + this.getToken()
         },
         body: JSON.stringify({
           "orderID": this.state.tableDishes_orderID, "tableID": this.props.match.params.tableid,
@@ -370,8 +385,9 @@ export default class CheckDishesDishes extends Component {
         if (res.status === 200) {
           // console.log(res.json())
           return res.json();
-        } else {
-          console.log(res)
+        }
+        else if (res.status===401) {
+            window.location = '/'
         }
       }).then(json => {
         console.log(json)
@@ -379,15 +395,17 @@ export default class CheckDishesDishes extends Component {
           this.print()
           this.authOptions.current.getData();
           this.setState({tableDishes: [], tableModifiedDishes: []})
-          // window.location = '/'
+           window.location = '/home'
         }
       })
-    } else {
+    }
+    else {
       fetch(API.baseUri + API.checkOut, {
         method: "POST",
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + this.getToken()
         },
         body: JSON.stringify({
           "orderID": this.state.tableDishes_orderID, "tableID": this.props.match.params.tableid,
@@ -399,8 +417,9 @@ export default class CheckDishesDishes extends Component {
         if (res.status === 200) {
           // console.log(res.json())
           return res.json();
-        } else {
-          console.log(res)
+        }
+        else if (res.status===401) {
+            window.location = '/'
         }
       }).then(json => {
         console.log(json)
@@ -408,11 +427,10 @@ export default class CheckDishesDishes extends Component {
           this.print()
           this.authOptions.current.getData();
           this.setState({tableDishes: [], tableModifiedDishes: [] ,discount:""})
-          window.location = '/'
+          window.location = '/home'
         }
       })
     }
-
     console.log("checkOut");
   }
 
@@ -697,7 +715,6 @@ export default class CheckDishesDishes extends Component {
     var date = new Date();
     var time = date.toLocaleTimeString();
     // console.log(JSON.stringify(this.state.order))
-
     var orderInit = this.state.tableDishes
     var orderModified = this.state.tableModifiedDishes
     //首次 普通菜品
@@ -813,8 +830,6 @@ export default class CheckDishesDishes extends Component {
         orderInitNormal.push(orderInit[index])
       }
     }
-
-
     //后续 普通菜品
     var orderModifiedNormal = []
      for (let index in orderModified) {
@@ -823,14 +838,8 @@ export default class CheckDishesDishes extends Component {
         orderModifiedNormal.push(orderModified[index])
       }
     }
-
-
     //总 普通菜品
     var totalNormal = orderInitNormal.concat(orderModifiedNormal)
-
-
-
-
 
     fetch(API.baseUri+API.KprinterN, {
         method: "POST",
@@ -935,10 +944,9 @@ export default class CheckDishesDishes extends Component {
 
   }
 
-
   render() {
     var toHomePage = {
-     pathname: '/',
+     pathname: '/home',
     }
 
     console.log(this.SumUpModifiedNormalDishes())

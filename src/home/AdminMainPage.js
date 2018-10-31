@@ -26,6 +26,7 @@ export default class AdminMainPage extends Component {
             show: false,
             show2: false,
             showAlert: false,
+            showDelete: false,
             targetDish:[],
             pictures: []
 
@@ -182,9 +183,9 @@ export default class AdminMainPage extends Component {
   }
 
   //删除 唯一 对应 菜品信息
-  deleteDish = (dish) => {
+  deleteDishInfo = () => {
     console.log("删除 唯一 对应 菜品信息")
-    fetch(API.baseUri+API.deleteDishInfo + "/" + dish.dishId)
+    fetch(API.baseUri+API.deleteDishInfo + "/" + this.state.targetDish.dishId)
         .then((response) => {
             if (response.status === 200) {
                 return response.json()
@@ -192,6 +193,7 @@ export default class AdminMainPage extends Component {
         }).then((json) =>{
         console.log(json)
         this.getData()
+        this.handleHideDelete()
     }).catch((error) => {
         console.log('error on .catch', error);
     })
@@ -265,6 +267,15 @@ export default class AdminMainPage extends Component {
     return buttonDisable
   }
 
+  //对应 删除菜品 按钮
+  deleteDish = (dish) => {
+     console.log(dish)
+    this.setState({
+      targetDish: dish,
+      showDelete: true,
+     })
+
+  }
   //对应 查看图片 按钮
   checkImg = (dish) => {
     this.setState({
@@ -309,6 +320,11 @@ export default class AdminMainPage extends Component {
  //对应 添加图片的Modal 关闭功能
   handleHide2 = () => {
     this.setState({ show2: false });
+  }
+
+ //对应  删除菜品 Modal 关闭功能
+  handleHideDelete = () => {
+    this.setState({ showDelete: false });
   }
 
   //关闭Alert
@@ -407,9 +423,6 @@ export default class AdminMainPage extends Component {
                                             <Button className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.updateDish(dish)}}>保存</Button>
                                             </div>
                                           :null}
-
-
-
                                         </td>
                                       </tr>
                                       :null}
@@ -420,16 +433,27 @@ export default class AdminMainPage extends Component {
                                           <td>{dish.price}</td>
                                           <td>{dish.type}</td>
                                           <td>
-                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
-                                            <div className="col-lg-1"  />
-                                            {dish.available === 1 ?
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
-                                            :
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
-                                            }
-                                            <div className="col-lg-5"  />
-                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
-                                          </td>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
+                                              <div className="col-lg-1"/>
+                                              {dish.available === 1 ?
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
+                                              :
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
+                                              }
+                                              <div className="col-lg-1"/>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
+                                              {this.verifyImage(dish) === 1 ?
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="info" onClick={() => {this.checkImg(dish)}}>图片预览</Button>
+                                                </div>
+                                                :
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={true} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.addImg(dish)}}>暂无图片</Button>
+                                                </div>
+                                              }
+                                            </td>
                                         </tr>
                                         :null}
                                   </tbody>
@@ -490,9 +514,6 @@ export default class AdminMainPage extends Component {
                                             <Button className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.updateDish(dish)}}>保存</Button>
                                             </div>
                                           :null}
-
-
-
                                         </td>
                                       </tr>
                                       :null}
@@ -503,18 +524,27 @@ export default class AdminMainPage extends Component {
                                           <td>{dish.price}</td>
                                           <td>{dish.type}</td>
                                           <td>
-                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
-                                            <div className="col-lg-1"  />
-                                            {dish.available === 1 ?
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
-                                            :
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
-                                            }
-
-
-
-
-                                          </td>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
+                                              <div className="col-lg-1"/>
+                                              {dish.available === 1 ?
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
+                                              :
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
+                                              }
+                                              <div className="col-lg-1"/>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
+                                              {this.verifyImage(dish) === 1 ?
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="info" onClick={() => {this.checkImg(dish)}}>图片预览</Button>
+                                                </div>
+                                                :
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={true} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.addImg(dish)}}>暂无图片</Button>
+                                                </div>
+                                              }
+                                            </td>
                                         </tr>
                                         :null}
                                   </tbody>
@@ -585,14 +615,27 @@ export default class AdminMainPage extends Component {
                                           <td>{dish.price}</td>
                                           <td>{dish.type}</td>
                                           <td>
-                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
-                                            <div className="col-lg-1"  />
-                                            {dish.available === 1 ?
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
-                                            :
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
-                                            }
-                                          </td>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
+                                              <div className="col-lg-1"/>
+                                              {dish.available === 1 ?
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
+                                              :
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
+                                              }
+                                              <div className="col-lg-1"/>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
+                                              {this.verifyImage(dish) === 1 ?
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="info" onClick={() => {this.checkImg(dish)}}>图片预览</Button>
+                                                </div>
+                                                :
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={true} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.addImg(dish)}}>暂无图片</Button>
+                                                </div>
+                                              }
+                                            </td>
                                         </tr>
                                         :null}
                                   </tbody>
@@ -653,9 +696,6 @@ export default class AdminMainPage extends Component {
                                             <Button className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.updateDish(dish)}}>保存</Button>
                                             </div>
                                           :null}
-
-
-
                                         </td>
                                       </tr>
                                       :null}
@@ -666,18 +706,27 @@ export default class AdminMainPage extends Component {
                                           <td>{dish.price}</td>
                                           <td>{dish.type}</td>
                                           <td>
-                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
-                                            <div className="col-lg-1"  />
-                                            {dish.available === 1 ?
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
-                                            :
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
-                                            }
-
-
-
-
-                                          </td>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
+                                              <div className="col-lg-1"/>
+                                              {dish.available === 1 ?
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
+                                              :
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
+                                              }
+                                              <div className="col-lg-1"/>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
+                                              {this.verifyImage(dish) === 1 ?
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="info" onClick={() => {this.checkImg(dish)}}>图片预览</Button>
+                                                </div>
+                                                :
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={true} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.addImg(dish)}}>暂无图片</Button>
+                                                </div>
+                                              }
+                                            </td>
                                         </tr>
                                         :null}
                                   </tbody>
@@ -738,9 +787,6 @@ export default class AdminMainPage extends Component {
                                             <Button className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.updateDish(dish)}}>保存</Button>
                                             </div>
                                           :null}
-
-
-
                                         </td>
                                       </tr>
                                       :null}
@@ -751,18 +797,27 @@ export default class AdminMainPage extends Component {
                                           <td>{dish.price}</td>
                                           <td>{dish.type}</td>
                                           <td>
-                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
-                                            <div className="col-lg-1"  />
-                                            {dish.available === 1 ?
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
-                                            :
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
-                                            }
-
-
-
-
-                                          </td>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
+                                              <div className="col-lg-1"/>
+                                              {dish.available === 1 ?
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
+                                              :
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
+                                              }
+                                              <div className="col-lg-1"/>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
+                                              {this.verifyImage(dish) === 1 ?
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="info" onClick={() => {this.checkImg(dish)}}>图片预览</Button>
+                                                </div>
+                                                :
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={true} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.addImg(dish)}}>暂无图片</Button>
+                                                </div>
+                                              }
+                                            </td>
                                         </tr>
                                         :null}
                                   </tbody>
@@ -823,9 +878,6 @@ export default class AdminMainPage extends Component {
                                             <Button className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.updateDish(dish)}}>保存</Button>
                                             </div>
                                           :null}
-
-
-
                                         </td>
                                       </tr>
                                       :null}
@@ -836,18 +888,27 @@ export default class AdminMainPage extends Component {
                                           <td>{dish.price}</td>
                                           <td>{dish.type}</td>
                                           <td>
-                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
-                                            <div className="col-lg-1"  />
-                                            {dish.available === 1 ?
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
-                                            :
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
-                                            }
-
-
-
-
-                                          </td>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
+                                              <div className="col-lg-1"/>
+                                              {dish.available === 1 ?
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
+                                              :
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
+                                              }
+                                              <div className="col-lg-1"/>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
+                                              {this.verifyImage(dish) === 1 ?
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="info" onClick={() => {this.checkImg(dish)}}>图片预览</Button>
+                                                </div>
+                                                :
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={true} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.addImg(dish)}}>暂无图片</Button>
+                                                </div>
+                                              }
+                                            </td>
                                         </tr>
                                         :null}
                                   </tbody>
@@ -899,7 +960,6 @@ export default class AdminMainPage extends Component {
                                             onChange={this.handleChangedishTypeValue}
                                           />
                                         </td>
-
                                         <td>
                                           {this.activeOrDisabled() === true ?
                                             <div>
@@ -908,9 +968,6 @@ export default class AdminMainPage extends Component {
                                             <Button className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.updateDish(dish)}}>保存</Button>
                                             </div>
                                           :null}
-
-
-
                                         </td>
                                       </tr>
                                       :null}
@@ -921,24 +978,32 @@ export default class AdminMainPage extends Component {
                                           <td>{dish.price}</td>
                                           <td>{dish.type}</td>
                                           <td>
-                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
-                                            <div className="col-lg-1"  />
-                                            {dish.available === 1 ?
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
-                                            :
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
-                                            }
-
-
-
-
-                                          </td>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
+                                              <div className="col-lg-1"/>
+                                              {dish.available === 1 ?
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
+                                              :
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
+                                              }
+                                              <div className="col-lg-1"/>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
+                                              {this.verifyImage(dish) === 1 ?
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="info" onClick={() => {this.checkImg(dish)}}>图片预览</Button>
+                                                </div>
+                                                :
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={true} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.addImg(dish)}}>暂无图片</Button>
+                                                </div>
+                                              }
+                                            </td>
                                         </tr>
                                         :null}
                                   </tbody>
                                 )
                             })}
-
                         </Table>
                     </Tab>
                     <Tab eventKey={10} title="牛" className="nova-padding">
@@ -993,9 +1058,6 @@ export default class AdminMainPage extends Component {
                                             <Button className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.updateDish(dish)}}>保存</Button>
                                             </div>
                                           :null}
-
-
-
                                         </td>
                                       </tr>
                                       :null}
@@ -1006,18 +1068,27 @@ export default class AdminMainPage extends Component {
                                           <td>{dish.price}</td>
                                           <td>{dish.type}</td>
                                           <td>
-                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
-                                            <div className="col-lg-1"  />
-                                            {dish.available === 1 ?
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
-                                            :
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
-                                            }
-
-
-
-
-                                          </td>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
+                                              <div className="col-lg-1"/>
+                                              {dish.available === 1 ?
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
+                                              :
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
+                                              }
+                                              <div className="col-lg-1"/>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
+                                              {this.verifyImage(dish) === 1 ?
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="info" onClick={() => {this.checkImg(dish)}}>图片预览</Button>
+                                                </div>
+                                                :
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={true} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.addImg(dish)}}>暂无图片</Button>
+                                                </div>
+                                              }
+                                            </td>
                                         </tr>
                                         :null}
                                   </tbody>
@@ -1069,7 +1140,6 @@ export default class AdminMainPage extends Component {
                                             onChange={this.handleChangedishTypeValue}
                                           />
                                         </td>
-
                                         <td>
                                           {this.activeOrDisabled() === true ?
                                             <div>
@@ -1078,9 +1148,6 @@ export default class AdminMainPage extends Component {
                                             <Button className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.updateDish(dish)}}>保存</Button>
                                             </div>
                                           :null}
-
-
-
                                         </td>
                                       </tr>
                                       :null}
@@ -1091,24 +1158,32 @@ export default class AdminMainPage extends Component {
                                           <td>{dish.price}</td>
                                           <td>{dish.type}</td>
                                           <td>
-                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
-                                            <div className="col-lg-1"  />
-                                            {dish.available === 1 ?
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
-                                            :
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
-                                            }
-
-
-
-
-                                          </td>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
+                                              <div className="col-lg-1"/>
+                                              {dish.available === 1 ?
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
+                                              :
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
+                                              }
+                                              <div className="col-lg-1"/>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
+                                              {this.verifyImage(dish) === 1 ?
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="info" onClick={() => {this.checkImg(dish)}}>图片预览</Button>
+                                                </div>
+                                                :
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={true} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.addImg(dish)}}>暂无图片</Button>
+                                                </div>
+                                              }
+                                            </td>
                                         </tr>
                                         :null}
                                   </tbody>
                                 )
                             })}
-
                         </Table>
                     </Tab>
                     <Tab eventKey={12} title="猪" className="nova-padding">
@@ -1163,9 +1238,6 @@ export default class AdminMainPage extends Component {
                                             <Button className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.updateDish(dish)}}>保存</Button>
                                             </div>
                                           :null}
-
-
-
                                         </td>
                                       </tr>
                                       :null}
@@ -1183,9 +1255,6 @@ export default class AdminMainPage extends Component {
                                             :
                                               <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
                                             }
-
-
-
 
                                           </td>
                                         </tr>
@@ -1248,9 +1317,6 @@ export default class AdminMainPage extends Component {
                                             <Button className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.updateDish(dish)}}>保存</Button>
                                             </div>
                                           :null}
-
-
-
                                         </td>
                                       </tr>
                                       :null}
@@ -1261,18 +1327,27 @@ export default class AdminMainPage extends Component {
                                           <td>{dish.price}</td>
                                           <td>{dish.type}</td>
                                           <td>
-                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
-                                            <div className="col-lg-1"  />
-                                            {dish.available === 1 ?
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
-                                            :
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
-                                            }
-
-
-
-
-                                          </td>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
+                                              <div className="col-lg-1"/>
+                                              {dish.available === 1 ?
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
+                                              :
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
+                                              }
+                                              <div className="col-lg-1"/>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
+                                              {this.verifyImage(dish) === 1 ?
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="info" onClick={() => {this.checkImg(dish)}}>图片预览</Button>
+                                                </div>
+                                                :
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={true} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.addImg(dish)}}>暂无图片</Button>
+                                                </div>
+                                              }
+                                            </td>
                                         </tr>
                                         :null}
                                   </tbody>
@@ -1333,9 +1408,6 @@ export default class AdminMainPage extends Component {
                                             <Button className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.updateDish(dish)}}>保存</Button>
                                             </div>
                                           :null}
-
-
-
                                         </td>
                                       </tr>
                                       :null}
@@ -1346,18 +1418,27 @@ export default class AdminMainPage extends Component {
                                           <td>{dish.price}</td>
                                           <td>{dish.type}</td>
                                           <td>
-                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
-                                            <div className="col-lg-1"  />
-                                            {dish.available === 1 ?
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
-                                            :
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
-                                            }
-
-
-
-
-                                          </td>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
+                                              <div className="col-lg-1"/>
+                                              {dish.available === 1 ?
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
+                                              :
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
+                                              }
+                                              <div className="col-lg-1"/>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
+                                              {this.verifyImage(dish) === 1 ?
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="info" onClick={() => {this.checkImg(dish)}}>图片预览</Button>
+                                                </div>
+                                                :
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={true} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.addImg(dish)}}>暂无图片</Button>
+                                                </div>
+                                              }
+                                            </td>
                                         </tr>
                                         :null}
                                   </tbody>
@@ -1418,9 +1499,6 @@ export default class AdminMainPage extends Component {
                                             <Button className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.updateDish(dish)}}>保存</Button>
                                             </div>
                                           :null}
-
-
-
                                         </td>
                                       </tr>
                                       :null}
@@ -1431,18 +1509,27 @@ export default class AdminMainPage extends Component {
                                           <td>{dish.price}</td>
                                           <td>{dish.type}</td>
                                           <td>
-                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
-                                            <div className="col-lg-1"  />
-                                            {dish.available === 1 ?
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
-                                            :
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
-                                            }
-
-
-
-
-                                          </td>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
+                                              <div className="col-lg-1"/>
+                                              {dish.available === 1 ?
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
+                                              :
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
+                                              }
+                                              <div className="col-lg-1"/>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
+                                              {this.verifyImage(dish) === 1 ?
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="info" onClick={() => {this.checkImg(dish)}}>图片预览</Button>
+                                                </div>
+                                                :
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={true} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.addImg(dish)}}>暂无图片</Button>
+                                                </div>
+                                              }
+                                            </td>
                                         </tr>
                                         :null}
                                   </tbody>
@@ -1525,16 +1612,27 @@ export default class AdminMainPage extends Component {
                                           <td>{dish.type}</td>
                                           <td>{dish.subtype}</td>
                                           <td>
-                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
-                                            <div className="col-lg-1"  />
-                                            {dish.available === 1 ?
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
-                                            :
-                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
-                                            }
-                                            <div className="col-lg-1"  />
-                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
-                                          </td>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="warning" onClick={() => {this.editor(dish)}}>编辑</Button>
+                                              <div className="col-lg-1"/>
+                                              {dish.available === 1 ?
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="success" onClick={() => {this.unavailable(dish)}}>已上架</Button>
+                                              :
+                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
+                                              }
+                                              <div className="col-lg-1"/>
+                                              <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
+                                              {this.verifyImage(dish) === 1 ?
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="info" onClick={() => {this.checkImg(dish)}}>图片预览</Button>
+                                                </div>
+                                                :
+                                                <div>
+                                                  <div className="col-lg-1"/>
+                                                  <Button disabled={true} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.addImg(dish)}}>暂无图片</Button>
+                                                </div>
+                                              }
+                                            </td>
                                         </tr>
                                         :null}
                                   </tbody>
@@ -1622,7 +1720,7 @@ export default class AdminMainPage extends Component {
                                               <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.available(dish)}}>已下架</Button>
                                             }
                                             <div className="col-lg-1"/>
-                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {}}>删除</Button>
+                                            <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.deleteDish(dish)}}>删除</Button>
                                             {this.verifyImage(dish) === 1 ?
                                               <div>
                                                 <div className="col-lg-1"/>
@@ -1631,7 +1729,7 @@ export default class AdminMainPage extends Component {
                                               :
                                               <div>
                                                 <div className="col-lg-1"/>
-                                                <Button disabled={this.activeOrDisabled()} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.addImg(dish)}}>暂无图片</Button>
+                                                <Button disabled={true} className="deleteButton col-lg-2" bsSize="xsmall" bsStyle="danger" onClick={() => {this.addImg(dish)}}>暂无图片</Button>
                                               </div>
                                             }
                                           </td>
@@ -1703,6 +1801,8 @@ export default class AdminMainPage extends Component {
                 </Table>
               </div>
           </div>
+
+
           <Modal
             show={this.state.show}
             onHide={this.handleHide}
@@ -1748,7 +1848,6 @@ export default class AdminMainPage extends Component {
             </Modal.Footer>
           </Modal>
 
-
           <Modal
             show={this.state.show2}
             onHide={this.handleHide2}
@@ -1781,13 +1880,31 @@ export default class AdminMainPage extends Component {
                   </Col>
                 </Row>
               </Grid>
-
             </Modal.Body>
             <Modal.Footer>
               <Button onClick={this.handleHide2}>关闭</Button>
             </Modal.Footer>
           </Modal>
 
+          <Modal
+            show={this.state.showDelete}
+            onHide={this.handleHideDelete}
+            container={this}
+            aria-labelledby="contained-modal-title"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title id="">
+                <center><h3>删除菜品信息</h3></center>
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <center><h4>需要您的再次确定确定</h4></center>
+              <center><Button onClick = {()=>{this.deleteDishInfo()}}>删除</Button></center>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={this.handleHideDelete}>关闭</Button>
+            </Modal.Footer>
+          </Modal>
         </div>
         )
     }

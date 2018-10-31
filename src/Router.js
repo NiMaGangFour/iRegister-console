@@ -26,7 +26,7 @@ const Router = () =>{
     return(
         <div className="">
             <Switch>
-                <Route exact path='/' component={Home} />
+                <Route exact path='/home' component={Home} />
                 <Route exact path='/post/newpost' component={NewPost} />
 
                 <Route exact path='/auth/email' component={Email} />
@@ -43,7 +43,7 @@ const Router = () =>{
                 <Route exact path='/home/AllCurrentOrders/' component={AllCurrentOrders}/>
                 <Route exact path='/home/AllTodayFinishedOrders/' component={AllTodayFinishedOrders}/>
                 <Route exact path='/home/CheckBookingsDetails/:tableid' component={CheckBookingsDetails}/>
-                <Route exact path='/login' component={Login}/>
+                <Route exact path='/' component={Login}/>
             </Switch>
         </div>
     )

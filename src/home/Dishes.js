@@ -478,14 +478,21 @@ export default class Dishes extends Component {
           console.log('error on .catch', error);
       });
     }
+
     getToken = () => {
         // Retrieves the user token from localStorage
         var user = localStorage.getItem('SHUWEIYUAN');
         var uu = JSON.parse(user);
-        console.log(uu);
-        return uu.Token
+        console.log(JSON.parse(user));
+        if (JSON.parse(user) === null) {
+          window.location = '/'
+        }
+        else {
+          return uu.Token
+        }
     }
 
+    //提交订单
     submitOrder = () => {
       var date = new Date();
       var time = date.toLocaleTimeString();
@@ -502,7 +509,7 @@ export default class Dishes extends Component {
           headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          // 'Authorization': 'Bearer ' + this.getToken()
+          'Authorization': 'Bearer ' + this.getToken()
         },
         body: JSON.stringify({
                 "items": totalorder,
@@ -516,7 +523,9 @@ export default class Dishes extends Component {
             // console.log(res.json())
             return res.json();
           }
-
+          else if (res.status===401) {
+            window.location = '/'
+          }
           else console.log(res)
       }).then(json => {
         console.log(json.success)
@@ -529,7 +538,6 @@ export default class Dishes extends Component {
             Fishorder:[],
           })
           window.location = '/home/CheckDishes/' + this.props.match.params.tableid
-          // window.location = '/'
         }
       })
     }
@@ -656,7 +664,6 @@ export default class Dishes extends Component {
         console.log(tempSDHPorder.reduce(reducer));
         var total = tempSDHPorder.reduce(reducer)
       }
-      console.log(total)
       return total;
     }
 
@@ -745,7 +752,6 @@ export default class Dishes extends Component {
     }
 
     activeOrDisabledModified = () => {
-
       //console.log(this.NumberCalculatorLater()) //普通的菜
       console.log(this.SDHPNumberCalculatorLater()) //香锅
       console.log(this.checkFishExistLater()) // 整条鱼
@@ -759,6 +765,85 @@ export default class Dishes extends Component {
       }
       return verify
     }
+
+    // //登陆判断
+    // handleSubmit=()=> {
+    //     console.log(this.state.email);
+    //     console.log(this.state.password);
+    //
+    //     if (!this.state.email){
+    //         this.setState({
+    //             //status: 'failed',
+    //             Emailerror: 'Username is required'
+    //         })
+    //     }
+    //     // else if (!this.handleEmail(this.state.email)){
+    //     //     this.setState({
+    //     //         //status: 'failed',
+    //     //         Emailerror: 'It is not an Email'
+    //     //     })
+    //     // }
+    //     else if(!this.state.password){
+    //         this.setState({
+    //             Emailerror: '',
+    //             PWerror: 'Password is required'
+    //         })
+    //     }
+    //     else {
+    //         this.setState({
+    //             status: 'normal',
+    //             PWerror: '',
+    //             mode1: true
+    //         })
+    //         var url = API.baseUri + API.login;
+    //         fetch(url, {
+    //             //credentials: 'include',
+    //             method: "POST",
+    //             headers: {
+    //                 //     'Content-Type':'multipart/form-data',
+    //                 //     'Content-Type':'application/x-www-form-urlencoded',
+    //                 //     'Content-Disposition': 'form-data',
+    //                 'Accept': 'application/json',
+    //                 'Content-Type': 'application/json',
+    //                 'Authorization': 'Bearer ' + this.getToken()
+    //
+    //             },
+    //             credentials: "same-origin",
+    //             body: JSON.stringify({
+    //                 // this.state.UserID,
+    //                 "name": this.state.email,
+    //                 "password": this.state.password,
+    //             })
+    //         }).then(res => {
+    //                 if (res.status === 200) {
+    //                     this.setState({status: 'success'})
+    //                     return res.json()
+    //                 } else {
+    //                     this.setState({
+    //                         status: 'failed',
+    //                         mode1: false})
+    //                     window.location = '/'
+    //                 }
+    //             }
+    //         ).then(json => {
+    //             //console.log(json.email)
+    //             if (this.state.status === "success") {
+    //
+    //                 this.submitOrder()
+    //             }
+    //             else {
+    //                 this.setState({
+    //                     open: true,
+    //                     email: '',
+    //                     password: '',
+    //                 })
+    //
+    //             }
+    //         }).catch(error => {
+    //             console.error(error)
+    //         })
+    //     }
+    // }
 
 render() {
 
