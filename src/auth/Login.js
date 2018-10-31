@@ -44,7 +44,7 @@ export default class Login extends Component {
         var uu = JSON.parse(user);
         console.log(JSON.parse(user));
         if (JSON.parse(user) === null) {
-          window.location = '/'
+          console.log("需要验证")
         }
         else {
           window.location = '/Home'
