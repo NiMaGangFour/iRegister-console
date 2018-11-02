@@ -784,7 +784,7 @@ export default class CheckDishesDishes extends Component {
       FINAL = this.sumAfterRedeem()
     }
 
-    fetch('localhost:3000/printReceipt', {
+    fetch('http://localhost:3000/printReceipt', {
         method: "POST",
         headers: {
         'Accept': 'application/json',
@@ -841,7 +841,7 @@ export default class CheckDishesDishes extends Component {
     //总 普通菜品
     var totalNormal = orderInitNormal.concat(orderModifiedNormal)
 
-    fetch('localhost:3000/KprinterN', {
+    fetch('http://localhost:3000/KprinterN', {
         method: "POST",
         headers: {
         'Accept': 'application/json',
@@ -878,7 +878,7 @@ export default class CheckDishesDishes extends Component {
         }
         //总 麻辣香锅菜品
         var totalSDHP = orderInitSDHP.concat(orderModifiedSDHP)
-        fetch('localhost:3000/KprinterS' , {
+        fetch('http://localhost:3000/KprinterS' , {
             method: "POST",
             headers: {
             'Accept': 'application/json',
@@ -915,7 +915,7 @@ export default class CheckDishesDishes extends Component {
             }
             //总 特色烤鱼菜品
             var totalFish = orderInitFish.concat(orderModifiedFish)
-            fetch('localhost:3000/KprinterF' , {
+            fetch('http://localhost:3000/KprinterF' , {
                 method: "POST",
                 headers: {
                 'Accept': 'application/json',
